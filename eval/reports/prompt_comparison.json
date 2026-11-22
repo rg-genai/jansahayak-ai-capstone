@@ -1,0 +1,852 @@
+{
+  "model": "Qwen/Qwen3-8B",
+  "num_queries": 30,
+  "strategies": [
+    {
+      "id": "P1",
+      "name": "Zero-Shot Direct Prompt",
+      "answer_accuracy": 0.9333,
+      "citation_adherence": 0.1,
+      "hallucination_rate": 0.6667,
+      "eligibility_accuracy": 1.0,
+      "avg_latency_s": 4.18,
+      "avg_tokens": 1659.8,
+      "details": [
+        {
+          "id": "QA-01",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 2.09,
+          "tokens": 1359
+        },
+        {
+          "id": "QA-02",
+          "category": "scheme_qa",
+          "accurate": false,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 1.18,
+          "tokens": 2023
+        },
+        {
+          "id": "QA-03",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 6.32,
+          "tokens": 2249
+        },
+        {
+          "id": "QA-04",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 5.57,
+          "tokens": 2016
+        },
+        {
+          "id": "QA-05",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 9.4,
+          "tokens": 1982
+        },
+        {
+          "id": "QA-06",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 4.47,
+          "tokens": 1760
+        },
+        {
+          "id": "QA-07",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 1.95,
+          "tokens": 1876
+        },
+        {
+          "id": "QA-08",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 4.84,
+          "tokens": 1704
+        },
+        {
+          "id": "QA-09",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 6.02,
+          "tokens": 2288
+        },
+        {
+          "id": "QA-10",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 6.71,
+          "tokens": 2121
+        },
+        {
+          "id": "ELIG-01",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 4.64,
+          "tokens": 1081
+        },
+        {
+          "id": "ELIG-02",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 1.31,
+          "tokens": 1235
+        },
+        {
+          "id": "ELIG-03",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": false,
+          "latency_s": 3.14,
+          "tokens": 1177
+        },
+        {
+          "id": "ELIG-04",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 1.84,
+          "tokens": 1861
+        },
+        {
+          "id": "ELIG-05",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 1.13,
+          "tokens": 1018
+        },
+        {
+          "id": "ELIG-06",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": false,
+          "latency_s": 9.44,
+          "tokens": 2186
+        },
+        {
+          "id": "ELIG-07",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": false,
+          "latency_s": 3.74,
+          "tokens": 1611
+        },
+        {
+          "id": "ELIG-08",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": false,
+          "latency_s": 9.41,
+          "tokens": 1955
+        },
+        {
+          "id": "FAQ-01",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": false,
+          "latency_s": 3.12,
+          "tokens": 2046
+        },
+        {
+          "id": "FAQ-02",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": false,
+          "latency_s": 2.92,
+          "tokens": 1995
+        },
+        {
+          "id": "FAQ-03",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": false,
+          "latency_s": 1.29,
+          "tokens": 1596
+        },
+        {
+          "id": "FAQ-04",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 9.48,
+          "tokens": 2365
+        },
+        {
+          "id": "FAQ-05",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": false,
+          "latency_s": 1.86,
+          "tokens": 2026
+        },
+        {
+          "id": "ML-01",
+          "category": "multilingual",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 1.45,
+          "tokens": 1466
+        },
+        {
+          "id": "ML-02",
+          "category": "multilingual",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 9.43,
+          "tokens": 2110
+        },
+        {
+          "id": "ML-03",
+          "category": "multilingual",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 1.63,
+          "tokens": 2056
+        },
+        {
+          "id": "ML-04",
+          "category": "multilingual",
+          "accurate": true,
+          "citation_ok": false,
+          "hallucinated": true,
+          "latency_s": 5.11,
+          "tokens": 1991
+        },
+        {
+          "id": "REF-01",
+          "category": "refusal",
+          "accurate": false,
+          "citation_ok": true,
+          "hallucinated": true,
+          "latency_s": 1.95,
+          "tokens": 204
+        },
+        {
+          "id": "REF-02",
+          "category": "refusal",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.45,
+          "tokens": 234
+        },
+        {
+          "id": "REF-03",
+          "category": "refusal",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 1.58,
+          "tokens": 204
+        }
+      ]
+    },
+    {
+      "id": "P2",
+      "name": "Few-Shot Structured Prompt",
+      "answer_accuracy": 0.9667,
+      "citation_adherence": 1.0,
+      "hallucination_rate": 0.0667,
+      "eligibility_accuracy": 1.0,
+      "avg_latency_s": 4.11,
+      "avg_tokens": 1967.9,
+      "details": [
+        {
+          "id": "QA-01",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 4.28,
+          "tokens": 1778
+        },
+        {
+          "id": "QA-02",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.76,
+          "tokens": 2429
+        },
+        {
+          "id": "QA-03",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 4.23,
+          "tokens": 2474
+        },
+        {
+          "id": "QA-04",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 5.26,
+          "tokens": 2315
+        },
+        {
+          "id": "QA-05",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 10.34,
+          "tokens": 2333
+        },
+        {
+          "id": "QA-06",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 4.95,
+          "tokens": 2097
+        },
+        {
+          "id": "QA-07",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.18,
+          "tokens": 2207
+        },
+        {
+          "id": "QA-08",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 5.43,
+          "tokens": 2051
+        },
+        {
+          "id": "QA-09",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 6.75,
+          "tokens": 2639
+        },
+        {
+          "id": "QA-10",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 7.1,
+          "tokens": 2456
+        },
+        {
+          "id": "ELIG-01",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 1.82,
+          "tokens": 1278
+        },
+        {
+          "id": "ELIG-02",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 1.89,
+          "tokens": 1585
+        },
+        {
+          "id": "ELIG-03",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": true,
+          "latency_s": 3.35,
+          "tokens": 1499
+        },
+        {
+          "id": "ELIG-04",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.24,
+          "tokens": 2206
+        },
+        {
+          "id": "ELIG-05",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 1.37,
+          "tokens": 1349
+        },
+        {
+          "id": "ELIG-06",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 4.74,
+          "tokens": 2289
+        },
+        {
+          "id": "ELIG-07",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 3.51,
+          "tokens": 1921
+        },
+        {
+          "id": "ELIG-08",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 6.08,
+          "tokens": 2122
+        },
+        {
+          "id": "FAQ-01",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 3.37,
+          "tokens": 2383
+        },
+        {
+          "id": "FAQ-02",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.2,
+          "tokens": 2297
+        },
+        {
+          "id": "FAQ-03",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 1.38,
+          "tokens": 1928
+        },
+        {
+          "id": "FAQ-04",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 6.16,
+          "tokens": 2528
+        },
+        {
+          "id": "FAQ-05",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 1.99,
+          "tokens": 2365
+        },
+        {
+          "id": "ML-01",
+          "category": "multilingual",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.67,
+          "tokens": 1842
+        },
+        {
+          "id": "ML-02",
+          "category": "multilingual",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 9.15,
+          "tokens": 2416
+        },
+        {
+          "id": "ML-03",
+          "category": "multilingual",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 4.19,
+          "tokens": 2508
+        },
+        {
+          "id": "ML-04",
+          "category": "multilingual",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 6.6,
+          "tokens": 2372
+        },
+        {
+          "id": "REF-01",
+          "category": "refusal",
+          "accurate": false,
+          "citation_ok": true,
+          "hallucinated": true,
+          "latency_s": 1.76,
+          "tokens": 418
+        },
+        {
+          "id": "REF-02",
+          "category": "refusal",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 3.36,
+          "tokens": 499
+        },
+        {
+          "id": "REF-03",
+          "category": "refusal",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.17,
+          "tokens": 454
+        }
+      ]
+    },
+    {
+      "id": "P3",
+      "name": "Grounded Planner-Executor-Synthesizer-Critic",
+      "answer_accuracy": 1.0,
+      "citation_adherence": 1.0,
+      "hallucination_rate": 0.0,
+      "eligibility_accuracy": 1.0,
+      "avg_latency_s": 4.49,
+      "avg_tokens": 2192.6,
+      "details": [
+        {
+          "id": "QA-01",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.24,
+          "tokens": 1819
+        },
+        {
+          "id": "QA-02",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.77,
+          "tokens": 2564
+        },
+        {
+          "id": "QA-03",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 4.95,
+          "tokens": 2639
+        },
+        {
+          "id": "QA-04",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 6.0,
+          "tokens": 2482
+        },
+        {
+          "id": "QA-05",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 11.25,
+          "tokens": 2517
+        },
+        {
+          "id": "QA-06",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 3.87,
+          "tokens": 2182
+        },
+        {
+          "id": "QA-07",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.16,
+          "tokens": 2340
+        },
+        {
+          "id": "QA-08",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 4.71,
+          "tokens": 2152
+        },
+        {
+          "id": "QA-09",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 5.2,
+          "tokens": 2703
+        },
+        {
+          "id": "QA-10",
+          "category": "scheme_qa",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 5.23,
+          "tokens": 2505
+        },
+        {
+          "id": "ELIG-01",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 5.8,
+          "tokens": 1882
+        },
+        {
+          "id": "ELIG-02",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 4.38,
+          "tokens": 2153
+        },
+        {
+          "id": "ELIG-03",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 5.44,
+          "tokens": 2094
+        },
+        {
+          "id": "ELIG-04",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 5.5,
+          "tokens": 2844
+        },
+        {
+          "id": "ELIG-05",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 6.08,
+          "tokens": 2039
+        },
+        {
+          "id": "ELIG-06",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 6.78,
+          "tokens": 2929
+        },
+        {
+          "id": "ELIG-07",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 5.53,
+          "tokens": 2417
+        },
+        {
+          "id": "ELIG-08",
+          "category": "eligibility",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 7.19,
+          "tokens": 2655
+        },
+        {
+          "id": "FAQ-01",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.5,
+          "tokens": 2478
+        },
+        {
+          "id": "FAQ-02",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.59,
+          "tokens": 2448
+        },
+        {
+          "id": "FAQ-03",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.14,
+          "tokens": 2096
+        },
+        {
+          "id": "FAQ-04",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 6.37,
+          "tokens": 2672
+        },
+        {
+          "id": "FAQ-05",
+          "category": "faq",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 3.72,
+          "tokens": 2577
+        },
+        {
+          "id": "ML-01",
+          "category": "multilingual",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 1.68,
+          "tokens": 1931
+        },
+        {
+          "id": "ML-02",
+          "category": "multilingual",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 7.73,
+          "tokens": 2485
+        },
+        {
+          "id": "ML-03",
+          "category": "multilingual",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.72,
+          "tokens": 2576
+        },
+        {
+          "id": "ML-04",
+          "category": "multilingual",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 4.33,
+          "tokens": 2403
+        },
+        {
+          "id": "REF-01",
+          "category": "refusal",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 3.0,
+          "tokens": 592
+        },
+        {
+          "id": "REF-02",
+          "category": "refusal",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 0.0,
+          "tokens": 0
+        },
+        {
+          "id": "REF-03",
+          "category": "refusal",
+          "accurate": true,
+          "citation_ok": true,
+          "hallucinated": false,
+          "latency_s": 2.89,
+          "tokens": 604
+        }
+      ]
+    }
+  ]
+}

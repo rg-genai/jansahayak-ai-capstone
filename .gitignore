@@ -1,0 +1,39 @@
+# Secrets, Certificates & IIT Key Bundles (NEVER COMMIT!)
+.env
+.env.local
+certs/
+*.crt
+*.key
+*.pem
+Capstone_Overview_resources/
+JanSahayak_Private_Team_Bundle.zip
+
+# Virtual environments & Python caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node & Frontend build
+frontend/node_modules/
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Local generated data, indices & raw zip archives
+data/
+archive.zip
+
+# IDE, Office Lock Files & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+~$*.docx
+~$*.xlsx
+~$*.pptx

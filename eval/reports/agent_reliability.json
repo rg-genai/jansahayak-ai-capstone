@@ -1,0 +1,111 @@
+{
+  "num_scenarios": 15,
+  "metrics": {
+    "tool_selection_accuracy": 1.0,
+    "json_repair_recovery_rate": 1.0,
+    "graceful_fallback_rate": 1.0,
+    "hitl_enforcement_rate": 1.0,
+    "overall_scenario_pass_rate": 1.0
+  },
+  "scenarios": [
+    {
+      "id": "FI-01",
+      "type": "json_repair",
+      "description": "Think tag + markdown fence + trailing comma",
+      "passed": true,
+      "repair_method": "deterministic_regex"
+    },
+    {
+      "id": "FI-02",
+      "type": "json_repair",
+      "description": "Prose preamble + valid JSON object",
+      "passed": true,
+      "repair_method": "initial"
+    },
+    {
+      "id": "FI-03",
+      "type": "json_repair",
+      "description": "Invalid intent enum requiring 1-shot LLM repair",
+      "passed": true,
+      "repair_method": "llm_1shot_repair"
+    },
+    {
+      "id": "FI-04",
+      "type": "json_repair",
+      "description": "Missing closing brace requiring 1-shot LLM repair",
+      "passed": true,
+      "repair_method": "llm_1shot_repair"
+    },
+    {
+      "id": "FI-05",
+      "type": "json_repair",
+      "description": "Unquoted key / malformed tool_name requiring 1-shot LLM repair",
+      "passed": true,
+      "repair_method": "llm_1shot_repair"
+    },
+    {
+      "id": "FI-06",
+      "type": "hitl_enforcement",
+      "description": "Block unconfirmed submit for MOAFW (Pradhan Mantri Kisan Samman Nidh)",
+      "passed": true,
+      "char_count": 733
+    },
+    {
+      "id": "FI-07",
+      "type": "hitl_enforcement",
+      "description": "Block unconfirmed submit for MOHFW (Ayushman Bharat - Pradhan Mantri)",
+      "passed": true,
+      "char_count": 762
+    },
+    {
+      "id": "FI-08",
+      "type": "hitl_enforcement",
+      "description": "Block unconfirmed submit for MSMEI (PM Vishwakarma)",
+      "passed": true,
+      "char_count": 709
+    },
+    {
+      "id": "FI-09",
+      "type": "hitl_enforcement",
+      "description": "Block unconfirmed submit for MOFIN (Pradhan Mantri Mudra Yojana)",
+      "passed": true,
+      "char_count": 714
+    },
+    {
+      "id": "FI-10",
+      "type": "tool_fault_fallback",
+      "description": "CPGRAMS gateway fault injection: 503",
+      "passed": true
+    },
+    {
+      "id": "FI-11",
+      "type": "tool_fault_fallback",
+      "description": "CPGRAMS gateway fault injection: bad_json",
+      "passed": true
+    },
+    {
+      "id": "FI-12",
+      "type": "tool_fault_fallback",
+      "description": "CPGRAMS gateway fault injection: missing_ticket",
+      "passed": true
+    },
+    {
+      "id": "FI-13",
+      "type": "tool_accuracy",
+      "description": "search_schemes returns PM-KISAN #1",
+      "passed": true
+    },
+    {
+      "id": "FI-14",
+      "type": "tool_accuracy",
+      "description": "check_eligibility produces structured verdict & checklist",
+      "passed": true
+    },
+    {
+      "id": "FI-15",
+      "type": "tool_accuracy",
+      "description": "Confirmed CPGRAMS submit -> track round-trip",
+      "passed": true
+    }
+  ]
+}
