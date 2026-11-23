@@ -48,6 +48,12 @@ class Settings(BaseSettings):
     semantic_cache_threshold: float = Field(default=0.96)
     rate_limit_rpm_per_session: int = Field(default=15, ge=1, le=120)
 
+    # Agent loop (planner -> executor -> reflector -> ...) safety limits
+    agent_reflection_enabled: bool = Field(default=True)  # False = single-pass pipeline (ablation baseline)
+    agent_max_tool_calls: int = Field(default=10, ge=1, le=10)  # Track B cap: 10 steps per query
+    agent_max_reflection_rounds: int = Field(default=2, ge=0, le=4)
+    agent_token_budget: int = Field(default=24000, ge=2000)  # prompt+completion tokens per query
+
     # Grievance Execution Mode
     grievance_mode: Literal["sandbox", "assisted", "apisetu"] = Field(default="sandbox")
     mock_cpgrams_base_url: str = Field(default="http://127.0.0.1:8000/mock-cpgrams/v1")

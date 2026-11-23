@@ -37,6 +37,62 @@ class Repository:
             item["dbt_scheme"] = bool(item.get("dbt_scheme"))
             return item
 
+    def list_scheme_titles(self) -> list[dict[str, str]]:
+        """Slug, full name and short title of every scheme (for name matching)."""
+        with get_connection(self.db_path) as conn:
+            rows = conn.execute("SELECT slug, scheme_name, short_title FROM schemes_catalog").fetchall()
+        return [dict(r) for r in rows]
+
+    def beneficiary_group_categories(self) -> dict[str, dict[str, int]]:
+        """{beneficiary_group: {category: scheme_count}} across the catalog."""
+        out: dict[str, dict[str, int]] = {}
+        with get_connection(self.db_path) as conn:
+            rows = conn.execute("SELECT beneficiary_groups_json, categories FROM schemes_catalog").fetchall()
+        for row in rows:
+            cats = [c.strip() for c in (row["categories"] or "").split(",") if c.strip()]
+            for group in json.loads(row["beneficiary_groups_json"] or "[]"):
+                bucket = out.setdefault(group, {})
+                for cat in cats:
+                    bucket[cat] = bucket.get(cat, 0) + 1
+        return out
+
+    def save_scheme_criteria(
+        self, slug: str, criteria: dict[str, Any], diagnostics: dict[str, Any], prompt_version: str, model_name: str
+    ) -> None:
+        with get_connection(self.db_path) as conn:
+            conn.execute(
+                """
+                INSERT INTO scheme_criteria(scheme_slug, criteria_json, diagnostics_json, prompt_version, model_name, extracted_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+                ON CONFLICT(scheme_slug) DO UPDATE SET
+                    criteria_json = excluded.criteria_json, diagnostics_json = excluded.diagnostics_json,
+                    prompt_version = excluded.prompt_version, model_name = excluded.model_name,
+                    extracted_at = excluded.extracted_at
+                """,
+                (slug, json.dumps(criteria, ensure_ascii=False), json.dumps(diagnostics, ensure_ascii=False),
+                 prompt_version, model_name, now_ist_iso()),
+            )
+
+    def get_scheme_criteria(self, slug: str) -> dict[str, Any] | None:
+        with get_connection(self.db_path) as conn:
+            row = conn.execute("SELECT * FROM scheme_criteria WHERE scheme_slug = ?", (slug,)).fetchone()
+        if not row:
+            return None
+        item = dict(row)
+        item["criteria"] = json.loads(item.pop("criteria_json"))
+        item["diagnostics"] = json.loads(item.pop("diagnostics_json"))
+        return item
+
+    def list_scheme_criteria_versions(self) -> dict[str, str]:
+        """{scheme_slug: prompt_version} for every extracted scheme (used to resume a batch run)."""
+        with get_connection(self.db_path) as conn:
+            rows = conn.execute("SELECT scheme_slug, prompt_version FROM scheme_criteria").fetchall()
+        return {r["scheme_slug"]: r["prompt_version"] for r in rows}
+
+    def list_scheme_slugs(self) -> list[str]:
+        with get_connection(self.db_path) as conn:
+            return [r["slug"] for r in conn.execute("SELECT slug FROM schemes_catalog ORDER BY slug").fetchall()]
+
     def get_scheme_faqs(self, slug: str, limit: int = 50) -> list[dict[str, Any]]:
         with get_connection(self.db_path) as conn:
             rows = conn.execute(

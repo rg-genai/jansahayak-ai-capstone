@@ -184,6 +184,16 @@ CREATE TABLE IF NOT EXISTS embedding_cache (
     created_at TEXT NOT NULL
 );
 
+-- LLM-extracted, code-grounded eligibility checklist per scheme (scripts/extract_eligibility_criteria.py)
+CREATE TABLE IF NOT EXISTS scheme_criteria (
+    scheme_slug TEXT PRIMARY KEY REFERENCES schemes_catalog(slug),
+    criteria_json TEXT NOT NULL,
+    diagnostics_json TEXT NOT NULL DEFAULT '{}',
+    prompt_version TEXT NOT NULL,
+    model_name TEXT NOT NULL,
+    extracted_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS email_notifications (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     registration_number TEXT NOT NULL,

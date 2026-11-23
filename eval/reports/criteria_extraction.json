@@ -1,0 +1,332 @@
+{
+  "summary": {
+    "dev": {
+      "schemes": 11,
+      "field_accuracy": {
+        "applicant_type": 90.9,
+        "groups": 100.0,
+        "education_stages": 90.9,
+        "study_location": 100.0,
+        "required_institution": 100.0,
+        "required_states": 100.0,
+        "gender": 100.0,
+        "age_min": 100.0,
+        "age_max": 100.0,
+        "income_max_inr": 100.0,
+        "social_categories": 90.9,
+        "requires_bpl": 100.0,
+        "requires_disability": 100.0
+      },
+      "overall_field_accuracy": 97.9,
+      "text_verified_fields_accuracy": 98.7,
+      "model_judgement_fields_accuracy": 97.0
+    },
+    "all": {
+      "schemes": 30,
+      "field_accuracy": {
+        "applicant_type": 93.3,
+        "groups": 90.0,
+        "education_stages": 86.7,
+        "study_location": 100.0,
+        "required_institution": 100.0,
+        "required_states": 96.7,
+        "gender": 100.0,
+        "age_min": 96.7,
+        "age_max": 93.3,
+        "income_max_inr": 100.0,
+        "social_categories": 90.0,
+        "requires_bpl": 100.0,
+        "requires_disability": 96.7
+      },
+      "overall_field_accuracy": 95.6,
+      "text_verified_fields_accuracy": 96.7,
+      "model_judgement_fields_accuracy": 94.4
+    },
+    "heldout": {
+      "schemes": 19,
+      "field_accuracy": {
+        "applicant_type": 94.7,
+        "groups": 84.2,
+        "education_stages": 84.2,
+        "study_location": 100.0,
+        "required_institution": 100.0,
+        "required_states": 94.7,
+        "gender": 100.0,
+        "age_min": 94.7,
+        "age_max": 89.5,
+        "income_max_inr": 100.0,
+        "social_categories": 89.5,
+        "requires_bpl": 100.0,
+        "requires_disability": 94.7
+      },
+      "overall_field_accuracy": 94.3,
+      "text_verified_fields_accuracy": 95.5,
+      "model_judgement_fields_accuracy": 93.0
+    }
+  },
+  "errors": [
+    {
+      "scheme": "dacssiselosobcebc",
+      "set": "dev",
+      "field": "social_categories",
+      "extracted": [
+        "OBC"
+      ],
+      "acceptable": [
+        [
+          "OBC",
+          "EBC"
+        ]
+      ]
+    },
+    {
+      "scheme": "pm-yasasvitcceobcebcdnts",
+      "set": "dev",
+      "field": "applicant_type",
+      "extracted": "institution",
+      "acceptable": [
+        "individual"
+      ]
+    },
+    {
+      "scheme": "pm-yasasvitcceobcebcdnts",
+      "set": "dev",
+      "field": "education_stages",
+      "extracted": [
+        "class_11_12"
+      ],
+      "acceptable": [
+        [
+          "undergraduate",
+          "postgraduate"
+        ],
+        [
+          "undergraduate",
+          "postgraduate",
+          "doctoral"
+        ]
+      ]
+    },
+    {
+      "scheme": "ngra",
+      "set": "heldout",
+      "field": "groups",
+      "extracted": [
+        "Farmer",
+        "Differently Abled",
+        "Entrepreneur",
+        "MSME",
+        "Researcher",
+        "Worker",
+        "Youth"
+      ],
+      "acceptable": {
+        "core": [
+          "Farmer"
+        ],
+        "allowed": [
+          "Farmer",
+          "Worker",
+          "Entrepreneur"
+        ]
+      }
+    },
+    {
+      "scheme": "sak-dip",
+      "set": "heldout",
+      "field": "education_stages",
+      "extracted": [
+        "school",
+        "class_11_12",
+        "undergraduate",
+        "postgraduate",
+        "doctoral"
+      ],
+      "acceptable": [
+        [
+          "undergraduate"
+        ],
+        [
+          "class_11_12"
+        ],
+        [
+          "class_11_12",
+          "undergraduate"
+        ]
+      ]
+    },
+    {
+      "scheme": "dsctassgcsccm",
+      "set": "heldout",
+      "field": "required_states",
+      "extracted": [
+        "Kerala",
+        "Karnataka",
+        "Tamil Nadu",
+        "Goa",
+        "Andhra Pradesh",
+        "Odisha",
+        "West Bengal",
+        "Madhya Pradesh",
+        "Maharashtra",
+        "Chhattisgarh",
+        "Jharkhand",
+        "Tripura",
+        "Assam",
+        "Nagaland",
+        "Manipur",
+        "Meghalaya",
+        "Mizoram",
+        "Arunachal Pradesh",
+        "Sikkim",
+        "Ladakh",
+        "Delhi",
+        "Puducherry",
+        "Andaman and Nicobar Islands",
+        "Lakshadweep"
+      ],
+      "acceptable": [
+        []
+      ]
+    },
+    {
+      "scheme": "jrfbio",
+      "set": "heldout",
+      "field": "education_stages",
+      "extracted": [
+        "postgraduate"
+      ],
+      "acceptable": [
+        [
+          "postgraduate",
+          "doctoral"
+        ],
+        [
+          "doctoral"
+        ]
+      ]
+    },
+    {
+      "scheme": "jrfbio",
+      "set": "heldout",
+      "field": "age_max",
+      "extracted": 28,
+      "acceptable": [
+        33
+      ]
+    },
+    {
+      "scheme": "jrfbio",
+      "set": "heldout",
+      "field": "social_categories",
+      "extracted": [
+        "SC",
+        "ST",
+        "EWS"
+      ],
+      "acceptable": [
+        []
+      ]
+    },
+    {
+      "scheme": "pmkvy-stt",
+      "set": "heldout",
+      "field": "groups",
+      "extracted": [
+        "Youth",
+        "Worker",
+        "Entrepreneur",
+        "Student"
+      ],
+      "acceptable": {
+        "core": [
+          "Youth"
+        ],
+        "allowed": [
+          "Youth",
+          "Worker",
+          "Student"
+        ]
+      }
+    },
+    {
+      "scheme": "stfhrdphr",
+      "set": "heldout",
+      "field": "education_stages",
+      "extracted": [
+        "postgraduate",
+        "doctoral"
+      ],
+      "acceptable": [
+        []
+      ]
+    },
+    {
+      "scheme": "rpsy",
+      "set": "heldout",
+      "field": "age_min",
+      "extracted": 18,
+      "acceptable": [
+        null
+      ]
+    },
+    {
+      "scheme": "rpsy",
+      "set": "heldout",
+      "field": "age_max",
+      "extracted": 59,
+      "acceptable": [
+        null
+      ]
+    },
+    {
+      "scheme": "tgsctclvccmuo",
+      "set": "heldout",
+      "field": "groups",
+      "extracted": [
+        "Student",
+        "Researcher",
+        "Worker"
+      ],
+      "acceptable": {
+        "core": [],
+        "allowed": [
+          "Researcher",
+          "Worker"
+        ]
+      }
+    },
+    {
+      "scheme": "tgsctclvccmuo",
+      "set": "heldout",
+      "field": "social_categories",
+      "extracted": [
+        "SC",
+        "ST",
+        "OBC"
+      ],
+      "acceptable": [
+        []
+      ]
+    },
+    {
+      "scheme": "tgsctclvccmuo",
+      "set": "heldout",
+      "field": "requires_disability",
+      "extracted": true,
+      "acceptable": [
+        null
+      ]
+    },
+    {
+      "scheme": "lbssf-els",
+      "set": "heldout",
+      "field": "applicant_type",
+      "extracted": "individual",
+      "acceptable": [
+        "both"
+      ]
+    }
+  ],
+  "missing_extractions": []
+}

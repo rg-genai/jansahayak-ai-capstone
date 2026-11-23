@@ -55,6 +55,18 @@ class PlannerOutput(BaseModel):
     profile_updates: dict[str, Any] = Field(default_factory=dict)
     tool_calls: list[PlannedToolCall] = Field(default_factory=list)
     reasoning: str = ""
+    # Set when this message answers the assistant's clarifying question: the original request it continues.
+    continues_request: str | None = None
+
+
+class ReflectionOutput(BaseModel):
+    """Reflector decision after observing one round of tool results."""
+
+    decision: Literal["answer", "search_again", "check_eligibility", "ask_user"] = "answer"
+    new_query: str | None = None
+    scheme_slugs: list[str] = Field(default_factory=list)
+    question: str | None = None
+    reason: str = ""
 
 
 class CriticOutput(BaseModel):
@@ -93,6 +105,13 @@ class AgentState(TypedDict, total=False):
     grievance_draft: dict[str, Any] | None
     grievance_receipt: dict[str, Any] | None
     hitl_paused: bool
+
+    # Agent loop (Reflector) state
+    reflection_round: int
+    reflections: list[dict[str, Any]]
+    pending_tool_calls: list[dict[str, Any]]  # tool calls requested by the Reflector for the next round
+    searched_queries: list[str]
+    clarifying_question: str | None
 
     draft_answer_en: str
     critic_output: dict[str, Any]
