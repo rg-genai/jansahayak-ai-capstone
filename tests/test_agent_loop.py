@@ -1,0 +1,201 @@
+"""Agent loop (Planner -> Executor <-> Reflector) behaviour: re-search, clarifying questions, loop guards.
+
+A scripted fake LLM stands in for Qwen3-8B so the control flow is tested deterministically;
+tools (retrieval, eligibility) are the real ones.
+"""
+
+from __future__ import annotations
+
+import json
+from typing import Any
+
+import pytest
+
+from backend.agent.graph import JanSahayakAgent, _is_bare_identifier, _validate_reflection, _verified_continuation
+from backend.agent.state import ReflectionOutput
+from backend.config import get_settings
+from backend.gateway.llm_client import LLMResponse
+
+PRIYA = {
+    "age": 19, "gender": "Female", "state": "Maharashtra", "annual_income_inr": 180000,
+    "social_category": "OBC", "occupation": "Student", "education_level": "B.Tech",
+}
+
+
+class ScriptedLLM:
+    """Returns canned replies per node, recognised by each node's system prompt."""
+
+    model = "fake-qwen"
+
+    def __init__(self, planner: dict, reflections: list[str]):
+        self.planner = json.dumps(planner)
+        self.reflections = list(reflections)
+        self.calls: list[str] = []
+
+    async def chat_completion(self, messages: list[dict[str, str]], **_: Any) -> LLMResponse:
+        system = messages[0]["content"]
+        if "Planner Node" in system:
+            node, content = "planner", self.planner
+        elif "Reflector Node" in system:
+            node = "reflector"
+            content = self.reflections.pop(0) if self.reflections else '{"decision": "answer", "reason": "done"}'
+        elif "Critic" in system:
+            node, content = "critic", '{"passed": true, "issues": [], "needs_revision": false, "revision_instructions": null}'
+        else:
+            node, content = "synthesizer", "**Schemes That May Suit You**\n- A matching scheme [1]."
+        self.calls.append(node)
+        return LLMResponse(content, content, 50, 20, 70, 1.0, 0, self.model)
+
+
+def _search_plan(intent: str = "ELIGIBILITY_CHECK") -> dict:
+    return {"intent": intent, "profile_updates": {}, "reasoning": "search first",
+            "tool_calls": [{"tool_name": "search_schemes", "arguments": {"query": "x", "top_k": 6}}]}
+
+
+def _searches(state: dict) -> list[dict]:
+    return [t for t in state["tool_calls_log"] if t["tool"] == "search_schemes"]
+
+
+@pytest.mark.asyncio
+async def test_reflector_searches_again_then_answers():
+    llm = ScriptedLLM(_search_plan("SCHEME_QA"), [
+        '{"decision": "search_again", "new_query": "post matric scholarship for OBC engineering students", "reason": "off-topic"}',
+        '{"decision": "answer", "reason": "good results"}',
+    ])
+    state = await JanSahayakAgent(llm=llm).run("Tell me about education help for students", "test-loop-1", citizen_profile=PRIYA)
+
+    assert len(_searches(state)) == 2, "the Reflector's new query must trigger a second search"
+    assert state["searched_queries"][1] == "post matric scholarship for OBC engineering students"
+    assert [r["decision"] for r in state["reflections"]] == ["search_again", "answer"]
+    assert llm.calls.count("synthesizer") == 1 and state["final_answer"]
+
+
+@pytest.mark.asyncio
+async def test_reflector_asks_user_instead_of_guessing():
+    llm = ScriptedLLM(_search_plan(), [
+        '{"decision": "ask_user", "question": "What is your age, occupation and yearly family income?", "reason": "empty profile"}',
+    ])
+    state = await JanSahayakAgent(llm=llm).run("Which schemes am I eligible for?", "test-loop-2", citizen_profile={})
+
+    assert state["status"] == "awaiting_user_input"
+    assert "occupation" in state["final_answer"]
+    assert "synthesizer" not in llm.calls, "no answer should be written when the agent is asking"
+
+
+@pytest.mark.asyncio
+async def test_loop_stops_at_max_rounds_even_if_model_keeps_searching():
+    """Infinite-loop guard: a model that always wants to search again is stopped by the round cap."""
+    llm = ScriptedLLM(_search_plan("SCHEME_QA"), [
+        json.dumps({"decision": "search_again", "new_query": f"different query number {i}", "reason": "again"})
+        for i in range(10)
+    ])
+    state = await JanSahayakAgent(llm=llm).run("education schemes", "test-loop-3", citizen_profile=PRIYA)
+
+    settings = get_settings()
+    assert state["reflection_round"] == settings.agent_max_reflection_rounds
+    assert state["reflections"][-1]["guard"] == "max_reflection_rounds_reached"
+    assert len(state["tool_calls_log"]) <= settings.agent_max_tool_calls
+    assert state["final_answer"]
+
+
+@pytest.mark.asyncio
+async def test_malformed_reflector_json_falls_back_to_answer():
+    llm = ScriptedLLM(_search_plan("SCHEME_QA"), ["this is not json at all"])
+    state = await JanSahayakAgent(llm=llm).run("scholarship schemes", "test-loop-4", citizen_profile=PRIYA)
+
+    assert state["reflections"][0]["decision"] == "answer"
+    assert state["reflections"][0]["guard"] == "unparseable_reflection_json"
+    assert state["final_answer"]
+
+
+# ---- Pure loop-guard unit tests (no LLM, no retrieval) ----
+
+def _state(**kw: Any) -> dict:
+    base = {"tool_calls_log": [{}] * 2, "searched_queries": ["pm kisan farmer"], "eligibility_cards": [],
+            "retrieved_chunks": [{"scheme_slug": "pm-kisan"}, {"scheme_slug": "pmfby"}]}
+    return {**base, **kw}
+
+
+def test_guard_blocks_repeated_query():
+    d, guard = _validate_reflection(ReflectionOutput(decision="search_again", new_query="PM-Kisan, farmer!"), _state(), 10)
+    assert d.decision == "answer" and guard == "repeated_or_empty_query"
+
+
+def test_guard_drops_invented_and_already_checked_slugs():
+    d, guard = _validate_reflection(
+        ReflectionOutput(decision="check_eligibility", scheme_slugs=["made-up-slug", "pm-kisan", "pmfby"]),
+        _state(eligibility_cards=[{"scheme_slug": "pm-kisan"}]), 10,
+    )
+    assert guard is None and d.scheme_slugs == ["pmfby"]
+
+    d, guard = _validate_reflection(ReflectionOutput(decision="check_eligibility", scheme_slugs=["made-up-slug"]), _state(), 10)
+    assert d.decision == "answer" and guard == "no_valid_unchecked_slugs"
+
+
+def test_guard_enforces_tool_call_budget():
+    d, guard = _validate_reflection(
+        ReflectionOutput(decision="search_again", new_query="a brand new query"), _state(tool_calls_log=[{}] * 10), 10
+    )
+    assert d.decision == "answer" and guard == "tool_call_budget_exhausted"
+
+
+def test_guard_rejects_empty_question():
+    d, guard = _validate_reflection(ReflectionOutput(decision="ask_user", question="  "), _state(), 10)
+    assert d.decision == "answer" and guard == "empty_clarifying_question"
+
+
+@pytest.mark.parametrize("message", ["1234 5678 9012", "NSP/2024/123456", "[AADHAAR_MASKED:XXXX-XXXX-0124]", "MH12AB1234"])
+def test_bare_identifier_detected(message):
+    assert _is_bare_identifier(message)
+
+
+@pytest.mark.parametrize("message", ["track my complaint MOAFW/E/2026/000001", "my PM-KISAN money is late", "hello", "Which schemes am I eligible for?"])
+def test_real_requests_are_not_bare_identifiers(message):
+    assert not _is_bare_identifier(message)
+
+
+@pytest.mark.asyncio
+async def test_bare_id_asks_instead_of_drafting_grievance():
+    """Regression: the 8B planner drafted a PM-KISAN grievance from the bare message '1234 5678 9012'."""
+    llm = ScriptedLLM({"intent": "GRIEVANCE_DRAFT", "tool_calls": [{"tool_name": "draft_grievance", "arguments": {
+        "scheme_name": "PM-KISAN", "ministry": "MOAFW", "issue_summary": "x"}}]}, [])
+    state = await JanSahayakAgent(llm=llm).run("1234 5678 9012", "test-loop-5", citizen_profile=PRIYA)
+
+    assert state["status"] == "awaiting_user_input"
+    assert not state.get("grievance_draft") and not state.get("tool_calls_log")
+    assert llm.calls == [], "no LLM call or tool should run for a bare ID"
+
+
+_HISTORY = [{"role": "user", "content": "Which schemes am I eligible for?"},
+            {"role": "assistant", "content": "To give you an accurate answer, I need a little more information.\n\n"
+                                             "**What is your age, occupation, and yearly family income?**"}]
+
+
+def test_continuation_accepted_only_if_in_history():
+    assert _verified_continuation("Which schemes am I eligible for?", _HISTORY) == "Which schemes am I eligible for?"
+    assert _verified_continuation("which schemes am i eligible for", _HISTORY) == "Which schemes am I eligible for?"
+    assert _verified_continuation("Tell me about PM-KISAN", _HISTORY) is None  # hallucinated "original request"
+    assert _verified_continuation(None, _HISTORY) is None
+
+
+@pytest.mark.asyncio
+async def test_answer_to_clarifying_question_continues_original_request():
+    llm = ScriptedLLM({"intent": "ELIGIBILITY_CHECK", "continues_request": "Which schemes am I eligible for?",
+                       "profile_updates": {"age": 45, "occupation": "Farmer", "annual_income_inr": 100000},
+                       "tool_calls": [{"tool_name": "search_schemes", "arguments": {"query": "x"}}]}, [])
+    state = await JanSahayakAgent(llm=llm).run(
+        "I am 45, a farmer, and we earn about 1 lakh a year", "test-loop-6", citizen_profile={}, history=_HISTORY)
+
+    assert state["query_en"] == "Which schemes am I eligible for?"
+    assert state["citizen_profile"]["occupation"] == "Farmer"
+    first_search = state["searched_queries"][0]
+    assert "farmer" in first_search.lower() and "45" in first_search, "broad eligibility search should use the new profile"
+
+
+@pytest.mark.asyncio
+async def test_continuation_detected_even_when_model_omits_it():
+    """Live Qwen3-8B returned profile_updates but no continues_request; our own question in history is used."""
+    llm = ScriptedLLM({"intent": "ELIGIBILITY_CHECK", "profile_updates": {"age": 45, "occupation": "Farmer"},
+                       "tool_calls": [{"tool_name": "search_schemes", "arguments": {"query": "x"}}]}, [])
+    state = await JanSahayakAgent(llm=llm).run("I am 45 and a farmer", "test-loop-7", citizen_profile={}, history=_HISTORY)
+    assert state["query_en"] == "Which schemes am I eligible for?"

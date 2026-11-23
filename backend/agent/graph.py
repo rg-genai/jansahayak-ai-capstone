@@ -1,4 +1,4 @@
-"""LangGraph Stateful Multi-Agent Orchestrator: InputGuardrail -> LanguagePivot -> Planner -> Executor -> Synthesizer -> Critic -> OutputLocalizer."""
+"""LangGraph Stateful Agent: InputGuardrail -> LanguagePivot -> Planner -> [Executor <-> Reflector loop] -> Synthesizer -> Critic -> OutputLocalizer."""
 
 from __future__ import annotations
 
@@ -14,12 +14,20 @@ from langgraph.graph import END, StateGraph
 from backend.agent.prompts import (
     CRITIC_SYSTEM_PROMPT,
     PLANNER_SYSTEM_PROMPT,
+    REFLECTOR_SYSTEM_PROMPT,
     SYNTHESIZER_SYSTEM_PROMPT,
     build_p1_zero_shot_messages,
     build_p2_few_shot_messages,
 )
 from backend.agent.profile_matching import CatalogVocabulary, get_catalog_vocabulary
-from backend.agent.state import AgentState, CitizenProfile, CriticOutput, PlannedToolCall, PlannerOutput
+from backend.agent.state import (
+    AgentState,
+    CitizenProfile,
+    CriticOutput,
+    PlannedToolCall,
+    PlannerOutput,
+    ReflectionOutput,
+)
 from backend.agent.tools import (
     AgentToolbox,
     CheckEligibilityInput,
@@ -29,6 +37,7 @@ from backend.agent.tools import (
     WebSearchGovInput,
     parse_and_repair_json,
 )
+from backend.config import get_settings
 from backend.db.repositories import Repository
 from backend.gateway.llm_client import LLMGateway, get_llm_gateway
 from backend.gateway.translation_client import TranslationClient, detect_language, normalize_lang_code
@@ -73,6 +82,156 @@ _VERDICT_RANK = {"ELIGIBLE": 0, "PARTIALLY_ELIGIBLE": 1, "NEEDS_MORE_INFO": 2, "
 
 # How many distinct schemes to eligibility-check for a broad discovery question.
 _BROAD_ELIGIBILITY_MAX_SCHEMES = 5
+
+# Evidence chunks kept for the Synthesizer across loop rounds (keeps the 8B prompt within budget).
+_MAX_EVIDENCE_CHUNKS = 8
+
+
+# ---- Agent loop (Reflector) helpers ----
+# Intents where observing results and adapting is useful; grievance/tracking flows are single-pass.
+_REFLECTIVE_INTENTS = ("SCHEME_QA", "ELIGIBILITY_CHECK")
+_MAX_SCHEMES_IN_OBSERVATION = 6
+_MAX_RECHECK_SLUGS = 3
+_NON_WORD_RE = re.compile(r"[^a-z0-9]+")
+
+
+# Profile facts that most often decide eligibility, with plain-language names for the clarifying question.
+_KEY_PROFILE_FACTS = {
+    "age": "age",
+    "occupation": "occupation",
+    "annual_income_inr": "yearly family income",
+    "social_category": "social category (SC / ST / OBC / EWS / General)",
+}
+
+# A message that is only an ID / number with no request (e.g. "1234 5678 9012"): the 8B planner was seen
+# drafting a grievance from such input, so it is routed to a clarifying question before any tool runs.
+_MASKED_PII_RE = re.compile(r"\[[A-Z_]+(?::[^\]]*)?\]")
+_ID_LIKE_RE = re.compile(r"\d")
+_WORD_RE = re.compile(r"[A-Za-z]{2,}")
+_ACRONYM_MAX_LEN = 5
+# Opening line of every clarifying question this agent asks (lets the next turn recognise an answer to it).
+_CLARIFY_PREFIX = "To give you an accurate answer, I need a little more information."
+
+_BARE_ID_QUESTION = (
+    "I can see you've shared a number or ID. What would you like me to do with it? For example: track a "
+    "complaint, check a scheme application, or find schemes for you. (For your safety, please don't share "
+    "your full Aadhaar number here.)"
+)
+
+
+def _is_bare_identifier(message: str) -> bool:
+    text = message or ""
+    has_id = bool(_MASKED_PII_RE.search(text) or _ID_LIKE_RE.search(text))
+    words = [
+        w for w in _WORD_RE.findall(_MASKED_PII_RE.sub(" ", text))
+        if not (w.isupper() and len(w) <= _ACRONYM_MAX_LEN)  # "NSP" in "NSP/2024/123456" is part of the ID
+    ]
+    return has_id and not words
+
+
+def _verified_continuation(claimed: str | None, history: list[dict[str, str]]) -> str | None:
+    """Return the original request being continued, only if it really is an earlier user message."""
+    want = _normalize_query(claimed)
+    if len(want) < 3:
+        return None
+    for msg in reversed(history):
+        if msg.get("role") == "user":
+            have = _normalize_query(msg.get("content"))
+            if want == have or (len(want) >= 10 and (want in have or have in want)):
+                return msg["content"]
+    return None
+
+
+def _request_before_our_question(history: list[dict[str, str]]) -> str | None:
+    """If our last reply was a clarifying question, return the user request that prompted it."""
+    if len(history) >= 2 and history[-1].get("role") == "assistant" and history[-2].get("role") == "user":
+        if (history[-1].get("content") or "").startswith(_CLARIFY_PREFIX):
+            return history[-2].get("content") or None
+    return None
+
+
+def _normalize_query(q: str | None) -> str:
+    return _NON_WORD_RE.sub(" ", (q or "").lower()).strip()
+
+
+def _summarize_observations(state: AgentState, max_tool_calls: int) -> str:
+    """Compact, token-cheap view of what the tools returned, for the Reflector."""
+    profile = CitizenProfile.model_validate(state.get("citizen_profile") or {}).non_empty_dict()
+    profile.pop("preferred_language", None)
+    cards = {c.get("scheme_slug"): c for c in state.get("eligibility_cards") or []}
+
+    schemes: dict[str, dict[str, Any]] = {}
+    for ch in state.get("retrieved_chunks") or []:
+        slug = ch.get("scheme_slug")
+        if not slug:
+            continue
+        score = float((ch.get("scores") or {}).get("rerank") or 0.0)
+        if slug not in schemes or score > schemes[slug]["score"]:
+            schemes[slug] = {"name": ch.get("scheme_name"), "score": score}
+
+    lines = []
+    for slug, info in list(schemes.items())[:_MAX_SCHEMES_IN_OBSERVATION]:
+        card = cards.get(slug)
+        verdict = card.get("verdict") if card else "not checked"
+        note = ""
+        if card and card.get("unmet_criteria"):
+            note = f" ({card['unmet_criteria'][0][:90]})"
+        elif card and card.get("clarifying_questions"):
+            note = f" (needs: {card['clarifying_questions'][0][:90]})"
+        lines.append(f"- {slug} | {info['name']} | relevance {info['score']:.2f} | {verdict}{note}")
+
+    used = len(state.get("tool_calls_log") or [])
+    intent = (state.get("planner_output") or {}).get("intent", "SCHEME_QA")
+    missing = [label for key, label in _KEY_PROFILE_FACTS.items() if key not in profile]
+    missing_line = (
+        f"Key profile facts missing: {', '.join(missing)}\n" if intent == "ELIGIBILITY_CHECK" and missing else ""
+    )
+    return (
+        f"Citizen Question: {state.get('query_en', '')}\n"
+        f"Intent: {intent}\n"
+        f"Citizen Profile: {json.dumps(profile, ensure_ascii=False) if profile else '(empty - nothing known)'}\n"
+        f"{missing_line}"
+        f"Queries Already Tried: {json.dumps(state.get('searched_queries') or [], ensure_ascii=False)}\n"
+        f"Schemes Found (slug | name | relevance 0-1 | eligibility verdict):\n"
+        + ("\n".join(lines) if lines else "- (none)")
+        + f"\nOfficial web results: {len(state.get('web_results') or [])}\n"
+        f"Tool calls left: {max(0, max_tool_calls - used)}\n"
+        "Output ONLY the Reflector JSON."
+    )
+
+
+def _validate_reflection(
+    decision: ReflectionOutput, state: AgentState, max_tool_calls: int
+) -> tuple[ReflectionOutput, str | None]:
+    """Loop guards: turn an unsafe or pointless Reflector decision into 'answer'. Returns (decision, guard)."""
+
+    def answer(guard: str) -> tuple[ReflectionOutput, str]:
+        return ReflectionOutput(decision="answer", reason=decision.reason), guard
+
+    budget = max_tool_calls - len(state.get("tool_calls_log") or [])
+    if decision.decision in ("search_again", "check_eligibility") and budget <= 0:
+        return answer("tool_call_budget_exhausted")
+
+    if decision.decision == "search_again":
+        new_q = _normalize_query(decision.new_query)
+        tried = {_normalize_query(q) for q in state.get("searched_queries") or []}
+        if len(new_q) < 3 or new_q in tried:
+            return answer("repeated_or_empty_query")  # infinite-loop guard
+        return decision, None
+
+    if decision.decision == "check_eligibility":
+        found = {c.get("scheme_slug") for c in state.get("retrieved_chunks") or []}
+        checked = {c.get("scheme_slug") for c in state.get("eligibility_cards") or []}
+        slugs = [s for s in dict.fromkeys(decision.scheme_slugs) if s in found and s not in checked]
+        slugs = slugs[: min(_MAX_RECHECK_SLUGS, budget)]
+        if not slugs:
+            return answer("no_valid_unchecked_slugs")  # blocks invented or repeated slugs
+        return decision.model_copy(update={"scheme_slugs": slugs}), None
+
+    if decision.decision == "ask_user" and not (decision.question or "").strip():
+        return answer("empty_clarifying_question")
+
+    return decision, None
 
 
 def _is_broad_eligibility_query(query_en: str, vocab: CatalogVocabulary) -> bool:
@@ -204,7 +363,7 @@ def _deterministic_critic_check(state: AgentState) -> CriticOutput:
 
 
 class JanSahayakAgent:
-    """Compiled LangGraph Planner -> Executor -> Synthesizer -> Critic agent."""
+    """Compiled LangGraph agent: Planner -> (Executor <-> Reflector, max 10 tool calls) -> Synthesizer -> Critic."""
 
     def __init__(
         self,
@@ -437,6 +596,26 @@ class JanSahayakAgent:
                 "spans": spans,
             }
 
+        # Deterministic fast-track 3: only an ID / number, no request -> ask what they need (no tools, no guessing)
+        if _is_bare_identifier(state.get("user_message_masked") or query_en):
+            plan = PlannerOutput(intent="CONVERSATION_HELP", tool_calls=[], reasoning="Bare ID/number with no request.")
+            step_lat = dict(state.get("step_latencies") or {})
+            step_lat["planner_ms"] = round((time.perf_counter() - t0) * 1000.0, 2)
+            spans = self._append_span(
+                state,
+                name="Planner (Fast-Track: bare ID -> clarify)",
+                span_type="GUARDRAIL",
+                t_start=t0,
+                inp={"query_en": query_en},
+                out=plan.model_dump(),
+            )
+            return {
+                "planner_output": plan.model_dump(),
+                "clarifying_question": _BARE_ID_QUESTION,
+                "step_latencies": step_lat,
+                "spans": spans,
+            }
+
         # Call Qwen3-8B Planner with JSON extraction & 1-shot Pydantic repair
         recent_hist = (state.get("history") or [])[-4:]
         hist_str = "\n".join(f"{m['role']}: {m['content'][:250]}" for m in recent_hist)
@@ -492,6 +671,18 @@ class JanSahayakAgent:
                 continue
             safe_tools.append(tc)
 
+        # Multi-turn continuation: the citizen answered our clarifying question, so the turn works on the
+        # ORIGINAL request (with the new profile facts). Accepted only if that request is really in history.
+        history = state.get("history") or []
+        task_query = _verified_continuation(parsed.continues_request, history)
+        if not task_query and parsed.profile_updates:
+            # Small models often leave continues_request empty: fall back to our own last clarifying question.
+            task_query = _request_before_our_question(history)
+        if task_query:
+            query_en = task_query
+        else:
+            parsed.continues_request = None
+
         # CONSISTENCY GUARANTEE: For SCHEME_QA & ELIGIBILITY_CHECK, ALWAYS execute search_schemes FIRST
         # using the faithful English query (`query_en`), so English, Hindi, Tamil, Marathi, Bengali & Telugu
         # always retrieve the exact same canonical top schemes instead of skipping search or dropping keywords like "OBC"!
@@ -536,7 +727,7 @@ class JanSahayakAgent:
             error=repair_diag.get("error"),
         )
 
-        return {
+        out = {
             "planner_output": planner_dict,
             "citizen_profile": merged_profile.model_dump(),
             "prompt_tokens": p_toks,
@@ -544,27 +735,40 @@ class JanSahayakAgent:
             "step_latencies": step_lat,
             "spans": spans,
         }
+        if task_query:
+            out["query_en"] = task_query  # later nodes answer the original request
+        return out
 
     # ---- Node 4: Executor (runs planned Pydantic tools + automatic web fallback / eligibility check) ----
     async def _node_executor(self, state: AgentState) -> dict[str, Any]:
         t0 = time.perf_counter()
         plan = state.get("planner_output") or {}
         intent = plan.get("intent", "SCHEME_QA")
-        tool_calls = plan.get("tool_calls") or []
+        # Results accumulate across loop rounds (planner round 0, then Reflector-requested rounds).
+        round_no = int(state.get("reflection_round") or 0)
+        tool_calls = (state.get("pending_tool_calls") if round_no else plan.get("tool_calls")) or []
         profile_dict = state.get("citizen_profile") or {}
         query_en = state.get("query_en") or ""
 
-        tool_logs: list[dict[str, Any]] = []
+        settings = get_settings()
+        tool_logs: list[dict[str, Any]] = list(state.get("tool_calls_log") or [])
+        logs_before = len(tool_logs)
         retrieved_chunks: list[dict[str, Any]] = list(state.get("retrieved_chunks") or [])
         web_results: list[dict[str, Any]] = list(state.get("web_results") or [])
-        eligibility_cards: list[dict[str, Any]] = []
+        eligibility_cards: list[dict[str, Any]] = list(state.get("eligibility_cards") or [])
+        searched_queries: list[str] = list(state.get("searched_queries") or [])
         grievance_draft: dict[str, Any] | None = None
         grievance_receipt: dict[str, Any] | None = None
         active_slugs: list[str] = list(state.get("active_scheme_slugs") or [])
         low_confidence = False
         # Broad "which schemes am I eligible for?" -> search with the profile and check several schemes.
+        # Only on round 0: later search queries are chosen by the Reflector itself.
         vocab = get_catalog_vocabulary(self.repo)
         broad_eligibility = intent == "ELIGIBILITY_CHECK" and _is_broad_eligibility_query(query_en, vocab)
+        apply_profile_query = broad_eligibility and round_no == 0
+
+        def budget_left() -> int:
+            return settings.agent_max_tool_calls - len(tool_logs)
 
         friendly_tool_msg = {
             "search_schemes": "Searching 649 Central Government schemes & official FAQs...",
@@ -578,12 +782,15 @@ class JanSahayakAgent:
             tname = tc.get("tool_name")
             raw_args = dict(tc.get("arguments") or {})
             t_start = time.perf_counter()
+            if budget_left() <= 0:
+                tool_logs.append({"tool": tname, "args": raw_args, "status": "skipped_step_budget"})
+                continue
             await self._emit("tool_call", {"tool": tname, "status": friendly_tool_msg.get(str(tname), "Looking up details...")})
 
             try:
                 if tname == "search_schemes":
                     raw_args.setdefault("query", query_en)
-                    if broad_eligibility:
+                    if apply_profile_query:
                         profile_query, profile_group = vocab.build_discovery_query(
                             CitizenProfile.model_validate(profile_dict)
                         )
@@ -593,7 +800,10 @@ class JanSahayakAgent:
                             raw_args["beneficiary_group"] = profile_group
                     inp = SearchSchemesInput.model_validate(raw_args)
                     res = await self.toolbox.search_schemes(inp, citizen_profile=profile_dict)
-                    retrieved_chunks = res["results"]
+                    searched_queries.append(inp.query)
+                    # Newer results first; keep earlier evidence the agent may still cite (deduped, capped).
+                    merged = {c["citation_id"]: c for c in [*res["results"], *(retrieved_chunks if round_no else [])]}
+                    retrieved_chunks = list(merged.values())[:_MAX_EVIDENCE_CHUNKS]
                     low_confidence = bool(res.get("low_confidence"))
                     for r in retrieved_chunks[:3]:
                         if r["scheme_slug"] and r["scheme_slug"] not in active_slugs:
@@ -692,9 +902,15 @@ class JanSahayakAgent:
 
         # Automatic follow-up 1: If intent is ELIGIBILITY_CHECK and we found schemes but haven't checked eligibility yet
         # (broad questions check up to 5 distinct schemes; a specific question checks only the top match)
-        if intent == "ELIGIBILITY_CHECK" and not eligibility_cards and retrieved_chunks:
-            distinct_slugs = list(dict.fromkeys(c["scheme_slug"] for c in retrieved_chunks if c.get("scheme_slug")))
-            for slug in distinct_slugs[: _BROAD_ELIGIBILITY_MAX_SCHEMES if broad_eligibility else 1]:
+        checked = {c.get("scheme_slug") for c in eligibility_cards}
+        new_cards_this_round = len(eligibility_cards) > len(state.get("eligibility_cards") or [])
+        if intent == "ELIGIBILITY_CHECK" and not new_cards_this_round and retrieved_chunks:
+            distinct_slugs = [
+                s for s in dict.fromkeys(c["scheme_slug"] for c in retrieved_chunks if c.get("scheme_slug"))
+                if s not in checked
+            ]
+            limit = _BROAD_ELIGIBILITY_MAX_SCHEMES if broad_eligibility else 1
+            for slug in distinct_slugs[: max(0, min(limit, budget_left()))]:
                 try:
                     elig = await self.toolbox.check_eligibility(
                         CheckEligibilityInput(
@@ -713,11 +929,11 @@ class JanSahayakAgent:
                     })
                 except Exception as exc:
                     logger.warning("Auto-chained check_eligibility failed for %s: %s", slug, exc)
-            # Best matches first so the answer leads with schemes the citizen can actually use
-            eligibility_cards.sort(key=lambda c: _VERDICT_RANK.get(str(c.get("verdict")), 9))
+        # Best matches first so the answer leads with schemes the citizen can actually use
+        eligibility_cards.sort(key=lambda c: _VERDICT_RANK.get(str(c.get("verdict")), 9))
 
         # Automatic follow-up 2: Low-confidence local retrieval -> restricted .gov.in web fallback
-        if low_confidence and not web_results and intent in ("SCHEME_QA", "ELIGIBILITY_CHECK"):
+        if low_confidence and not web_results and intent in ("SCHEME_QA", "ELIGIBILITY_CHECK") and budget_left() > 0:
             await self._emit("tool_call", {"tool": "web_search_gov_schemes", "status": "Searching official .gov.in portals..."})
             web_res = await self.toolbox.web_search_gov_schemes(WebSearchGovInput(query=query_en, max_results=4))
             web_results.extend(web_res.get("results") or [])
@@ -735,16 +951,18 @@ class JanSahayakAgent:
 
         lat = round((time.perf_counter() - t0) * 1000.0, 2)
         step_lat = dict(state.get("step_latencies") or {})
-        step_lat["executor_ms"] = lat
+        round_logs = tool_logs[logs_before:]
+        n_calls = len(round_logs)
         spans = self._append_span(
             state,
-            name=f"Executor ({len(tool_logs)} tool call{'s' if len(tool_logs) != 1 else ''})",
+            name=f"Executor (round {round_no + 1}, {n_calls} tool call{'s' if n_calls != 1 else ''})",
             span_type="RETRIEVAL" if retrieved_chunks else "TOOL",
             t_start=t0,
-            status="error" if any(t.get("status") == "error" for t in tool_logs) else "ok",
-            inp={"planned_tools": [tc.get("tool_name") for tc in tool_calls]},
+            status="error" if any(t.get("status") == "error" for t in round_logs) else "ok",
+            inp={"planned_tools": [tc.get("tool_name") for tc in tool_calls], "round": round_no + 1},
             out={
-                "tool_calls": tool_logs,
+                "tool_calls": round_logs,
+                "total_tool_calls_so_far": len(tool_logs),
                 "retrieved_count": len(retrieved_chunks),
                 "web_results_count": len(web_results),
                 "eligibility_cards_count": len(eligibility_cards),
@@ -752,8 +970,10 @@ class JanSahayakAgent:
             },
         )
 
+        step_lat["executor_ms"] = round(float((state.get("step_latencies") or {}).get("executor_ms", 0.0)) + lat, 2)
         return {
             "tool_calls_log": tool_logs,
+            "searched_queries": searched_queries,
             "retrieved_chunks": retrieved_chunks,
             "web_results": web_results,
             "eligibility_cards": eligibility_cards,
@@ -765,6 +985,100 @@ class JanSahayakAgent:
             "citations": citations,
             "step_latencies": step_lat,
             "spans": spans,
+        }
+
+    # ---- Node 4b: Reflector (observe tool results -> decide the next step; bounded loop) ----
+    async def _node_reflector(self, state: AgentState) -> dict[str, Any]:
+        t0 = time.perf_counter()
+        settings = get_settings()
+        round_no = int(state.get("reflection_round") or 0)
+        intent = (state.get("planner_output") or {}).get("intent", "SCHEME_QA")
+        tokens_used = int(state.get("prompt_tokens", 0)) + int(state.get("completion_tokens", 0))
+
+        # Loop guards that end the loop without spending an LLM call
+        stop_reason: str | None = None
+        if not settings.agent_reflection_enabled:
+            stop_reason = "reflection_disabled"
+        elif intent not in _REFLECTIVE_INTENTS:
+            stop_reason = f"not_needed_for_{intent.lower()}"
+        elif round_no >= settings.agent_max_reflection_rounds:
+            stop_reason = "max_reflection_rounds_reached"
+        elif len(state.get("tool_calls_log") or []) >= settings.agent_max_tool_calls:
+            stop_reason = "tool_call_budget_exhausted"
+        elif tokens_used >= settings.agent_token_budget:
+            stop_reason = "token_budget_exhausted"
+
+        decision = ReflectionOutput(decision="answer", reason=stop_reason or "")
+        guard: str | None = stop_reason
+        pt = ct = 0
+        llm_used = False
+        if stop_reason is None:
+            await self._emit("reflect", {"status": "Checking whether these results really answer your question..."})
+            try:
+                resp = await self.llm.chat_completion(
+                    messages=[
+                        {"role": "system", "content": REFLECTOR_SYSTEM_PROMPT},
+                        {"role": "user", "content": _summarize_observations(state, settings.agent_max_tool_calls)},
+                    ],
+                    max_tokens=160,
+                    temperature=0.0,
+                    disable_thinking=True,
+                )
+                pt, ct, llm_used = resp.prompt_tokens, resp.completion_tokens, True
+                parsed, _ = await parse_and_repair_json(resp.content, ReflectionOutput, llm=self.llm, allow_llm_repair=False)
+                if parsed is not None:
+                    decision = parsed
+                else:
+                    guard = "unparseable_reflection_json"
+            except Exception as exc:  # tool/LLM failure must never break the turn
+                logger.warning("Reflector failed (%s); answering with current evidence.", exc)
+                guard = "reflector_error"
+            if guard is None:
+                decision, guard = _validate_reflection(decision, state, settings.agent_max_tool_calls)
+
+        next_calls: list[dict[str, Any]] = []
+        if decision.decision == "search_again":
+            next_calls = [{"tool_name": "search_schemes", "arguments": {"query": decision.new_query, "top_k": 6}}]
+        elif decision.decision == "check_eligibility":
+            next_calls = [{"tool_name": "check_eligibility", "arguments": {"scheme_slug": s}} for s in decision.scheme_slugs]
+
+        record = {"round": round_no + 1, **decision.model_dump(), "guard": guard, "llm_used": llm_used}
+        reflections = [*(state.get("reflections") or []), record]
+
+        lat = round((time.perf_counter() - t0) * 1000.0, 2)
+        step_lat = dict(state.get("step_latencies") or {})
+        step_lat["reflector_ms"] = round(step_lat.get("reflector_ms", 0.0) + lat, 2)
+        spans = self._append_span(
+            state,
+            name=f"Reflector (round {round_no + 1}: {decision.decision})",
+            span_type="LLM" if llm_used else "GUARDRAIL",
+            t_start=t0,
+            inp={"round": round_no + 1, "tool_calls_so_far": len(state.get("tool_calls_log") or []), "tokens_so_far": tokens_used},
+            out=record,
+            prompt_tokens=pt,
+            completion_tokens=ct,
+        )
+        out: dict[str, Any] = {
+            "reflections": reflections,
+            "prompt_tokens": int(state.get("prompt_tokens", 0)) + pt,
+            "completion_tokens": int(state.get("completion_tokens", 0)) + ct,
+            "step_latencies": step_lat,
+            "spans": spans,
+        }
+        if next_calls:
+            out["pending_tool_calls"] = next_calls
+            out["reflection_round"] = round_no + 1
+        if decision.decision == "ask_user":
+            out["clarifying_question"] = decision.question
+        return out
+
+    # ---- Node 4c: Ask the citizen a clarifying question (ends the turn; answer arrives next turn) ----
+    async def _node_ask_user(self, state: AgentState) -> dict[str, Any]:
+        question = (state.get("clarifying_question") or "").strip()
+        return {
+            "draft_answer_en": f"{_CLARIFY_PREFIX}\n\n**{question}**",
+            "critic_output": {"passed": True, "issues": [], "needs_revision": False, "mode": "clarification"},
+            "status": "awaiting_user_input",
         }
 
     # ---- Node 5: HITL Pause Formatter (when draft_grievance was created) ----
@@ -1052,6 +1366,8 @@ class JanSahayakAgent:
     def _route_after_planner(state: AgentState) -> str:
         plan = state.get("planner_output") or {}
         intent = plan.get("intent")
+        if state.get("clarifying_question"):
+            return "ask_user"
         if intent == "CONVERSATION_HELP":
             return "conversation_help"
         if intent == "OUT_OF_SCOPE" and not plan.get("tool_calls"):
@@ -1119,7 +1435,17 @@ class JanSahayakAgent:
 
     @staticmethod
     def _route_after_executor(state: AgentState) -> str:
-        return "hitl_pause" if state.get("hitl_paused") else "synthesize"
+        return "hitl_pause" if state.get("hitl_paused") else "reflect"
+
+    @staticmethod
+    def _route_after_reflector(state: AgentState) -> str:
+        last = (state.get("reflections") or [{}])[-1]
+        decision = last.get("decision")
+        if decision == "ask_user":
+            return "ask_user"
+        if decision in ("search_again", "check_eligibility"):
+            return "continue"
+        return "synthesize"
 
     @staticmethod
     def _route_after_critic(state: AgentState) -> str:
@@ -1146,6 +1472,8 @@ class JanSahayakAgent:
         sg.add_node("language_pivot", self._node_language_pivot)
         sg.add_node("planner", self._node_planner)
         sg.add_node("executor", self._node_executor)
+        sg.add_node("reflector", self._node_reflector)
+        sg.add_node("ask_user", self._node_ask_user)
         sg.add_node("hitl_pause", self._node_hitl_pause)
         sg.add_node("conversation_help", self._node_conversation_help)
         sg.add_node("out_of_scope", self._node_out_of_scope)
@@ -1166,6 +1494,7 @@ class JanSahayakAgent:
             {
                 "conversation_help": "conversation_help",
                 "out_of_scope": "out_of_scope",
+                "ask_user": "ask_user",
                 "execute": "executor",
             },
         )
@@ -1174,8 +1503,15 @@ class JanSahayakAgent:
         sg.add_conditional_edges(
             "executor",
             self._route_after_executor,
-            {"hitl_pause": "hitl_pause", "synthesize": "synthesizer"},
+            {"hitl_pause": "hitl_pause", "reflect": "reflector"},
         )
+        # The agent loop: Reflector observes results and may send the Executor back out (bounded).
+        sg.add_conditional_edges(
+            "reflector",
+            self._route_after_reflector,
+            {"continue": "executor", "ask_user": "ask_user", "synthesize": "synthesizer"},
+        )
+        sg.add_edge("ask_user", "output_localizer")
         sg.add_edge("hitl_pause", "output_localizer")
         sg.add_edge("synthesizer", "critic")
         sg.add_conditional_edges(
@@ -1214,6 +1550,11 @@ class JanSahayakAgent:
             "eligibility_cards": [],
             "tool_calls_log": [],
             "revision_count": 0,
+            "reflection_round": 0,
+            "reflections": [],
+            "searched_queries": [],
+            "pending_tool_calls": [],
+            "clarifying_question": None,
             "prompt_tokens": 0,
             "completion_tokens": 0,
             "step_latencies": {},
