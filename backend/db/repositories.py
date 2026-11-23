@@ -37,6 +37,25 @@ class Repository:
             item["dbt_scheme"] = bool(item.get("dbt_scheme"))
             return item
 
+    def list_scheme_titles(self) -> list[dict[str, str]]:
+        """Slug, full name and short title of every scheme (for name matching)."""
+        with get_connection(self.db_path) as conn:
+            rows = conn.execute("SELECT slug, scheme_name, short_title FROM schemes_catalog").fetchall()
+        return [dict(r) for r in rows]
+
+    def beneficiary_group_categories(self) -> dict[str, dict[str, int]]:
+        """{beneficiary_group: {category: scheme_count}} across the catalog."""
+        out: dict[str, dict[str, int]] = {}
+        with get_connection(self.db_path) as conn:
+            rows = conn.execute("SELECT beneficiary_groups_json, categories FROM schemes_catalog").fetchall()
+        for row in rows:
+            cats = [c.strip() for c in (row["categories"] or "").split(",") if c.strip()]
+            for group in json.loads(row["beneficiary_groups_json"] or "[]"):
+                bucket = out.setdefault(group, {})
+                for cat in cats:
+                    bucket[cat] = bucket.get(cat, 0) + 1
+        return out
+
     def get_scheme_faqs(self, slug: str, limit: int = 50) -> list[dict[str, Any]]:
         with get_connection(self.db_path) as conn:
             rows = conn.execute(

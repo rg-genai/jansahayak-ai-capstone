@@ -18,6 +18,7 @@ from backend.agent.prompts import (
     build_p1_zero_shot_messages,
     build_p2_few_shot_messages,
 )
+from backend.agent.profile_matching import CatalogVocabulary, get_catalog_vocabulary
 from backend.agent.state import AgentState, CitizenProfile, CriticOutput, PlannedToolCall, PlannerOutput
 from backend.agent.tools import (
     AgentToolbox,
@@ -40,6 +41,7 @@ EventCallback = Callable[[str, dict[str, Any]], Awaitable[None]]
 
 _TICKET_PATTERN = re.compile(r"\b([A-Z]{4,6}/E/20\d{2}/\d{6})\b")
 _CITATION_PATTERN = re.compile(r"\[\d+\]")
+_CITATION_NUM_RE = re.compile(r"\[(\d+)\]")
 
 _GREETING_OR_HELP_RE = re.compile(
     r"^\s*(?:(?:hi|hello|hey|namaste|namaskar|namaskaram|vanakkam|nomoshkar|good\s+(?:morning|afternoon|evening)|howdy)[,!.\s]*)*"
@@ -55,6 +57,27 @@ _SCHEME_KEYWORDS_RE = re.compile(
     r"ujjwala|sukanya|grievance|complaint|cpgrams|eligible|eligibility|documents|ration|insurance|farmer|student|artisan)\b",
     re.IGNORECASE,
 )
+
+
+# Phrasing of a broad discovery question ("Which schemes am I eligible for?"). Whether the
+# question names a specific scheme is checked against the catalog, not a hardcoded list.
+_BROAD_ELIGIBILITY_RE = re.compile(
+    r"\b(?:which|what|any|all|list|show|suggest|recommend|find)\b.{0,40}\b(?:schemes?|yojanas?|benefits?|scholarships?|programm?e?s?)\b"
+    r"|\b(?:schemes?|yojanas?|benefits?|scholarships?)\b.{0,30}\b(?:for me|eligible|qualify|can i (?:get|apply))\b"
+    r"|\b(?:am i|i am|i'm)\s+eligible\s*(?:for)?\s*(?:anything|any|\?|$)",
+    re.IGNORECASE,
+)
+
+# Order in which eligibility cards are shown: best matches first.
+_VERDICT_RANK = {"ELIGIBLE": 0, "PARTIALLY_ELIGIBLE": 1, "NEEDS_MORE_INFO": 2, "NOT_ELIGIBLE": 3}
+
+# How many distinct schemes to eligibility-check for a broad discovery question.
+_BROAD_ELIGIBILITY_MAX_SCHEMES = 5
+
+
+def _is_broad_eligibility_query(query_en: str, vocab: CatalogVocabulary) -> bool:
+    q = (query_en or "").strip()
+    return bool(q) and bool(_BROAD_ELIGIBILITY_RE.search(q)) and not vocab.mentions_specific_scheme(q)
 
 
 def _is_greeting_or_capability_query(query_en: str) -> bool:
@@ -156,6 +179,14 @@ def _deterministic_critic_check(state: AgentState) -> CriticOutput:
     has_evidence = bool(chunks or web_res)
     if has_evidence and not _CITATION_PATTERN.search(answer) and not state.get("hitl_paused"):
         issues.append("Draft answer is missing mandatory inline citations [1], [2].")
+
+    # 2b. Every citation number must point at a real evidence item
+    n_evidence = len(chunks) + len(web_res)
+    out_of_range = sorted({int(n) for n in _CITATION_NUM_RE.findall(answer) if not 1 <= int(n) <= n_evidence})
+    if has_evidence and out_of_range:
+        issues.append(
+            f"Draft cites {', '.join(f'[{n}]' for n in out_of_range)} but only [1]-[{n_evidence}] exist in the evidence."
+        )
 
     # 3. Check CPGRAMS grievance character count
     draft = state.get("grievance_draft")
@@ -531,6 +562,9 @@ class JanSahayakAgent:
         grievance_receipt: dict[str, Any] | None = None
         active_slugs: list[str] = list(state.get("active_scheme_slugs") or [])
         low_confidence = False
+        # Broad "which schemes am I eligible for?" -> search with the profile and check several schemes.
+        vocab = get_catalog_vocabulary(self.repo)
+        broad_eligibility = intent == "ELIGIBILITY_CHECK" and _is_broad_eligibility_query(query_en, vocab)
 
         friendly_tool_msg = {
             "search_schemes": "Searching 649 Central Government schemes & official FAQs...",
@@ -549,6 +583,14 @@ class JanSahayakAgent:
             try:
                 if tname == "search_schemes":
                     raw_args.setdefault("query", query_en)
+                    if broad_eligibility:
+                        profile_query, profile_group = vocab.build_discovery_query(
+                            CitizenProfile.model_validate(profile_dict)
+                        )
+                        raw_args["query"] = profile_query
+                        raw_args["top_k"] = 8
+                        if profile_group and not raw_args.get("beneficiary_group"):
+                            raw_args["beneficiary_group"] = profile_group
                     inp = SearchSchemesInput.model_validate(raw_args)
                     res = await self.toolbox.search_schemes(inp, citizen_profile=profile_dict)
                     retrieved_chunks = res["results"]
@@ -649,24 +691,30 @@ class JanSahayakAgent:
                 })
 
         # Automatic follow-up 1: If intent is ELIGIBILITY_CHECK and we found schemes but haven't checked eligibility yet
+        # (broad questions check up to 5 distinct schemes; a specific question checks only the top match)
         if intent == "ELIGIBILITY_CHECK" and not eligibility_cards and retrieved_chunks:
-            top_slug = retrieved_chunks[0]["scheme_slug"]
-            try:
-                elig = await self.toolbox.check_eligibility(
-                    CheckEligibilityInput(
-                        scheme_slug=top_slug,
-                        citizen_profile=CitizenProfile.model_validate(profile_dict),
+            distinct_slugs = list(dict.fromkeys(c["scheme_slug"] for c in retrieved_chunks if c.get("scheme_slug")))
+            for slug in distinct_slugs[: _BROAD_ELIGIBILITY_MAX_SCHEMES if broad_eligibility else 1]:
+                try:
+                    elig = await self.toolbox.check_eligibility(
+                        CheckEligibilityInput(
+                            scheme_slug=slug,
+                            citizen_profile=CitizenProfile.model_validate(profile_dict),
+                        )
                     )
-                )
-                eligibility_cards.append(elig)
-                tool_logs.append({
-                    "tool": "check_eligibility",
-                    "args": {"scheme_slug": top_slug, "auto_chained": True},
-                    "status": "ok",
-                    "verdict": elig.get("verdict"),
-                })
-            except Exception as exc:
-                logger.warning("Auto-chained check_eligibility failed: %s", exc)
+                    if elig.get("error"):
+                        continue
+                    eligibility_cards.append(elig)
+                    tool_logs.append({
+                        "tool": "check_eligibility",
+                        "args": {"scheme_slug": slug, "auto_chained": True},
+                        "status": "ok",
+                        "verdict": elig.get("verdict"),
+                    })
+                except Exception as exc:
+                    logger.warning("Auto-chained check_eligibility failed for %s: %s", slug, exc)
+            # Best matches first so the answer leads with schemes the citizen can actually use
+            eligibility_cards.sort(key=lambda c: _VERDICT_RANK.get(str(c.get("verdict")), 9))
 
         # Automatic follow-up 2: Low-confidence local retrieval -> restricted .gov.in web fallback
         if low_confidence and not web_results and intent in ("SCHEME_QA", "ELIGIBILITY_CHECK"):
@@ -784,7 +832,36 @@ class JanSahayakAgent:
             flags.extend(ev_flags)
 
             extra_blocks: list[str] = []
-            if elig_cards:
+            if len(elig_cards) > 1:
+                # Multi-scheme discovery: compact cards (keeps the prompt small) + explicit answer shape
+                compact = [
+                    {
+                        "scheme_name": c.get("scheme_name"),
+                        "verdict": c.get("verdict"),
+                        "matched_criteria": c.get("matched_criteria"),
+                        "unmet_criteria": c.get("unmet_criteria"),
+                        "clarifying_questions": (c.get("clarifying_questions") or [])[:2],
+                        "documents_required": (c.get("documents_required") or [])[:4],
+                        "source_url": c.get("source_url"),
+                    }
+                    for c in elig_cards
+                ]
+                extra_blocks.append(
+                    "Structured Eligibility Tool Output (SEVERAL schemes, best match first):\n"
+                    + json.dumps(compact, ensure_ascii=False, indent=2)
+                )
+                extra_blocks.append(
+                    "ANSWER SHAPE FOR THIS BROAD ELIGIBILITY QUESTION:\n"
+                    "- Under a heading like **Schemes That May Suit You**, list up to 4 schemes whose verdict is "
+                    "ELIGIBLE, PARTIALLY_ELIGIBLE or NEEDS_MORE_INFO, in the order given: one bullet each with the scheme "
+                    "name in bold, its status, one short benefit line and a citation.\n"
+                    "- Do NOT recommend NOT_ELIGIBLE schemes. If every scheme is NOT_ELIGIBLE, say the closest matches "
+                    "found do not fit the profile.\n"
+                    "- NEVER claim that no other schemes exist or match — only a few top results were checked.\n"
+                    "- End with ONE short follow-up question that narrows the search (e.g. the kind of help they want: "
+                    "scholarship, skill training, loan, health, housing)."
+                )
+            elif elig_cards:
                 extra_blocks.append("Structured Eligibility Tool Output:\n" + json.dumps(elig_cards, ensure_ascii=False, indent=2))
             if revision_count > 0 and critic_out.get("revision_instructions"):
                 extra_blocks.append(f"MANDATORY CRITIC REVISION INSTRUCTIONS:\n{critic_out['revision_instructions']}")
@@ -853,10 +930,15 @@ class JanSahayakAgent:
         )
 
         if should_run_llm_critic:
-            chunks = (state.get("retrieved_chunks") or [])[:4]
-            brief_ev = "\n".join(
-                f"[{i+1}] {c.get('scheme_name')} ({c.get('section')}): {str(c.get('text', ''))[:450]}"
-                for i, c in enumerate(chunks)
+            # Audit against EXACTLY the numbered evidence the Synthesizer saw; a truncated subset made
+            # the critic flag real amounts and citations [5]+ as invented (trace TRC-6CBB8CC995).
+            evidence, _ = _build_evidence_block(state.get("retrieved_chunks") or [], state.get("web_results") or [])
+            verdicts = [
+                {"scheme_name": c.get("scheme_name"), "verdict": c.get("verdict")}
+                for c in (state.get("eligibility_cards") or [])
+            ]
+            verdict_block = (
+                f"Eligibility Tool Verdicts:\n{json.dumps(verdicts, ensure_ascii=False)}\n\n" if verdicts else ""
             )
             try:
                 resp = await self.llm.chat_completion(
@@ -866,7 +948,8 @@ class JanSahayakAgent:
                             "role": "user",
                             "content": (
                                 f"Question: {state.get('query_en', '')}\n\n"
-                                f"Evidence Snippets:\n{brief_ev}\n\n"
+                                f"Retrieved Evidence:\n{evidence}\n\n"
+                                f"{verdict_block}"
                                 f"Draft Answer:\n{state.get('draft_answer_en', '')}\n\n"
                                 "Output ONLY the Critic JSON."
                             ),

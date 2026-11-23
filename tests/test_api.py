@@ -184,3 +184,23 @@ def test_chat_guardrail_trace_export_dpdp_erase_and_rate_limit_429():
         client.delete("/api/traces/cleanup", headers=adm_headers)
 
     rate_limiter.reset()
+
+
+def test_new_chat_session_inherits_owner_profile():
+    """Regression: "New Chat" sessions reached the agent with a blank profile (trace TRC-1DA050A7C1)."""
+    app = create_app()
+    with TestClient(app) as client:
+        headers = _login(client, "priya", "citizen123")
+        new_sid = f"priya-test{uuid.uuid4().hex[:6]}"
+        try:
+            prof = client.get(f"/api/sessions/{new_sid}", headers=headers).json()["session"]["profile"]
+            assert prof["occupation"] == "Student"
+            assert prof["age"] == 19
+
+            # Someone else's session is never seeded with Priya's profile
+            other_sid = f"ramesh-test{uuid.uuid4().hex[:6]}"
+            other = client.get(f"/api/sessions/{other_sid}", headers=headers).json()["session"]["profile"]
+            assert not other.get("occupation")
+            client.delete(f"/api/sessions/{other_sid}", headers=headers)
+        finally:
+            client.delete(f"/api/sessions/{new_sid}", headers=headers)

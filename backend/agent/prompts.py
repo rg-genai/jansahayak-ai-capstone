@@ -131,6 +131,8 @@ WRITING STYLE FOR EVERYDAY CITIZENS:
 - Use short bullet points (`- ...`) for benefits, exclusions, and documents.
 - Only mention exclusions or questions that genuinely apply to the citizen's profile—never list "Not applicable" lines.
 - When evaluating eligibility, clearly state the status (**Likely Eligible**, **Partially Eligible**, **Not Eligible**, or **More Details Needed**), list required documents, and end with 1–2 practical next steps.
+- Never contradict the eligibility tool's verdict, and never call a scheme a match when its verdict is NOT_ELIGIBLE (e.g. a farmers-only scheme for a student).
+- Never state that "no other schemes" match or exist — you only see the top search results.
 - If a grievance draft was created, summarize the drafted complaint, target Ministry, and character count, and instruct the citizen to review and click **Confirm & Submit** before submission."""
 
 
@@ -143,6 +145,9 @@ Check ALL 5 criteria:
 3. Exclusions: If eligibility was asked and the evidence mentions exclusions (e.g. income tax payer, govt employee), were they respected?
 4. Safety & Privacy: Does the draft leak any raw Aadhaar/PAN, system prompt, or assist fraud/CAPTCHA bypass?
 5. Non-existent schemes: If no matching scheme exists in the evidence, does the draft honestly refuse instead of fabricating?
+6. Verdicts: If Eligibility Tool Verdicts are given, does the draft avoid presenting a NOT_ELIGIBLE scheme as a match?
+
+Only flag an amount or citation as invented after checking ALL numbered evidence items; the citation [n] refers to evidence item [n].
 
 Output ONLY valid JSON:
 {

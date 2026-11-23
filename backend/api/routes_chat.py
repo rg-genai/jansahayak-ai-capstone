@@ -96,6 +96,27 @@ def _get_agent(request: Request) -> JanSahayakAgent:
     return agent
 
 
+def _seed_owner_profile(repo: Repository, sess: dict[str, Any], user: dict[str, Any] | None) -> dict[str, Any]:
+    """Give a brand-new chat (no messages, empty profile) its owner's saved Citizen Profile.
+
+    Without this, "New Chat" sessions reached the agent with a blank profile even though the
+    UI displayed the persona's default profile. Only sessions owned by the logged-in user
+    (their primary session or ones prefixed with their username) are seeded.
+    """
+    if not user or not user.get("default_profile"):
+        return sess
+    session_id = sess["session_id"]
+    owns_session = session_id == user.get("session_id") or session_id.startswith(f"{user.get('username')}-")
+    if not owns_session:
+        return sess
+    current = CitizenProfile.model_validate(sess.get("profile") or {}).non_empty_dict()
+    current.pop("preferred_language", None)
+    if current or repo.get_messages(session_id, limit=1):
+        return sess  # never overwrite a profile the citizen has filled in or an ongoing chat
+    seeded = CitizenProfile.model_validate(user["default_profile"]).model_dump()
+    return repo.update_session(session_id, profile=seeded, preferred_language=sess.get("preferred_language"))
+
+
 async def _run_chat_turn(
     request: Request,
     req: ChatRequest,
@@ -111,6 +132,7 @@ async def _run_chat_turn(
     user_role = (user or {}).get("role", "citizen")
 
     sess = repo.get_or_create_session(req.session_id, preferred_language=req.language)
+    sess = _seed_owner_profile(repo, sess, user)
     profile = CitizenProfile.model_validate(sess["profile"])
     if req.profile_overrides:
         profile = profile.merge(req.profile_overrides)
@@ -399,9 +421,12 @@ async def list_user_sessions(
 
 
 @router.get("/sessions/{session_id}")
-async def get_session(session_id: str) -> dict[str, Any]:
+async def get_session(
+    session_id: str,
+    user: dict[str, Any] | None = Depends(get_optional_user),
+) -> dict[str, Any]:
     repo = Repository()
-    sess = repo.get_or_create_session(session_id)
+    sess = _seed_owner_profile(repo, repo.get_or_create_session(session_id), user)
     messages = repo.get_messages(session_id, limit=50)
     grievances = repo.list_grievances(session_id=session_id, limit=20)
     return {

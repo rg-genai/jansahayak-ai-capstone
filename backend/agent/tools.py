@@ -10,6 +10,12 @@ from typing import Any, Literal, TypeVar
 
 from pydantic import BaseModel, Field, ValidationError
 
+from backend.agent.profile_matching import (
+    EDUCATION_GROUPS,
+    get_catalog_vocabulary,
+    profile_education_stage,
+    scheme_education_stages,
+)
 from backend.agent.prompts import JSON_REPAIR_SYSTEM_PROMPT
 from backend.agent.state import CitizenProfile
 from backend.db.repositories import Repository
@@ -361,17 +367,46 @@ class AgentToolbox:
                 missing.append("gender")
                 questions.append("Is the beneficiary female/a woman or girl child?")
 
-        # 5. Occupation / Beneficiary group match
+        # 5. Occupation / Beneficiary group match.
+        # A clear occupation mismatch (e.g. a Student checked against a Farmer-only scheme)
+        # counts as an unmet criterion instead of being silently ignored.
         bgroups: list[str] = scheme.get("beneficiary_groups") or []
-        if profile.occupation and bgroups:
-            occ_low = profile.occupation.lower()
-            if any(occ_low in b.lower() or b.lower() in occ_low for b in bgroups):
-                matched.append(f"Occupation ({profile.occupation}) aligns with target group ({', '.join(bgroups[:4])}).")
-            elif "farmer" in occ_low and "Farmer" in bgroups:
-                matched.append("Farmer occupation matches target beneficiary.")
-        elif bgroups and not profile.occupation:
-            missing.append("occupation")
-            questions.append("What is your primary occupation (e.g., Farmer, Student, Artisan, MSME, Worker)?")
+        if bgroups:
+            vocab = get_catalog_vocabulary(self.repo)
+            scheme_occ = [b for b in bgroups if b in vocab.occupation_groups]
+            scheme_profile = [b for b in bgroups if b not in vocab.occupation_groups]
+            user_occ = vocab.occupation_group(profile.occupation)
+            user_groups = vocab.profile_groups(profile)
+            profile_hits = [b for b in scheme_profile if b in user_groups]
+            if user_occ and user_occ in scheme_occ:
+                matched.append(f"Occupation ({profile.occupation}) matches the target group ({user_occ}).")
+            elif scheme_occ and user_occ:
+                unmet.append(
+                    f"This scheme is meant for {', '.join(scheme_occ)}; your profile lists {profile.occupation}."
+                )
+            elif profile_hits:
+                matched.append(f"Your profile matches the target group ({', '.join(profile_hits)}).")
+            elif scheme_occ:
+                missing.append("occupation")
+                questions.append(f"This scheme is meant for {', '.join(scheme_occ)}. Does that describe you?")
+            else:
+                unmet.append(f"This scheme is meant for {', '.join(scheme_profile)}; your profile does not match.")
+
+        # 5b. Education stage (e.g. a B.Tech student vs a pre-matric / school scholarship)
+        if any(g in bgroups for g in EDUCATION_GROUPS):
+            scheme_stages = scheme_education_stages(scheme.get("scheme_name") or "", scheme.get("eligibility") or "")
+            if scheme_stages:
+                stage_list = ", ".join(sorted(scheme_stages))
+                user_stage = profile_education_stage(profile.education_level)
+                if user_stage is None:
+                    missing.append("education_level")
+                    questions.append(f"What are you studying right now? (This scheme is for {stage_list} students.)")
+                elif user_stage in scheme_stages:
+                    matched.append(f"Education level ({profile.education_level}) fits this scheme ({stage_list}).")
+                else:
+                    unmet.append(
+                        f"This scheme is for {stage_list} students; your profile lists {profile.education_level}."
+                    )
 
         # 6. Explicit exclusion triggers (income tax payer, government employee, landholding)
         if "income tax" in excl_low:
@@ -387,9 +422,12 @@ class AgentToolbox:
         # Determine structured verdict
         if unmet:
             verdict = "NOT_ELIGIBLE"
-        elif missing and not matched:
+        elif not matched:
+            # Nothing could be positively verified — never claim ELIGIBLE by default.
             verdict = "NEEDS_MORE_INFO"
-        elif missing and matched:
+            if not missing:
+                questions.append("Please check the official eligibility rules on the scheme page to confirm this applies to you.")
+        elif missing:
             verdict = "NEEDS_MORE_INFO" if len(missing) >= 2 else "PARTIALLY_ELIGIBLE"
         else:
             verdict = "ELIGIBLE"
