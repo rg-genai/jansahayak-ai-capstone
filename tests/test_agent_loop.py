@@ -270,3 +270,19 @@ async def test_open_ended_need_uses_profile_and_checks_several_schemes():
     assert first_search.startswith("I need money for my studies") and "OBC" in first_search
     checks = [t for t in state["tool_calls_log"] if t["tool"] == "check_eligibility"]
     assert len(checks) >= 2, "an open-ended need should check several schemes, not only the top one"
+
+
+def test_shared_name_prefix_does_not_cause_false_flag():
+    """Regression TRC-1BAB107B93: Post-Matric (ELIGIBLE) line was flagged as Pre-matric (NOT_ELIGIBLE)."""
+    from backend.agent.graph import _verdict_consistency_issues
+    post, pre, usp = _scheme_name("csspostmsossi"), _scheme_name("csspremsobcsi"), _scheme_name("csss-cus")
+    cards = [{"scheme_slug": "csspostmsossi", "scheme_name": post, "verdict": "ELIGIBLE"},
+             {"scheme_slug": "csspremsobcsi", "scheme_name": pre, "verdict": "NOT_ELIGIBLE"},
+             {"scheme_slug": "csss-cus", "scheme_name": usp, "verdict": "ELIGIBLE"}]
+    good = f"- **{post}** [1] | **Likely Eligible** | Monthly allowance for B.Tech students."
+    assert _verdict_consistency_issues(good, cards, []) == []
+    bad = f"- **{pre}** [3] | **Not Eligible** | For Class 9-10 students."
+    assert len(_verdict_consistency_issues(bad, cards, [])) == 1
+    # a shortened but still distinctive name is still caught
+    short = "- **Pradhan Mantri Uchchatar Shiksha Protsahan (PM-USP)** [2] | **Likely Eligible** | Rs 12,000."
+    assert _verdict_consistency_issues(short, cards, []) == []

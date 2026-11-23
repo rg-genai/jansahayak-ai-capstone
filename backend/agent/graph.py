@@ -351,12 +351,31 @@ def _drop_ruled_out_schemes(
 _STATUS_RE = re.compile(
     r"\b(?:likely eligible|partially eligible|not eligible|more details needed|needs more info|eligible)\b", re.I
 )
-_NAME_PREFIX_LEN = 30  # writers often shorten long scheme names; match on a distinctive prefix
+# Writers often shorten long scheme names, so a name may also match on a leading prefix of at least this
+# many characters, but only a prefix no other candidate name shares. (TRC-1BAB107B93: "Centrally Sponsored
+# Scheme of Pre-matric ..." and "... of Post-Matric ..." share 30 characters, causing a false critic flag.)
+_MIN_NAME_PREFIX_LEN = 30
 
 
-def _name_in_line(name: str, line_low: str) -> bool:
-    n = name.lower()
-    return n in line_low or (len(n) > _NAME_PREFIX_LEN and n[:_NAME_PREFIX_LEN] in line_low)
+def _distinctive_prefixes(names: list[str]) -> dict[str, str | None]:
+    """Shortest word-prefix (>= _MIN_NAME_PREFIX_LEN chars) unique to each name, or None if there is none."""
+    lowered = {n: n.lower() for n in names}
+    out: dict[str, str | None] = {}
+    for name, low in lowered.items():
+        words, prefix = low.split(), None
+        for k in range(1, len(words)):
+            cand = " ".join(words[:k])
+            if len(cand) >= _MIN_NAME_PREFIX_LEN and not any(
+                other != name and o.startswith(cand) for other, o in lowered.items()
+            ):
+                prefix = cand
+                break
+        out[name] = prefix
+    return out
+
+
+def _name_in_line(name: str, prefix: str | None, line_low: str) -> bool:
+    return name.lower() in line_low or (prefix is not None and prefix in line_low)
 
 
 def _verdict_consistency_issues(
@@ -367,14 +386,17 @@ def _verdict_consistency_issues(
         return []
     verdicts = {(c.get("scheme_name") or "").lower(): c.get("verdict") for c in cards if c.get("scheme_name")}
     multi = len(cards) > 1 and any(v != "NOT_ELIGIBLE" for v in verdicts.values())
-    names = {c.get("scheme_name") for c in chunks if c.get("scheme_name")} | {c.get("scheme_name") for c in cards}
+    names = sorted(
+        {c.get("scheme_name") for c in [*chunks, *cards] if c.get("scheme_name")}, key=len, reverse=True
+    )
+    prefixes = _distinctive_prefixes(names)
     issues: list[str] = []
     for line in answer.splitlines():
         if not _STATUS_RE.search(line):
             continue
         line_low = line.lower()
-        for name in sorted(filter(None, names), key=len, reverse=True):
-            if not _name_in_line(name, line_low):
+        for name in names:
+            if not _name_in_line(name, prefixes[name], line_low):
                 continue
             verdict = verdicts.get(name.lower())
             if verdict is None:
