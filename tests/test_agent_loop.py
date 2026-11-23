@@ -199,3 +199,74 @@ async def test_continuation_detected_even_when_model_omits_it():
                        "tool_calls": [{"tool_name": "search_schemes", "arguments": {"query": "x"}}]}, [])
     state = await JanSahayakAgent(llm=llm).run("I am 45 and a farmer", "test-loop-7", citizen_profile={}, history=_HISTORY)
     assert state["query_en"] == "Which schemes am I eligible for?"
+
+
+# ---- TRC-6232CFB779 ("I need money for my studies"): relevance signal, need query, ruled-out / invented verdicts ----
+
+def _scheme_name(slug: str) -> str:
+    from backend.db.repositories import Repository
+    return Repository().get_scheme(slug)["scheme_name"]
+
+
+def _trc_6232_cards_and_chunks() -> tuple[list[dict], list[dict]]:
+    verdicts = {"nsigse": "NOT_ELIGIBLE", "csspostmsossi": "ELIGIBLE", "i-mesa-eas": "NOT_ELIGIBLE", "icar-jrf-pgs": "NOT_ELIGIBLE"}
+    cards = [{"scheme_slug": s, "scheme_name": _scheme_name(s), "verdict": v} for s, v in verdicts.items()]
+    chunks = [{"scheme_slug": s, "scheme_name": _scheme_name(s), "citation_id": f"SCHEME:{s}#x"}
+              for s in [*verdicts, "wmcl", "pm-usp-sssjkl"]]
+    return cards, chunks
+
+
+def test_observation_spells_out_low_relevance():
+    from backend.agent.graph import _summarize_observations
+    state = {"query_en": "I need money for my studies", "planner_output": {"intent": "ELIGIBILITY_CHECK"},
+             "citizen_profile": PRIYA, "retrieved_chunks": [{"scheme_slug": "nsigse", "scheme_name": "X", "scores": {"rerank": 0.05}}]}
+    text = _summarize_observations(state, 10, 0.25)
+    assert "Search relevance: LOW" in text and "0.05" in text
+
+
+def test_need_query_keeps_citizen_words_and_adds_profile():
+    from backend.agent.profile_matching import get_catalog_vocabulary
+    from backend.agent.state import CitizenProfile
+    from backend.db.repositories import Repository
+    vocab = get_catalog_vocabulary(Repository())
+    q = vocab.build_need_query("I need money for my studies", CitizenProfile(**PRIYA))
+    assert q.startswith("I need money for my studies") and "OBC" in q and "student" in q and "B.Tech" in q
+    assert vocab.build_need_query("I need money for my studies", CitizenProfile()) == "I need money for my studies"
+
+
+def test_ruled_out_schemes_removed_only_in_multi_scheme_answers():
+    from backend.agent.graph import _drop_ruled_out_schemes
+    cards, chunks = _trc_6232_cards_and_chunks()
+    kept, ruled_out = _drop_ruled_out_schemes(chunks, cards)
+    assert [c["scheme_slug"] for c in kept] == ["csspostmsossi", "wmcl", "pm-usp-sssjkl"]
+    assert len(ruled_out) == 3
+
+    single = [{"scheme_slug": "pm-kisan", "scheme_name": "PM-KISAN", "verdict": "NOT_ELIGIBLE"}]
+    assert _drop_ruled_out_schemes(chunks, single) == (chunks, [])  # "Am I eligible for X?" -> "No" IS the answer
+
+
+def test_critic_flags_invented_and_ruled_out_statuses_from_real_trace():
+    from backend.agent.graph import _verdict_consistency_issues
+    cards, chunks = _trc_6232_cards_and_chunks()
+    n = {c["scheme_slug"]: c["scheme_name"] for c in chunks}
+    answer = "\n".join([  # shape of the real TRC-6232CFB779 answer
+        f"- **{n['csspostmsossi']}** [2] **Likely Eligible**: support for OBC students.",
+        f"- **{n['wmcl']}** [5] **Partially Eligible**: assistance for graduation.",
+        f"- **{n['icar-jrf-pgs']}** [4] **Not Eligible**: for agricultural post-graduates.",
+    ])
+    issues = _verdict_consistency_issues(answer, cards, chunks)
+    assert len(issues) == 2
+    assert any("NOT checked" in i and n["wmcl"] in i for i in issues)          # invented verdict
+    assert any("ruled NOT_ELIGIBLE" in i and n["icar-jrf-pgs"] in i for i in issues)
+    assert _verdict_consistency_issues(answer.splitlines()[0], cards, chunks) == []  # the correct line is fine
+
+
+@pytest.mark.asyncio
+async def test_open_ended_need_uses_profile_and_checks_several_schemes():
+    llm = ScriptedLLM(_search_plan("ELIGIBILITY_CHECK"), ['{"decision": "answer", "reason": "ok"}'])
+    state = await JanSahayakAgent(llm=llm).run("I need money for my studies", "test-loop-8", citizen_profile=PRIYA)
+
+    first_search = state["searched_queries"][0]
+    assert first_search.startswith("I need money for my studies") and "OBC" in first_search
+    checks = [t for t in state["tool_calls_log"] if t["tool"] == "check_eligibility"]
+    assert len(checks) >= 2, "an open-ended need should check several schemes, not only the top one"

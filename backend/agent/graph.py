@@ -154,7 +154,7 @@ def _normalize_query(q: str | None) -> str:
     return _NON_WORD_RE.sub(" ", (q or "").lower()).strip()
 
 
-def _summarize_observations(state: AgentState, max_tool_calls: int) -> str:
+def _summarize_observations(state: AgentState, max_tool_calls: int, relevance_threshold: float) -> str:
     """Compact, token-cheap view of what the tools returned, for the Reflector."""
     profile = CitizenProfile.model_validate(state.get("citizen_profile") or {}).non_empty_dict()
     profile.pop("preferred_language", None)
@@ -182,6 +182,17 @@ def _summarize_observations(state: AgentState, max_tool_calls: int) -> str:
 
     used = len(state.get("tool_calls_log") or [])
     intent = (state.get("planner_output") or {}).get("intent", "SCHEME_QA")
+    # Spell out what the relevance score means (TRC-6232CFB779: the model ignored a raw "0.05").
+    best = max((s["score"] for s in schemes.values()), default=0.0)
+    if not schemes:
+        relevance_line = "Search relevance: NONE - nothing found.\n"
+    elif best < relevance_threshold:
+        relevance_line = (
+            f"Search relevance: LOW (best {best:.2f}, below {relevance_threshold:.2f}) - these results are probably "
+            "off-topic; prefer search_again with the citizen's real need and profile words.\n"
+        )
+    else:
+        relevance_line = f"Search relevance: GOOD (best {best:.2f}).\n"
     missing = [label for key, label in _KEY_PROFILE_FACTS.items() if key not in profile]
     missing_line = (
         f"Key profile facts missing: {', '.join(missing)}\n" if intent == "ELIGIBILITY_CHECK" and missing else ""
@@ -194,7 +205,8 @@ def _summarize_observations(state: AgentState, max_tool_calls: int) -> str:
         f"Queries Already Tried: {json.dumps(state.get('searched_queries') or [], ensure_ascii=False)}\n"
         f"Schemes Found (slug | name | relevance 0-1 | eligibility verdict):\n"
         + ("\n".join(lines) if lines else "- (none)")
-        + f"\nOfficial web results: {len(state.get('web_results') or [])}\n"
+        + f"\n{relevance_line}"
+        f"Official web results: {len(state.get('web_results') or [])}\n"
         f"Tool calls left: {max(0, max_tool_calls - used)}\n"
         "Output ONLY the Reflector JSON."
     )
@@ -322,6 +334,60 @@ def _build_evidence_block(chunks: list[dict[str, Any]], web_results: list[dict[s
     return wrapped, list(dict.fromkeys(flags + s_flags))
 
 
+def _drop_ruled_out_schemes(
+    chunks: list[dict[str, Any]], cards: list[dict[str, Any]]
+) -> tuple[list[dict[str, Any]], list[str]]:
+    """In a multi-scheme answer, remove evidence for NOT_ELIGIBLE schemes. Returns (kept_chunks, ruled_out_names).
+
+    Single-scheme checks ("Am I eligible for PM-KISAN?") are untouched: there a NOT_ELIGIBLE verdict IS the answer.
+    """
+    if len(cards) < 2 or all(c.get("verdict") == "NOT_ELIGIBLE" for c in cards):
+        return chunks, []
+    ruled_out = {c.get("scheme_slug"): c.get("scheme_name") for c in cards if c.get("verdict") == "NOT_ELIGIBLE"}
+    kept = [c for c in chunks if c.get("scheme_slug") not in ruled_out]
+    return kept, [n for n in ruled_out.values() if n]
+
+
+_STATUS_RE = re.compile(
+    r"\b(?:likely eligible|partially eligible|not eligible|more details needed|needs more info|eligible)\b", re.I
+)
+_NAME_PREFIX_LEN = 30  # writers often shorten long scheme names; match on a distinctive prefix
+
+
+def _name_in_line(name: str, line_low: str) -> bool:
+    n = name.lower()
+    return n in line_low or (len(n) > _NAME_PREFIX_LEN and n[:_NAME_PREFIX_LEN] in line_low)
+
+
+def _verdict_consistency_issues(
+    answer: str, cards: list[dict[str, Any]], chunks: list[dict[str, Any]]
+) -> list[str]:
+    """Flag eligibility statuses given to unchecked schemes, and ruled-out schemes shown as options."""
+    if not cards:
+        return []
+    verdicts = {(c.get("scheme_name") or "").lower(): c.get("verdict") for c in cards if c.get("scheme_name")}
+    multi = len(cards) > 1 and any(v != "NOT_ELIGIBLE" for v in verdicts.values())
+    names = {c.get("scheme_name") for c in chunks if c.get("scheme_name")} | {c.get("scheme_name") for c in cards}
+    issues: list[str] = []
+    for line in answer.splitlines():
+        if not _STATUS_RE.search(line):
+            continue
+        line_low = line.lower()
+        for name in sorted(filter(None, names), key=len, reverse=True):
+            if not _name_in_line(name, line_low):
+                continue
+            verdict = verdicts.get(name.lower())
+            if verdict is None:
+                issues.append(
+                    f"Draft gives an eligibility status to '{name}', which was NOT checked; "
+                    "remove the status or drop that scheme."
+                )
+            elif multi and verdict == "NOT_ELIGIBLE":
+                issues.append(f"Draft lists '{name}', which the eligibility check ruled NOT_ELIGIBLE; remove it.")
+            break  # one scheme per line
+    return list(dict.fromkeys(issues))
+
+
 def _deterministic_critic_check(state: AgentState) -> CriticOutput:
     """Fast deterministic audit for PII leaks, missing citations, and CPGRAMS constraints."""
     answer = state.get("draft_answer_en") or ""
@@ -346,6 +412,9 @@ def _deterministic_critic_check(state: AgentState) -> CriticOutput:
         issues.append(
             f"Draft cites {', '.join(f'[{n}]' for n in out_of_range)} but only [1]-[{n_evidence}] exist in the evidence."
         )
+
+    # 2c. Eligibility statuses must come from the eligibility tool, never invented by the writer
+    issues.extend(_verdict_consistency_issues(answer, state.get("eligibility_cards") or [], chunks))
 
     # 3. Check CPGRAMS grievance character count
     draft = state.get("grievance_draft")
@@ -766,6 +835,10 @@ class JanSahayakAgent:
         vocab = get_catalog_vocabulary(self.repo)
         broad_eligibility = intent == "ELIGIBILITY_CHECK" and _is_broad_eligibility_query(query_en, vocab)
         apply_profile_query = broad_eligibility and round_no == 0
+        # Open-ended eligibility need ("I need money for my studies"): keep the citizen's words, add who they are.
+        # (TRC-6232CFB779: the bare need text scored 0.05 relevance and missed PM-USP / PM-YASASVI.)
+        open_ended_eligibility = intent == "ELIGIBILITY_CHECK" and not vocab.mentions_specific_scheme(query_en)
+        apply_need_query = open_ended_eligibility and not broad_eligibility and round_no == 0
 
         def budget_left() -> int:
             return settings.agent_max_tool_calls - len(tool_logs)
@@ -798,6 +871,10 @@ class JanSahayakAgent:
                         raw_args["top_k"] = 8
                         if profile_group and not raw_args.get("beneficiary_group"):
                             raw_args["beneficiary_group"] = profile_group
+                    elif apply_need_query:
+                        raw_args["query"] = vocab.build_need_query(
+                            raw_args["query"], CitizenProfile.model_validate(profile_dict)
+                        )
                     inp = SearchSchemesInput.model_validate(raw_args)
                     res = await self.toolbox.search_schemes(inp, citizen_profile=profile_dict)
                     searched_queries.append(inp.query)
@@ -909,7 +986,7 @@ class JanSahayakAgent:
                 s for s in dict.fromkeys(c["scheme_slug"] for c in retrieved_chunks if c.get("scheme_slug"))
                 if s not in checked
             ]
-            limit = _BROAD_ELIGIBILITY_MAX_SCHEMES if broad_eligibility else 1
+            limit = _BROAD_ELIGIBILITY_MAX_SCHEMES if (broad_eligibility or open_ended_eligibility) else 1
             for slug in distinct_slugs[: max(0, min(limit, budget_left()))]:
                 try:
                     elig = await self.toolbox.check_eligibility(
@@ -1018,7 +1095,9 @@ class JanSahayakAgent:
                 resp = await self.llm.chat_completion(
                     messages=[
                         {"role": "system", "content": REFLECTOR_SYSTEM_PROMPT},
-                        {"role": "user", "content": _summarize_observations(state, settings.agent_max_tool_calls)},
+                        {"role": "user", "content": _summarize_observations(
+                            state, settings.agent_max_tool_calls, settings.web_fallback_threshold
+                        )},
                     ],
                     max_tokens=160,
                     temperature=0.0,
@@ -1142,11 +1221,19 @@ class JanSahayakAgent:
         elif strategy == "P2":
             messages = build_p2_few_shot_messages(query_en, chunks, profile)
         else:
+            # Schemes the eligibility check ruled out never reach the writer (TRC-6232CFB779 listed them anyway).
+            chunks, ruled_out = _drop_ruled_out_schemes(chunks, elig_cards)
+            if ruled_out:
+                elig_cards = [c for c in elig_cards if c.get("verdict") != "NOT_ELIGIBLE"]
             evidence, ev_flags = _build_evidence_block(chunks, web_results)
             flags.extend(ev_flags)
 
             extra_blocks: list[str] = []
-            if len(elig_cards) > 1:
+            if ruled_out:
+                extra_blocks.append(
+                    "Ruled out by the eligibility check (do NOT mention these): " + "; ".join(ruled_out)
+                )
+            if len(elig_cards) > 1 or ruled_out:
                 # Multi-scheme discovery: compact cards (keeps the prompt small) + explicit answer shape
                 compact = [
                     {
@@ -1171,6 +1258,8 @@ class JanSahayakAgent:
                     "name in bold, its status, one short benefit line and a citation.\n"
                     "- Do NOT recommend NOT_ELIGIBLE schemes. If every scheme is NOT_ELIGIBLE, say the closest matches "
                     "found do not fit the profile.\n"
+                    "- Give an eligibility status ONLY to schemes listed in the Eligibility Tool Output above. Any other "
+                    "scheme from the evidence may be mentioned WITHOUT a status, or skipped.\n"
                     "- NEVER claim that no other schemes exist or match — only a few top results were checked.\n"
                     "- End with ONE short follow-up question that narrows the search (e.g. the kind of help they want: "
                     "scholarship, skill training, loan, health, housing)."
@@ -1213,7 +1302,7 @@ class JanSahayakAgent:
             completion_tokens=resp.completion_tokens,
         )
 
-        return {
+        out: dict[str, Any] = {
             "draft_answer_en": resp.content,
             "guardrail_flags": list(dict.fromkeys(flags)),
             "prompt_tokens": state.get("prompt_tokens", 0) + resp.prompt_tokens,
@@ -1221,6 +1310,11 @@ class JanSahayakAgent:
             "step_latencies": step_lat,
             "spans": spans,
         }
+        if len(chunks) != len(state.get("retrieved_chunks") or []):
+            # Keep [n] numbering consistent for the critic and the UI citation list after filtering.
+            out["retrieved_chunks"] = chunks
+            out["citations"] = _extract_citations(chunks, web_results)
+        return out
 
     # ---- Node 7: Critic / Groundedness Verifier ----
     async def _node_critic(self, state: AgentState) -> dict[str, Any]:

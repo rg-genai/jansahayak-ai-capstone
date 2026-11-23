@@ -181,7 +181,16 @@ class CatalogVocabulary:
 
         topics = self.group_top_categories.get(filter_group or "", ())
         topic = f"{' and '.join(topics)} schemes" if topics else "welfare schemes"
+        return f"Central Government {topic} for a {self.describe_citizen(profile)}", filter_group
 
+    def build_need_query(self, need: str, profile: CitizenProfile) -> str:
+        """The citizen's own words plus who they are (no group filter: the need may differ from their occupation)."""
+        who = self.describe_citizen(profile)
+        return f"{need.strip()} - for a {who}" if who != "citizen" else need.strip()
+
+    def describe_citizen(self, profile: CitizenProfile) -> str:
+        """Short retrieval-friendly description, e.g. '19-year-old female OBC student, education B.Tech, ...'."""
+        p_groups = self.profile_groups(profile)
         who: list[str] = []
         if profile.age is not None:
             who.append(f"{profile.age}-year-old")
@@ -195,14 +204,14 @@ class CatalogVocabulary:
             who.append("person with disability")
         who.append(profile.occupation.lower() if profile.occupation else "citizen")
 
-        parts = [f"Central Government {topic} for a {' '.join(who)}"]
+        parts = [" ".join(who)]
         if profile.education_level:
             parts.append(f"education {profile.education_level}")
         if profile.annual_income_inr is not None:
             parts.append(f"family annual income Rs {profile.annual_income_inr}")
         if profile.is_bpl:
             parts.append("below poverty line (BPL)")
-        return ", ".join(parts), filter_group
+        return ", ".join(parts)
 
 
 _TOP_CATEGORIES_PER_GROUP = 2

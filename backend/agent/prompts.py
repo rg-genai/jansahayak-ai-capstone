@@ -151,7 +151,7 @@ Decide the SINGLE best next step and output ONLY one JSON object:
 
 Choose:
 - "answer" when the schemes found clearly match what was asked (and, for eligibility questions, verdicts exist). This is the usual choice.
-- "search_again" when the schemes found are off-topic for the question or the citizen (e.g. farmer schemes for a student, or the named scheme is missing). Write a different query using the citizen's real need and profile words. Never repeat a query from Queries Already Tried.
+- "search_again" when "Search relevance" is LOW or the schemes found are off-topic for the question or the citizen (e.g. farmer schemes for a student, or the named scheme is missing). Write a different query using the citizen's real need and profile words. Never repeat a query from Queries Already Tried.
 - "check_eligibility" when the citizen asked about eligibility and relevant schemes were found but not yet checked.
 - "ask_user" when an answer would be a guess because key facts are missing: e.g. an eligibility question with no age, occupation or income in the profile, or a message that is only an ID/number with no request. Ask for up to 3 facts from "Key profile facts missing" (most important first), in one short, plain-language question.
 
