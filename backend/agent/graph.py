@@ -1034,11 +1034,13 @@ class JanSahayakAgent:
         # Automatic follow-up 2: Low-confidence local retrieval -> restricted .gov.in web fallback
         if low_confidence and not web_results and intent in ("SCHEME_QA", "ELIGIBILITY_CHECK") and budget_left() > 0:
             await self._emit("tool_call", {"tool": "web_search_gov_schemes", "status": "Searching official .gov.in portals..."})
-            web_res = await self.toolbox.web_search_gov_schemes(WebSearchGovInput(query=query_en, max_results=4))
+            # Same (profile-enriched) query the local search just used, not the bare message (TRC-1BAB107B93).
+            web_query = searched_queries[-1] if searched_queries else query_en
+            web_res = await self.toolbox.web_search_gov_schemes(WebSearchGovInput(query=web_query, max_results=4))
             web_results.extend(web_res.get("results") or [])
             tool_logs.append({
                 "tool": "web_search_gov_schemes",
-                "args": {"query": query_en, "auto_fallback": True},
+                "args": {"query": web_query, "auto_fallback": True},
                 "status": "ok" if not web_res.get("error") else "degraded",
                 "provider": web_res.get("provider"),
                 "result_count": len(web_res.get("results") or []),

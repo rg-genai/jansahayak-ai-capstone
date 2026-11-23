@@ -111,3 +111,45 @@ def test_critic_flags_citation_beyond_evidence():
     assert not out.passed and "[3]" in out.issues[0]
     state["draft_answer_en"] = "Benefit A [1]. Benefit B [2]."
     assert _deterministic_critic_check(state).passed
+
+
+# ---- Place-specific requirements (TRC-1BAB107B93: a University-of-Delhi-only scheme was called ELIGIBLE) ----
+
+def test_named_university_requirement_detected_only_for_real_restrictions():
+    from backend.agent.profile_matching import required_university
+    repo = Repository()
+    assert required_university(repo.get_scheme("fssdu")["eligibility"]) == "University of Delhi"
+    assert required_university(repo.get_scheme("vcis")["eligibility"]) == "University of Delhi"
+    # INSPIRE lists eligible institutes ("at IISERs, NISER ... University of Mumbai"): not a single-university rule
+    assert required_university(repo.get_scheme("inspire-she")["eligibility"]) is None
+
+
+def test_region_requirement_detected():
+    from backend.agent.profile_matching import required_regions
+    repo = Repository()
+    jkl = repo.get_scheme("pm-usp-sssjkl")
+    assert required_regions(jkl["scheme_name"], jkl["eligibility"]) == ["Jammu & Kashmir and Ladakh"]
+    ner = repo.get_scheme("iu-sss-ner")
+    assert required_regions(ner["scheme_name"], ner["eligibility"]) == ["North Eastern Region"]
+    capf = repo.get_scheme("pmsswcapfar")  # "... Assam Rifles" is a force, not a residence rule
+    assert required_regions(capf["scheme_name"], capf["eligibility"]) == []
+
+
+@pytest.mark.asyncio
+async def test_university_only_scheme_is_not_eligible_by_default():
+    res = await AgentToolbox().check_eligibility(CheckEligibilityInput(scheme_slug="fssdu", citizen_profile=PRIYA))
+    assert res["verdict"] != "ELIGIBLE"
+    assert any("University of Delhi" in q for q in res["clarifying_questions"])
+
+
+@pytest.mark.asyncio
+async def test_region_scheme_checks_citizen_state():
+    toolbox = AgentToolbox()
+    res = await toolbox.check_eligibility(CheckEligibilityInput(scheme_slug="pm-usp-sssjkl", citizen_profile=PRIYA))
+    assert res["verdict"] == "NOT_ELIGIBLE"  # Priya lives in Maharashtra
+    kashmiri = PRIYA.model_copy(update={"state": "Jammu & Kashmir"})
+    res = await toolbox.check_eligibility(CheckEligibilityInput(scheme_slug="pm-usp-sssjkl", citizen_profile=kashmiri))
+    assert not any("residents of" in u for u in res["unmet_criteria"])
+    no_state = PRIYA.model_copy(update={"state": None})
+    res = await toolbox.check_eligibility(CheckEligibilityInput(scheme_slug="iu-sss-ner", citizen_profile=no_state))
+    assert "state" in res["missing_fields"]

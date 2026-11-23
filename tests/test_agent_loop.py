@@ -286,3 +286,26 @@ def test_shared_name_prefix_does_not_cause_false_flag():
     # a shortened but still distinctive name is still caught
     short = "- **Pradhan Mantri Uchchatar Shiksha Protsahan (PM-USP)** [2] | **Likely Eligible** | Rs 12,000."
     assert _verdict_consistency_issues(short, cards, []) == []
+
+
+@pytest.mark.asyncio
+async def test_web_fallback_uses_the_enriched_query():
+    """Regression TRC-1BAB107B93: the web fallback searched the bare message and found nothing."""
+    agent = JanSahayakAgent(llm=ScriptedLLM(_search_plan("ELIGIBILITY_CHECK"), ['{"decision": "answer", "reason": "ok"}']))
+    web_queries: list[str] = []
+
+    async def low_confidence_search(inp, citizen_profile=None):
+        return {"results": [{"citation_id": "SCHEME:csss-cus#x", "scheme_slug": "csss-cus", "scheme_name": "PM-USP",
+                             "ministry": "MoE", "section": "faq", "source_url": "https://x.gov.in", "text": "t",
+                             "scores": {"rerank": 0.1}}],
+                "top_rerank_score": 0.1, "low_confidence": True}
+
+    async def spy_web_search(inp):
+        web_queries.append(inp.query)
+        return {"results": [], "provider": "spy"}
+
+    agent.toolbox.search_schemes = low_confidence_search
+    agent.toolbox.web_search_gov_schemes = spy_web_search
+    await agent.run("I need money for my studies", "test-loop-9", citizen_profile=PRIYA)
+
+    assert web_queries and web_queries[0].startswith("I need money for my studies - for a 19-year-old")

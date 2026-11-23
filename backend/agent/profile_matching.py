@@ -102,6 +102,52 @@ def profile_education_stage(education_level: str | None) -> str | None:
     return next((stage for pattern, stage in _PROFILE_EDUCATION_STAGES if pattern.search(text)), None) if text else None
 
 
+# ---- Place-specific requirements ----
+# A scheme tied to ONE named university ("students of the University of Delhi"). Requires a student/studying
+# context in the same sentence, so lists of eligible institute types ("at IISERs, NISER ...") are not flagged.
+_SENTENCE_SPLIT_RE = re.compile(r"[.;|\n]")
+_STUDENT_CONTEXT_RE = re.compile(r"\bstud(?:ent|ying)", re.I)
+_NAMED_UNIVERSITY_RE = re.compile(r"\bUniversity of ([A-Z][a-z]+(?: [A-Z][a-z]+)?)")
+
+# Regions that schemes are restricted to by residence. The catalog names the region but not its member
+# states, so membership is reference data (official definitions of NER and the two northern UTs).
+REGION_STATES: dict[str, frozenset[str]] = {
+    "North Eastern Region": frozenset({
+        "arunachal pradesh", "assam", "manipur", "meghalaya", "mizoram", "nagaland", "sikkim", "tripura",
+    }),
+    "Jammu & Kashmir and Ladakh": frozenset({"jammu and kashmir", "ladakh"}),
+}
+_REGION_PATTERNS: dict[str, re.Pattern[str]] = {
+    "North Eastern Region": re.compile(r"(?i:north[- ]?east(?:ern)?(?: region)?)|\bNER\b"),  # "NER" stays case-sensitive
+    "Jammu & Kashmir and Ladakh": re.compile(r"jammu\s*(?:&|and)\s*kashmir|\bJ\s*&\s*K\b|ladakh", re.I),
+}
+_RESIDENCE_CONTEXT_RE = re.compile(r"domicile|resident|permanent(?:ly)? (?:settled|resident)|belong", re.I)
+
+
+def required_university(eligibility_text: str) -> str | None:
+    """'University of Delhi' if the scheme is only for students of that one university, else None."""
+    for sentence in _SENTENCE_SPLIT_RE.split(eligibility_text or ""):
+        match = _NAMED_UNIVERSITY_RE.search(sentence)
+        if match and _STUDENT_CONTEXT_RE.search(sentence):
+            return match.group(0)
+    return None
+
+
+def required_regions(scheme_name: str, eligibility_text: str) -> list[str]:
+    """Regions the citizen must live in: named in the scheme title, or in a residence sentence."""
+    residence_text = " ".join(
+        s for s in _SENTENCE_SPLIT_RE.split(eligibility_text or "") if _RESIDENCE_CONTEXT_RE.search(s)
+    )
+    return [
+        region for region, pattern in _REGION_PATTERNS.items()
+        if pattern.search(scheme_name or "") or pattern.search(residence_text)
+    ]
+
+
+def normalize_state(state: str | None) -> str:
+    return re.sub(r"\s+", " ", (state or "").replace("&", " and ")).strip().lower()
+
+
 # Short-title matching rules (the catalog has acronyms like "BIG", "TIP", "AMI" that are also
 # everyday words, so short ones must be typed in capitals to count as a scheme mention):
 _MIN_TITLE_LEN = 3            # ignore 1-2 letter titles entirely ("AA", "AE")

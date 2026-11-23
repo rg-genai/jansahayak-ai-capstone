@@ -12,8 +12,12 @@ from pydantic import BaseModel, Field, ValidationError
 
 from backend.agent.profile_matching import (
     EDUCATION_GROUPS,
+    REGION_STATES,
     get_catalog_vocabulary,
+    normalize_state,
     profile_education_stage,
+    required_regions,
+    required_university,
     scheme_education_stages,
 )
 from backend.agent.prompts import JSON_REPAIR_SYSTEM_PROMPT
@@ -407,6 +411,23 @@ class AgentToolbox:
                     unmet.append(
                         f"This scheme is for {stage_list} students; your profile lists {profile.education_level}."
                     )
+
+        # 5c. Place-specific requirements (TRC-1BAB107B93 called a University-of-Delhi-only scheme ELIGIBLE)
+        university = required_university(scheme.get("eligibility") or "")
+        if university:
+            missing.append("institution")
+            questions.append(f"This scheme is only for students of the {university}. Are you studying there?")
+        regions = required_regions(scheme.get("scheme_name") or "", scheme.get("eligibility") or "")
+        if regions:
+            allowed = frozenset().union(*(REGION_STATES[r] for r in regions))
+            region_list = " / ".join(regions)
+            if not profile.state:
+                missing.append("state")
+                questions.append(f"Which state do you live in? (This scheme is for residents of {region_list}.)")
+            elif normalize_state(profile.state) in allowed:
+                matched.append(f"Your state ({profile.state}) is in {region_list}.")
+            else:
+                unmet.append(f"This scheme is for residents of {region_list}; your profile lists {profile.state}.")
 
         # 6. Explicit exclusion triggers (income tax payer, government employee, landholding)
         if "income tax" in excl_low:
