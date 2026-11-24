@@ -182,27 +182,27 @@ export const GrievanceModal: React.FC<Props> = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs">
-      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 dark:bg-slate-950/60 backdrop-blur-sm">
+      <div className="w-full max-w-2xl glass overflow-hidden max-h-[92vh] flex flex-col">
         {/* Header */}
-        <div className="px-5 py-4 bg-indiaNavy text-white flex items-center justify-between">
+        <div className="px-5 py-4 bg-white/40 dark:bg-white/5 border-b border-slate-900/10 dark:border-white/10 text-indiaNavy dark:text-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             {localReceipt ? (
-              <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+              <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             ) : workingDraft ? (
               <ShieldAlert className="w-5 h-5 text-indiaSaffron" />
             ) : (
-              <FileEdit className="w-5 h-5 text-amber-300" />
+              <FileEdit className="w-5 h-5 text-amber-500 dark:text-amber-300" />
             )}
             <div>
-              <h3 className="font-semibold text-base">
+              <h3 className="font-semibold text-base text-indiaNavy dark:text-slate-100">
                 {localReceipt
                   ? 'CPGRAMS Grievance Registered (Sandbox Gateway)'
                   : workingDraft
                     ? 'Review & Confirm CPGRAMS Grievance'
                     : 'Raise a Public Grievance (CPGRAMS Form)'}
               </h3>
-              <p className="text-xs text-slate-300">
+              <p className="text-xs text-slate-600 dark:text-slate-400">
                 {localReceipt
                   ? `Registration Number: ${localReceipt.registration_number}`
                   : workingDraft
@@ -211,7 +211,7 @@ export const GrievanceModal: React.FC<Props> = ({
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/10" aria-label="Close modal">
+          <button onClick={onClose} className="p-1.5 rounded-full text-slate-600 transition hover:bg-slate-900/5 dark:text-slate-300 dark:hover:bg-white/10" aria-label="Close modal">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -222,11 +222,11 @@ export const GrievanceModal: React.FC<Props> = ({
           {!workingDraft && !localReceipt && (
             <form onSubmit={handleGenerateDraft} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
                   1. Select Central Government Scheme *
                 </label>
                 <div className="relative">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+                  <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3 top-2.5" />
                   <input
                     type="text"
                     value={selectedScheme ? selectedScheme.scheme_name : schemeSearch}
@@ -235,12 +235,12 @@ export const GrievanceModal: React.FC<Props> = ({
                       setSchemeSearch(e.target.value)
                     }}
                     placeholder="Type scheme name (e.g., PM-KISAN, Ayushman Bharat, PM-USP Scholarship)..."
-                    className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-300 text-sm focus:border-indiaNavy focus:outline-none"
+                    className="field py-2 pl-9"
                     required
                   />
                 </div>
                 {!selectedScheme && schemeSuggestions.length > 0 && (
-                  <div className="mt-1.5 border border-slate-200 rounded-xl divide-y divide-slate-100 max-h-36 overflow-y-auto bg-slate-50">
+                  <div className="mt-1.5 glass-subtle shadow-lg divide-y divide-slate-900/10 dark:divide-white/10 max-h-36 overflow-y-auto">
                     {schemeSuggestions.map((s) => (
                       <button
                         key={s.slug}
@@ -249,16 +249,16 @@ export const GrievanceModal: React.FC<Props> = ({
                           setSelectedScheme(s)
                           setSchemeSearch(s.scheme_name)
                         }}
-                        className="w-full text-left px-3 py-2 hover:bg-white text-xs flex items-center justify-between gap-2"
+                        className="w-full text-left px-3 py-2 hover:bg-white/80 dark:hover:bg-white/10 transition text-xs flex items-center justify-between gap-2"
                       >
-                        <span className="font-medium text-slate-800 truncate">{s.scheme_name}</span>
-                        <span className="text-[10px] font-mono text-indiaNavy shrink-0">{s.ministry_code}</span>
+                        <span className="font-medium text-slate-800 dark:text-slate-100 truncate">{s.scheme_name}</span>
+                        <span className="text-[10px] font-mono text-indiaNavy dark:text-indiaSaffron shrink-0">{s.ministry_code}</span>
                       </button>
                     ))}
                   </div>
                 )}
                 {selectedScheme && (
-                  <p className="text-[11px] text-emerald-700 mt-1">
+                  <p className="text-[11px] text-emerald-700 dark:text-emerald-400 mt-1">
                     Auto-routed Ministry: <strong>{selectedScheme.ministry}</strong> ({selectedScheme.ministry_code})
                   </p>
                 )}
@@ -266,18 +266,18 @@ export const GrievanceModal: React.FC<Props> = ({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Applicant Full Name *</label>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">Applicant Full Name *</label>
                   <input
                     type="text"
                     value={applicantName}
                     onChange={(e) => setApplicantName(e.target.value)}
                     required
                     placeholder="e.g., Ramesh Kumar"
-                    className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-indiaNavy focus:outline-none"
+                                        className="field"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
                     Email Address (For Confirmation Receipt) *
                   </label>
                   <input
@@ -286,46 +286,46 @@ export const GrievanceModal: React.FC<Props> = ({
                     onChange={(e) => setApplicantEmail(e.target.value)}
                     required
                     placeholder="citizen@example.com"
-                    className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm focus:border-indiaNavy focus:outline-none"
+                                        className="field"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">State / UT</label>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">State / UT</label>
                   <input
                     type="text"
                     value={stateName}
                     onChange={(e) => setStateName(e.target.value)}
                     placeholder="e.g., Uttar Pradesh"
-                    className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs"
+                                        className="field text-xs"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">District</label>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">District</label>
                   <input
                     type="text"
                     value={districtName}
                     onChange={(e) => setDistrictName(e.target.value)}
                     placeholder="e.g., Lucknow"
-                    className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs"
+                                        className="field text-xs"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Pending Since</label>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">Pending Since</label>
                   <input
                     type="text"
                     value={pendingSince}
                     onChange={(e) => setPendingSince(e.target.value)}
                     placeholder="e.g., June 2026"
-                    className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs"
+                                        className="field text-xs"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
                   Application / Beneficiary Reference ID (Optional — never enter full Aadhaar)
                 </label>
                 <input
@@ -333,12 +333,12 @@ export const GrievanceModal: React.FC<Props> = ({
                   value={refId}
                   onChange={(e) => setRefId(e.target.value)}
                   placeholder="e.g., UP-PMKISAN-2026-4412"
-                  className="w-full rounded-xl border border-slate-300 px-3 py-2 text-xs"
+                                    className="field text-xs"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
                   Describe Your Grievance / Delay *
                 </label>
                 <textarea
@@ -347,26 +347,26 @@ export const GrievanceModal: React.FC<Props> = ({
                   value={issueSummary}
                   onChange={(e) => setIssueSummary(e.target.value)}
                   placeholder="Example: My last two PM-KISAN installments of ₹2,000 have not been credited despite completed e-KYC and Aadhaar bank seeding..."
-                  className="w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-indiaNavy focus:outline-none"
+                  className="field p-3"
                 />
               </div>
 
               {error && (
-                <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs">{error}</div>
+                <div className="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 dark:bg-rose-500/15 dark:border-rose-400/30 dark:text-rose-300 text-xs">{error}</div>
               )}
 
-              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                              <div className="flex justify-end gap-2 pt-2 border-t border-slate-900/10 dark:border-white/10">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 rounded-xl border border-slate-300 text-slate-700 text-xs font-medium"
+                  className="btn-secondary text-xs"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={drafting}
-                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-indiaNavy hover:bg-slate-800 text-white text-xs font-semibold"
+                  className="btn-primary text-xs"
                 >
                   <FileEdit className="w-4 h-4" />
                   {drafting ? 'Generating Formal CPGRAMS Letter...' : 'Generate Formal CPGRAMS Draft'}
@@ -378,29 +378,29 @@ export const GrievanceModal: React.FC<Props> = ({
           {/* STEP 2: HITL Review & Confirm Modal */}
           {workingDraft && !localReceipt && (
             <>
-              <div className="flex flex-wrap items-center justify-between gap-2 bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs">
+              <div className="flex flex-wrap items-center justify-between gap-2 glass-subtle p-3 text-xs">
                 <div>
-                  <span className="text-slate-500">Target Central Ministry:</span>{' '}
-                  <strong className="text-slate-900">{workingDraft.ministry_name}</strong>
+                  <span className="text-slate-500 dark:text-slate-400">Target Central Ministry:</span>{' '}
+                  <strong className="text-slate-900 dark:text-slate-100">{workingDraft.ministry_name}</strong>
                 </div>
-                <span className="px-2 py-0.5 rounded-full bg-indiaNavy text-white font-mono font-semibold">
+                <span className="px-2 py-0.5 rounded-full bg-indiaNavy dark:bg-indiaSaffron text-white dark:text-slate-950 font-mono font-semibold">
                   {workingDraft.ministry_code}
                 </span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Applicant Name</label>
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">Applicant Name</label>
                   <input
                     type="text"
                     value={applicantName}
                     onChange={(e) => setApplicantName(e.target.value)}
                     placeholder="Your full name"
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs focus:border-indiaNavy focus:outline-none"
+                                      className="field text-xs"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">
                     Confirmation Email Address (Receives Official Receipt)
                   </label>
                   <input
@@ -408,30 +408,30 @@ export const GrievanceModal: React.FC<Props> = ({
                     value={applicantEmail}
                     onChange={(e) => setApplicantEmail(e.target.value)}
                     placeholder="yourname@email.com"
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-xs focus:border-indiaNavy focus:outline-none"
+                                      className="field text-xs"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Grievance Subject</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-200 mb-1">Grievance Subject</label>
                 <input
                   type="text"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   maxLength={250}
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-indiaNavy focus:outline-none"
+                                  className="field"
                 />
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-semibold text-slate-700">
+                  <label className="text-xs font-semibold text-slate-700 dark:text-slate-200">
                     Formal CPGRAMS Grievance Text (Editable)
                   </label>
                   <span
                     className={`text-xs font-mono font-semibold ${
-                      overLimit ? 'text-rose-600' : charCount > 1800 ? 'text-amber-600' : 'text-emerald-700'
+                      overLimit ? 'text-rose-600 dark:text-rose-400' : charCount > 1800 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-700 dark:text-emerald-400'
                     }`}
                   >
                     {charCount} / {CPGRAMS_LIMIT} chars
@@ -441,26 +441,26 @@ export const GrievanceModal: React.FC<Props> = ({
                   rows={9}
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  className={`w-full rounded-lg border p-3 text-xs font-mono leading-relaxed focus:outline-none ${
-                    overLimit ? 'border-rose-400 bg-rose-50/40' : 'border-slate-300 focus:border-indiaNavy'
+                  className={`field p-3 text-xs font-mono leading-relaxed ${
+                    overLimit ? 'border-rose-400 bg-rose-50/40 focus:border-rose-400 focus:ring-rose-400/25 dark:border-rose-400/60 dark:bg-rose-500/10' : ''
                   }`}
                 />
                 {overLimit && (
-                  <p className="text-xs text-rose-600 mt-1">
+                  <p className="text-xs text-rose-600 dark:text-rose-400 mt-1">
                     Exceeds official CPGRAMS 2,000-character limit. Please shorten by {charCount - CPGRAMS_LIMIT} characters.
                   </p>
                 )}
               </div>
 
               {error && (
-                <div className="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-xs">{error}</div>
+                <div className="p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 dark:bg-rose-500/15 dark:border-rose-400/30 dark:text-rose-300 text-xs">{error}</div>
               )}
 
-              <div className="flex flex-wrap items-center justify-end gap-3 pt-2 border-t border-slate-100">
+              <div className="flex flex-wrap items-center justify-end gap-3 pt-2 border-t border-slate-900/10 dark:border-white/10">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 text-sm hover:bg-slate-50"
+                  className="btn-secondary"
                 >
                   Cancel
                 </button>
@@ -468,7 +468,7 @@ export const GrievanceModal: React.FC<Props> = ({
                   type="button"
                   disabled={submitting || overLimit}
                   onClick={handleConfirmSubmit}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indiaGreen hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-sm shadow-sm transition"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-indiaGreen text-white font-semibold text-sm shadow-md shadow-indiaGreen/25 transition hover:bg-emerald-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <Send className="w-4 h-4" />
                   {submitting ? 'Submitting & Sending Email Receipt...' : 'Confirm & Submit Grievance'}
@@ -480,17 +480,17 @@ export const GrievanceModal: React.FC<Props> = ({
           {/* STEP 3: Receipt + Live Confirmation Email Preview + Handoff Packet */}
           {localReceipt && (
             <div className="space-y-4">
-              <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-2">
+              <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200 shadow-sm dark:bg-emerald-500/15 dark:border-emerald-400/30 space-y-2">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <p className="text-xs text-emerald-700 font-medium">CPGRAMS Registration Number</p>
-                    <p className="text-lg font-mono font-bold text-emerald-950">{localReceipt.registration_number}</p>
+                    <p className="text-xs text-emerald-700 dark:text-emerald-400 font-medium">CPGRAMS Registration Number</p>
+                                        <p className="text-lg font-mono font-bold text-emerald-950 dark:text-emerald-100">{localReceipt.registration_number}</p>
                   </div>
                   <span className="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-semibold">
                     {localReceipt.status} ({localReceipt.mode.toUpperCase()})
                   </span>
                 </div>
-                <p className="text-xs text-emerald-800">
+                <p className="text-xs text-emerald-800 dark:text-emerald-200">
                   <strong>Ministry:</strong> {localReceipt.ministry_name} ({localReceipt.ministry_code}) &bull;{' '}
                   <strong>Expected SLA:</strong> {localReceipt.expected_sla_days} days
                 </p>
@@ -498,15 +498,15 @@ export const GrievanceModal: React.FC<Props> = ({
 
               {/* Confirmation Email Dispatch Card */}
               {emailNotif && (
-                <div className="border border-sky-200 bg-sky-50/50 rounded-xl p-4 space-y-3">
+                <div className="rounded-2xl border border-sky-200 bg-sky-50/60 dark:border-sky-400/30 dark:bg-sky-500/10 p-4 space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-indiaNavy" />
+                      <Mail className="w-4 h-4 text-indiaNavy dark:text-sky-300" />
                       <div>
-                        <p className="text-xs font-bold text-indiaNavy">
+                        <p className="text-xs font-bold text-indiaNavy dark:text-slate-100">
                           Confirmation Email {emailNotif.delivery_status === 'SENT_SMTP' ? 'Delivered' : 'Generated (Sandbox Outbox)'}
                         </p>
-                        <p className="text-[11px] text-slate-600">
+                        <p className="text-[11px] text-slate-600 dark:text-slate-300">
                           To: <span className="font-mono">{emailNotif.recipient_email}</span> &bull; {emailNotif.delivery_detail}
                         </p>
                       </div>
@@ -515,14 +515,14 @@ export const GrievanceModal: React.FC<Props> = ({
                       <button
                         type="button"
                         onClick={() => setShowEmailPreview((v) => !v)}
-                        className="px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-[11px] font-medium text-slate-700"
+                        className="btn-secondary px-2.5 py-1 text-[11px]"
                       >
                         {showEmailPreview ? 'Hide Preview' : 'Preview Email'}
                       </button>
                       <button
                         type="button"
                         onClick={downloadHtmlReceipt}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indiaNavy text-white text-[11px] font-medium"
+                        className="btn-primary gap-1 px-2.5 py-1 text-[11px]"
                       >
                         <Download className="w-3 h-3" /> Receipt (.html)
                       </button>
@@ -533,7 +533,7 @@ export const GrievanceModal: React.FC<Props> = ({
                     <iframe
                       title="CPGRAMS Email Receipt Preview"
                       srcDoc={emailNotif.body_html}
-                      className="w-full h-64 rounded-lg border border-slate-200 bg-white"
+                      className="w-full h-64 rounded-2xl border border-slate-200 bg-white dark:border-white/10"
                       sandbox=""
                     />
                   )}
@@ -541,32 +541,32 @@ export const GrievanceModal: React.FC<Props> = ({
               )}
 
               {/* Assisted Real-Portal Handoff Packet */}
-              <div className="border border-slate-200 rounded-xl p-4 space-y-3">
+              <div className="glass-subtle p-4 space-y-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h4 className="font-semibold text-slate-900 text-sm">
+                  <h4 className="font-semibold text-slate-900 dark:text-slate-100 text-sm">
                     Official Portal Handoff Packet (pgportal.gov.in)
                   </h4>
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
                       onClick={copyHandoff}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-medium"
+                      className="btn-secondary gap-1.5 px-3 py-1.5 text-xs"
                     >
-                      {copied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                      {copied ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                       {copied ? 'Copied!' : 'Copy Complaint Text'}
                     </button>
                     <a
                       href={localReceipt.assisted_handoff_packet.portal_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indiaNavy text-white text-xs font-medium hover:bg-slate-800"
+                      className="btn-primary gap-1.5 px-3 py-1.5 text-xs"
                     >
                       Open pgportal.gov.in <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   </div>
                 </div>
 
-                <ol className="text-xs text-slate-600 space-y-1 pl-1">
+                <ol className="text-xs text-slate-600 dark:text-slate-300 space-y-1 pl-1">
                   {localReceipt.assisted_handoff_packet.next_steps.map((step, idx) => (
                     <li key={idx}>{step}</li>
                   ))}
@@ -577,7 +577,7 @@ export const GrievanceModal: React.FC<Props> = ({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2 rounded-lg bg-indiaNavy text-white text-sm font-medium hover:bg-slate-800"
+                  className="btn-primary"
                 >
                   Done
                 </button>

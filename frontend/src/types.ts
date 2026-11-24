@@ -128,6 +128,14 @@ export interface ChatMessage {
   created_at: string
 }
 
+export interface SessionSummary {
+  session_id: string
+  preferred_language: string
+  last_message_at: string | null
+  message_count: number
+  first_question: string | null
+}
+
 export interface SchemeSummary {
   slug: string
   scheme_name: string

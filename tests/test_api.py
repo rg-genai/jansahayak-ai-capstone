@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import uuid
+from pathlib import Path
 
 from fastapi.testclient import TestClient
 
 from backend.api.routes_chat import rate_limiter
+from backend.db.repositories import Repository
 from backend.main import create_app
 
 
@@ -107,6 +109,24 @@ def test_grievance_hitl_gate_confirm_and_track_via_api():
         assert track.status_code == 200
         assert track.json()["found"] is True
         assert track.json()["registration_number"] == reg_no
+
+
+def test_session_list_hides_empty_and_orders_by_latest_message(tmp_path: Path):
+    repo = Repository(tmp_path / "sessions.db")
+    repo.add_message("ram-a", "user", "first question")
+    repo.add_message("ram-b", "user", "second question")
+    repo.add_message("ram-a", "assistant", "reply")
+    repo.add_message("citizen-ramesh-01", "user", "primary question")
+    repo.add_message("priya-x", "user", "other user")
+    repo.get_or_create_session("ram-empty")
+
+    own = repo.list_sessions_for_prefix(prefix="ram-")
+    assert [s["session_id"] for s in own] == ["ram-a", "ram-b"]
+    assert own[0]["message_count"] == 2
+    assert own[0]["first_question"] == "first question"
+
+    with_primary = repo.list_sessions_for_prefix(prefix="ram-", extra_session_id="citizen-ramesh-01")
+    assert [s["session_id"] for s in with_primary] == ["citizen-ramesh-01", "ram-a", "ram-b"]
 
 
 def test_chat_guardrail_trace_export_dpdp_erase_and_rate_limit_429():

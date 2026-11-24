@@ -18,6 +18,7 @@ import {
   MessageSquarePlus,
   RotateCcw,
   FilePlus2,
+  History,
 } from 'lucide-react'
 import {
   AuthUser,
@@ -33,6 +34,7 @@ import { useVoiceIO } from '../hooks/useVoiceIO'
 import { EligibilityCard } from './EligibilityCard'
 import { GrievanceModal } from './GrievanceModal'
 import { ProfileDrawer } from './ProfileDrawer'
+import { SessionsSidebar } from './SessionsSidebar'
 
 interface Props {
   user: AuthUser
@@ -40,33 +42,34 @@ interface Props {
   initialPrompt?: string | null
   onClearInitialPrompt?: () => void
   onNewSession: () => void
+  onSelectSession: (sessionId: string) => void
   onTraceCreated?: () => void
 }
 
 const QUICK_SERVICES = [
   {
-    icon: <Sprout className="w-4 h-4 text-emerald-700" />,
+    icon: <Sprout className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />,
     title: 'Delayed PM-KISAN Installment',
     subtitle: 'Check pending DBT reasons or file a complaint (Hindi/Hinglish)',
     lang: 'hi',
     text: 'Mera PM-KISAN ka pichle 6 mahine se paisa nahi aaya, kya karun? Main Uttar Pradesh se farmer hoon.',
   },
   {
-    icon: <GraduationCap className="w-4 h-4 text-sky-700" />,
+    icon: <GraduationCap className="w-4 h-4 text-sky-700 dark:text-sky-400" />,
     title: 'Central Scholarships & Documents',
     subtitle: 'Check eligibility for OBC/SC/ST/EWS college scholarships',
     lang: 'en',
     text: 'I am a 19-year-old OBC B.Tech student with ₹1,80,000 annual family income. Which Central scholarships am I eligible for and what documents do I need?',
   },
   {
-    icon: <Hammer className="w-4 h-4 text-amber-700" />,
+    icon: <Hammer className="w-4 h-4 text-amber-700 dark:text-amber-400" />,
     title: 'PM Vishwakarma for Artisans',
     subtitle: 'Toolkit incentive, skill training & 5% concessional loan details',
     lang: 'en',
     text: 'I am a 34-year-old carpenter. Explain PM Vishwakarma toolkit incentive, loan interest rate, and exclusions.',
   },
   {
-    icon: <FileText className="w-4 h-4 text-rose-700" />,
+    icon: <FileText className="w-4 h-4 text-rose-700 dark:text-rose-400" />,
     title: 'Draft a Public Grievance (CPGRAMS)',
     subtitle: 'Generate a formal complaint letter routed to the right Ministry',
     lang: 'en',
@@ -91,7 +94,7 @@ function renderInlineSpans(text: string, citations: CitationItem[]): React.React
           href={linkMatch[2]}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-indiaNavy font-medium underline decoration-indiaNavy/40 hover:decoration-indiaNavy inline-flex items-center gap-0.5"
+          className="text-indiaNavy dark:text-sky-300 font-medium underline decoration-indiaNavy/40 dark:decoration-sky-300/40 hover:decoration-indiaNavy dark:hover:decoration-sky-300 inline-flex items-center gap-0.5"
         >
           {linkMatch[1]}
           <ExternalLink className="w-3 h-3 inline" />
@@ -102,7 +105,7 @@ function renderInlineSpans(text: string, citations: CitationItem[]): React.React
     // Bold **text**
     if (part.startsWith('**') && part.endsWith('**')) {
       return (
-        <strong key={idx} className="font-semibold text-slate-900">
+        <strong key={idx} className="font-semibold text-slate-900 dark:text-slate-100">
           {part.slice(2, -2)}
         </strong>
       )
@@ -111,7 +114,7 @@ function renderInlineSpans(text: string, citations: CitationItem[]): React.React
     // Inline code `text`
     if (part.startsWith('`') && part.endsWith('`')) {
       return (
-        <code key={idx} className="px-1.5 py-0.5 rounded bg-slate-100 text-indiaNavy font-mono text-[12px]">
+        <code key={idx} className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-white/10 text-indiaNavy dark:text-sky-200 font-mono text-[12px]">
           {part.slice(1, -1)}
         </code>
       )
@@ -130,14 +133,14 @@ function renderInlineSpans(text: string, citations: CitationItem[]): React.React
             target="_blank"
             rel="noopener noreferrer"
             title={`Open official source: ${found.scheme_name}`}
-            className="inline-flex items-center justify-center mx-0.5 px-1.5 py-0 rounded-full bg-sky-50 hover:bg-sky-100 text-indiaNavy border border-sky-200 text-[10px] font-bold align-super transition"
+            className="inline-flex items-center justify-center mx-0.5 px-1.5 py-0 rounded-full bg-sky-50 hover:bg-sky-100 text-indiaNavy border border-sky-200 text-[10px] font-bold align-super transition dark:bg-sky-500/15 dark:hover:bg-sky-500/25 dark:text-sky-200 dark:border-sky-400/30"
           >
             {num}
           </a>
         )
       }
       return (
-        <span key={idx} className="text-[11px] font-semibold text-indiaNavy ml-0.5">
+        <span key={idx} className="text-[11px] font-semibold text-indiaNavy dark:text-slate-300 ml-0.5">
           [{num}]
         </span>
       )
@@ -156,7 +159,7 @@ function renderCitizenMessage(content: string, citations: CitationItem[] = []): 
   const flushLists = (keyPrefix: string) => {
     if (bulletBuffer.length > 0) {
       blocks.push(
-        <ul key={`${keyPrefix}-ul`} className="my-2 space-y-1.5 pl-5 list-disc marker:text-indiaSaffron text-[14px] leading-relaxed text-slate-700">
+        <ul key={`${keyPrefix}-ul`} className="my-2 space-y-1.5 pl-5 list-disc marker:text-indiaSaffron text-[14px] leading-relaxed text-slate-700 dark:text-slate-200">
           {bulletBuffer.map((item, idx) => (
             <li key={idx}>{renderInlineSpans(item, citations)}</li>
           ))}
@@ -166,7 +169,7 @@ function renderCitizenMessage(content: string, citations: CitationItem[] = []): 
     }
     if (orderedBuffer.length > 0) {
       blocks.push(
-        <ol key={`${keyPrefix}-ol`} className="my-2 space-y-1.5 pl-5 list-decimal marker:text-indiaNavy marker:font-semibold text-[14px] leading-relaxed text-slate-700">
+        <ol key={`${keyPrefix}-ol`} className="my-2 space-y-1.5 pl-5 list-decimal marker:text-indiaNavy dark:marker:text-indiaSaffron marker:font-semibold text-[14px] leading-relaxed text-slate-700 dark:text-slate-200">
           {orderedBuffer.map((item, idx) => (
             <li key={idx}>{renderInlineSpans(item, citations)}</li>
           ))}
@@ -190,7 +193,7 @@ function renderCitizenMessage(content: string, citations: CitationItem[] = []): 
       blocks.push(
         <div
           key={`q-${i}`}
-          className="my-2.5 px-3.5 py-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 text-xs leading-relaxed"
+          className="my-2.5 px-3.5 py-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-950 text-xs leading-relaxed dark:bg-amber-500/15 dark:border-amber-500/30 dark:text-amber-100"
         >
           {renderInlineSpans(clean, citations)}
         </div>,
@@ -209,8 +212,8 @@ function renderCitizenMessage(content: string, citations: CitationItem[] = []): 
           key={`h-${i}`}
           className={
             level <= 3
-              ? 'mt-3.5 mb-1.5 text-[15px] font-bold text-indiaNavy border-b border-slate-100 pb-1'
-              : 'mt-3 mb-1 text-[14px] font-semibold text-slate-900'
+              ? 'mt-3.5 mb-1.5 text-[15px] font-bold text-indiaNavy dark:text-slate-100 border-b border-slate-900/10 dark:border-white/10 pb-1'
+              : 'mt-3 mb-1 text-[14px] font-semibold text-slate-900 dark:text-slate-100'
           }
         >
           {renderInlineSpans(headingText, citations)}
@@ -224,7 +227,7 @@ function renderCitizenMessage(content: string, citations: CitationItem[] = []): 
       flushLists(`bh-${i}`)
       const cleanTitle = trimmed.replace(/^\*\*/, '').replace(/\*\*:?$/, '').trim()
       blocks.push(
-        <h4 key={`bh-${i}`} className="mt-3.5 mb-1 text-[14px] font-bold text-indiaNavy">
+        <h4 key={`bh-${i}`} className="mt-3.5 mb-1 text-[14px] font-bold text-indiaNavy dark:text-slate-100">
           {cleanTitle}
         </h4>,
       )
@@ -250,7 +253,7 @@ function renderCitizenMessage(content: string, citations: CitationItem[] = []): 
     // Regular paragraph
     flushLists(`p-${i}`)
     blocks.push(
-      <p key={`p-${i}`} className="my-1.5 text-[14px] leading-relaxed text-slate-800">
+      <p key={`p-${i}`} className="my-1.5 text-[14px] leading-relaxed text-slate-800 dark:text-slate-200">
         {renderInlineSpans(trimmed, citations)}
       </p>,
     )
@@ -286,6 +289,7 @@ export const ChatWorkspace: React.FC<Props> = ({
   initialPrompt,
   onClearInitialPrompt,
   onNewSession,
+  onSelectSession,
   onTraceCreated,
 }) => {
   const [language, setLanguage] = useState<string>(user.preferred_language || 'en')
@@ -295,6 +299,7 @@ export const ChatWorkspace: React.FC<Props> = ({
   const [liveStep, setLiveStep] = useState<string | null>(null)
   const [profile, setProfile] = useState<CitizenProfile>(user.default_profile || {})
   const [profileOpen, setProfileOpen] = useState(false)
+  const [sessionsOpen, setSessionsOpen] = useState(false)
   const [grievanceModalOpen, setGrievanceModalOpen] = useState(false)
   const [activeDraft, setActiveDraft] = useState<GrievanceDraft | null>(null)
   const [activeReceipt, setActiveReceipt] = useState<GrievanceReceipt | null>(null)
@@ -316,10 +321,13 @@ export const ChatWorkspace: React.FC<Props> = ({
   }, [initialPrompt, onClearInitialPrompt])
 
   useEffect(() => {
+    let cancelled = false
     setLanguage(user.preferred_language || 'en')
+    setMessages([])
     apiFetch(`/api/sessions/${sessionId}`)
       .then((r) => r.json())
       .then((data) => {
+        if (cancelled) return
         if (data?.session?.profile && Object.keys(data.session.profile).length > 0) {
           setProfile(data.session.profile)
         } else {
@@ -345,6 +353,9 @@ export const ChatWorkspace: React.FC<Props> = ({
         }
       })
       .catch(() => {})
+    return () => {
+      cancelled = true
+    }
   }, [sessionId, user])
 
   const appendFinalAssistantPayload = (p: {
@@ -518,14 +529,14 @@ export const ChatWorkspace: React.FC<Props> = ({
   return (
     <div className="flex flex-col h-[calc(100vh-112px)] max-w-4xl mx-auto">
       {/* Calm Citizen Utility Bar with Session Controls & Direct Raise Grievance CTA */}
-      <div className="bg-white border border-slate-200/90 rounded-xl px-3.5 py-2.5 mb-3 flex flex-wrap items-center justify-between gap-2 shadow-2xs">
+      <div className="glass-subtle bg-white/70 dark:bg-slate-900/60 rounded-2xl px-3.5 py-2.5 mb-3 flex flex-wrap items-center justify-between gap-2 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
-          <Globe className="w-4 h-4 text-indiaNavy" />
+          <Globe className="w-4 h-4 text-indiaNavy dark:text-indiaSaffron" />
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
             aria-label="Preferred Language"
-            className="text-xs font-semibold text-slate-800 border border-slate-300 rounded-lg px-2.5 py-1.5 bg-slate-50 focus:bg-white focus:border-indiaNavy focus:outline-none"
+            className="text-xs font-semibold text-slate-800 dark:text-slate-100 border border-slate-300/80 dark:border-white/15 rounded-full px-3 py-1.5 bg-white/70 dark:bg-slate-950/50 focus:bg-white dark:focus:bg-slate-900 focus:border-indiaSaffron focus:outline-none focus:ring-2 focus:ring-indiaSaffron/25 transition dark:[color-scheme:dark]"
           >
             {LANGUAGE_OPTIONS.map((opt) => (
               <option key={opt.code} value={opt.code}>
@@ -541,11 +552,21 @@ export const ChatWorkspace: React.FC<Props> = ({
               setInput('')
               onNewSession()
             }}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-xs font-medium text-slate-700 transition"
+            className="btn-secondary gap-1.5 px-3 py-1.5 text-xs"
             title="Start a fresh conversation session"
           >
-            <MessageSquarePlus className="w-3.5 h-3.5 text-indiaNavy" />
+            <MessageSquarePlus className="w-3.5 h-3.5 text-indiaNavy dark:text-indiaSaffron" />
             New Chat
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSessionsOpen(true)}
+            className="btn-secondary gap-1.5 px-3 py-1.5 text-xs"
+            title="View your past conversations"
+          >
+            <History className="w-3.5 h-3.5 text-indiaNavy dark:text-indiaSaffron" />
+            Sessions
           </button>
 
           {messages.length > 0 && (
@@ -556,7 +577,7 @@ export const ChatWorkspace: React.FC<Props> = ({
                 setMessages([])
                 onNewSession()
               }}
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-rose-200 bg-rose-50/70 hover:bg-rose-100 text-xs font-medium text-rose-700 transition"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-rose-200 bg-rose-50/70 hover:bg-rose-100 text-xs font-medium text-rose-700 transition dark:border-rose-500/40 dark:bg-rose-500/15 dark:text-rose-300 dark:hover:bg-rose-500/25"
               title="Close and erase current chat session"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -573,7 +594,7 @@ export const ChatWorkspace: React.FC<Props> = ({
               setActiveReceipt(null)
               setGrievanceModalOpen(true)
             }}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indiaSaffron hover:bg-orange-600 text-white text-xs font-semibold shadow-2xs transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-indiaSaffron hover:bg-orange-600 text-white text-xs font-semibold shadow-md shadow-indiaSaffron/25 transition"
           >
             <FilePlus2 className="w-3.5 h-3.5" />
             Raise Grievance
@@ -582,12 +603,12 @@ export const ChatWorkspace: React.FC<Props> = ({
           <button
             type="button"
             onClick={() => setProfileOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-indiaNavy transition"
+            className="btn-secondary gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-indiaNavy dark:text-slate-100"
           >
             <UserCheck className="w-4 h-4 text-indiaSaffron" />
             My Profile
             {profileCount > 0 && (
-              <span className="px-1.5 py-0.5 rounded-full bg-indiaNavy text-white text-[10px]">
+              <span className="px-1.5 py-0.5 rounded-full bg-indiaNavy dark:bg-indiaSaffron text-white dark:text-slate-950 text-[10px]">
                 {profileCount}
               </span>
             )}
@@ -598,15 +619,15 @@ export const ChatWorkspace: React.FC<Props> = ({
       {/* Conversation Area */}
       <div className="flex-1 overflow-y-auto space-y-4 pr-1 pb-4">
         {messages.length === 0 && (
-          <div className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 space-y-5 shadow-2xs">
+          <div className="glass p-6 sm:p-8 space-y-5">
             <div className="space-y-1.5">
               <p className="text-xs font-semibold uppercase tracking-wide text-indiaSaffron">
                 Citizen Helpdesk
               </p>
-              <h2 className="text-xl sm:text-2xl font-bold text-indiaNavy">
+              <h2 className="text-xl sm:text-2xl font-bold text-indiaNavy dark:text-slate-100">
                 Namaste, {user.display_name}. How can we assist you today?
               </h2>
-              <p className="text-sm text-slate-600 leading-relaxed max-w-2xl">
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
                 Ask about any Central Government scheme, check your eligibility and required documents,
                 or get help drafting and tracking a formal CPGRAMS public grievance.
               </p>
@@ -618,14 +639,14 @@ export const ChatWorkspace: React.FC<Props> = ({
                   key={i}
                   type="button"
                   onClick={() => sendMessage(svc.text, svc.lang)}
-                  className="p-4 rounded-xl border border-slate-200 bg-[#FAF9F6] hover:bg-white hover:border-indiaNavy hover:shadow-xs transition text-left flex items-start gap-3"
+                  className="glass-subtle p-4 rounded-2xl hover:bg-white/85 hover:border-indiaNavy/40 hover:shadow-md dark:hover:bg-white/10 dark:hover:border-indiaSaffron/40 transition text-left flex items-start gap-3"
                 >
-                  <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-8 h-8 rounded-xl bg-white/80 border border-slate-200/80 dark:bg-white/10 dark:border-white/10 flex items-center justify-center shrink-0 mt-0.5">
                     {svc.icon}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-slate-900">{svc.title}</p>
-                    <p className="text-xs text-slate-500 mt-0.5 leading-snug">{svc.subtitle}</p>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">{svc.title}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">{svc.subtitle}</p>
                   </div>
                 </button>
               ))}
@@ -652,10 +673,10 @@ export const ChatWorkspace: React.FC<Props> = ({
           return (
             <div key={m.id} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div
-                className={`max-w-[94%] sm:max-w-[88%] rounded-2xl px-5 py-4 shadow-2xs ${
+                className={`max-w-[94%] sm:max-w-[88%] rounded-2xl px-5 py-4 shadow-sm ${
                   m.role === 'user'
-                    ? 'bg-indiaNavy text-white rounded-br-sm text-sm leading-relaxed'
-                    : 'bg-white border border-slate-200/90 text-slate-800 rounded-bl-sm'
+                    ? 'bg-indiaNavy text-white rounded-br-sm text-sm leading-relaxed shadow-md shadow-indiaNavy/20 dark:bg-indiaSaffron/20 dark:text-slate-100 dark:border dark:border-indiaSaffron/40'
+                    : 'glass-subtle bg-white/80 border-slate-900/10 text-slate-800 rounded-bl-sm dark:bg-slate-900/60 dark:border-white/10 dark:text-slate-200'
                 }`}
               >
                 {m.role === 'user' ? (
@@ -675,12 +696,12 @@ export const ChatWorkspace: React.FC<Props> = ({
 
                 {/* Grievance Draft HITL Action Card */}
                 {m.grievance_draft && (
-                  <div className="mt-4 p-4 rounded-xl bg-amber-50 border border-amber-300 flex flex-wrap items-center justify-between gap-3">
-                    <div className="flex items-start gap-2.5 text-xs text-amber-950">
-                      <FileWarning className="w-5 h-5 text-amber-700 shrink-0 mt-0.5" />
+                  <div className="mt-4 p-4 rounded-2xl bg-amber-50/80 border border-amber-300 backdrop-blur-sm flex flex-wrap items-center justify-between gap-3 dark:bg-amber-500/10 dark:border-amber-400/30">
+                    <div className="flex items-start gap-2.5 text-xs text-amber-950 dark:text-amber-100">
+                      <FileWarning className="w-5 h-5 text-amber-700 dark:text-amber-300 shrink-0 mt-0.5" />
                       <div>
-                        <p className="font-bold text-sm text-amber-950">Your Grievance Draft is Ready for Review</p>
-                        <p className="text-amber-800 mt-0.5">
+                        <p className="font-bold text-sm text-amber-950 dark:text-amber-100">Your Grievance Draft is Ready for Review</p>
+                        <p className="text-amber-800 dark:text-amber-200 mt-0.5">
                           Routed to <strong>{m.grievance_draft.ministry_name}</strong> ({m.grievance_draft.char_count} / 2000 characters). Nothing is submitted until you confirm.
                         </p>
                       </div>
@@ -692,7 +713,7 @@ export const ChatWorkspace: React.FC<Props> = ({
                         setActiveDraft(m.grievance_draft || null)
                         setGrievanceModalOpen(true)
                       }}
-                      className="px-4 py-2 rounded-lg bg-indiaSaffron hover:bg-orange-600 text-white text-xs font-semibold shadow-xs transition"
+                      className="px-4 py-2 rounded-full bg-indiaSaffron hover:bg-orange-600 text-white text-xs font-semibold shadow-md shadow-indiaSaffron/25 transition"
                     >
                       Review &amp; Submit Grievance
                     </button>
@@ -701,9 +722,9 @@ export const ChatWorkspace: React.FC<Props> = ({
 
                 {/* Direct Official Scheme Links (myScheme.gov.in) */}
                 {m.role === 'assistant' && officialSchemes.length > 0 && (
-                  <div className="mt-4 pt-3 border-t border-slate-100">
-                    <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-1.5">
-                      <BookOpen className="w-3.5 h-3.5 text-indiaNavy" />
+                  <div className="mt-4 pt-3 border-t border-slate-900/10 dark:border-white/10">
+                    <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                      <BookOpen className="w-3.5 h-3.5 text-indiaNavy dark:text-indiaSaffron" />
                       Direct Official Scheme Pages
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -713,17 +734,17 @@ export const ChatWorkspace: React.FC<Props> = ({
                           href={c.source_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-[#FAF9F6] hover:bg-sky-50 border border-slate-200 hover:border-indiaNavy/40 transition group"
+                          className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-white/60 hover:bg-white/90 border border-slate-900/10 hover:border-indiaNavy/40 shadow-sm transition group dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 dark:hover:border-indiaSaffron/40"
                         >
                           <div className="min-w-0">
-                            <p className="text-xs font-semibold text-indiaNavy truncate group-hover:underline">
+                            <p className="text-xs font-semibold text-indiaNavy dark:text-slate-100 truncate group-hover:underline">
                               {c.scheme_name}
                             </p>
                             {c.ministry && (
-                              <p className="text-[11px] text-slate-500 truncate">{c.ministry}</p>
+                              <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">{c.ministry}</p>
                             )}
                           </div>
-                          <ExternalLink className="w-3.5 h-3.5 text-slate-400 group-hover:text-indiaNavy shrink-0" />
+                          <ExternalLink className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 group-hover:text-indiaNavy dark:group-hover:text-indiaSaffron shrink-0" />
                         </a>
                       ))}
                     </div>
@@ -732,9 +753,9 @@ export const ChatWorkspace: React.FC<Props> = ({
 
                 {/* Live .gov.in Web Search Links (DuckDuckGo / Tavily) */}
                 {m.role === 'assistant' && webSources.length > 0 && (
-                  <div className="mt-3 pt-3 border-t border-slate-100">
-                    <p className="text-[11px] font-semibold text-emerald-800 uppercase tracking-wide mb-2 flex items-center gap-1.5">
-                      <Globe className="w-3.5 h-3.5 text-emerald-700" />
+                  <div className="mt-3 pt-3 border-t border-slate-900/10 dark:border-white/10">
+                    <p className="text-[11px] font-semibold text-emerald-800 dark:text-emerald-300 uppercase tracking-wide mb-2 flex items-center gap-1.5">
+                      <Globe className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400" />
                       Official Government Web Links Found (.gov.in / .nic.in)
                     </p>
                     <div className="space-y-1.5">
@@ -744,10 +765,10 @@ export const ChatWorkspace: React.FC<Props> = ({
                           href={w.source_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-emerald-50/60 hover:bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 transition"
+                          className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-emerald-50/60 hover:bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 transition dark:bg-emerald-500/10 dark:hover:bg-emerald-500/20 dark:border-emerald-400/30 dark:text-emerald-100"
                         >
                           <span className="truncate font-medium">{w.scheme_name}</span>
-                          <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 shrink-0">
+                          <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 dark:text-emerald-300 shrink-0">
                             Open Link <ExternalLink className="w-3 h-3" />
                           </span>
                         </a>
@@ -758,10 +779,10 @@ export const ChatWorkspace: React.FC<Props> = ({
 
                 {/* Clean Footer (Read Aloud for all; Trace ID only for Admin) */}
                 {m.role === 'assistant' && (
-                  <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between gap-2 text-[11px] text-slate-400">
+                  <div className="mt-3 pt-2 border-t border-slate-900/10 dark:border-white/10 flex items-center justify-between gap-2 text-[11px] text-slate-400 dark:text-slate-500">
                     <div className="flex items-center gap-2">
                       {isAdmin && m.trace_id && (
-                        <span className="font-mono px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
+                        <span className="font-mono px-1.5 py-0.5 rounded bg-slate-900/5 text-slate-600 dark:bg-white/10 dark:text-slate-300">
                           {m.trace_id}
                         </span>
                       )}
@@ -773,7 +794,7 @@ export const ChatWorkspace: React.FC<Props> = ({
                       <button
                         type="button"
                         onClick={() => (voice.isSpeaking || voice.isLoadingAudio ? voice.stopSpeaking() : voice.speak(m.content))}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-slate-100 text-slate-600 hover:text-indiaNavy font-medium transition"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full hover:bg-slate-900/5 text-slate-600 hover:text-indiaNavy font-medium transition dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-indiaSaffron"
                       >
                         {voice.isLoadingAudio ? (
                           <Loader2 className="w-3.5 h-3.5 animate-spin text-indiaSaffron" />
@@ -794,7 +815,7 @@ export const ChatWorkspace: React.FC<Props> = ({
 
         {loading && (
           <div className="flex justify-start">
-            <div className="bg-white border border-slate-200 rounded-2xl px-4 py-3 text-xs text-slate-600 flex items-center gap-2.5 shadow-2xs">
+            <div className="glass-subtle bg-white/80 border-slate-900/10 px-4 py-3 text-xs text-slate-600 flex items-center gap-2.5 shadow-sm dark:bg-slate-900/60 dark:border-white/10 dark:text-slate-300">
               <Loader2 className="w-4 h-4 animate-spin text-indiaSaffron" />
               <span>{liveStep || 'Looking up official scheme information...'}</span>
             </div>
@@ -804,7 +825,7 @@ export const ChatWorkspace: React.FC<Props> = ({
       </div>
 
       {voice.voiceError && (
-        <div className="mb-2 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-xs">
+        <div className="mb-2 px-3 py-1.5 rounded-xl bg-amber-50/80 border border-amber-200 text-amber-800 text-xs backdrop-blur-sm dark:bg-amber-500/10 dark:border-amber-400/30 dark:text-amber-200">
           {voice.voiceError}
         </div>
       )}
@@ -815,7 +836,7 @@ export const ChatWorkspace: React.FC<Props> = ({
           e.preventDefault()
           sendMessage()
         }}
-        className="bg-white border border-slate-300 rounded-2xl p-2 flex items-center gap-2 shadow-sm focus-within:border-indiaNavy transition"
+        className="glass rounded-full p-2 pl-3 flex items-center gap-2 focus-within:border-indiaSaffron/60 transition"
       >
         <button
           type="button"
@@ -824,10 +845,10 @@ export const ChatWorkspace: React.FC<Props> = ({
               ? voice.stopListening()
               : voice.startListening((transcript) => setInput((prev) => (prev ? `${prev} ${transcript}` : transcript)))
           }
-          className={`p-2.5 rounded-xl transition ${
+          className={`p-2.5 rounded-full transition ${
             voice.isListening
               ? 'bg-rose-600 text-white animate-pulse'
-              : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+              : 'bg-slate-900/5 hover:bg-slate-900/10 text-slate-700 dark:bg-white/10 dark:hover:bg-white/15 dark:text-slate-200'
           }`}
           title={voice.sttSupported ? `Speak in ${currentLangOpt.label}` : 'Voice input unsupported in this browser'}
         >
@@ -839,19 +860,27 @@ export const ChatWorkspace: React.FC<Props> = ({
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={`Ask about schemes, eligibility, documents, or grievances (${currentLangOpt.label})...`}
-          className="flex-1 text-sm bg-transparent px-2 py-2 focus:outline-none text-slate-900 placeholder-slate-400"
+          className="flex-1 text-sm bg-transparent px-2 py-2 focus:outline-none text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500"
           disabled={loading}
         />
 
         <button
           type="submit"
           disabled={loading || !input.trim()}
-          className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-indiaNavy hover:bg-slate-800 disabled:opacity-40 text-white font-semibold text-sm transition"
+          className="btn-primary gap-1.5 px-4 py-2.5 disabled:opacity-40"
         >
           <Send className="w-4 h-4" />
           <span className="hidden sm:inline">Ask</span>
         </button>
       </form>
+
+      <SessionsSidebar
+        open={sessionsOpen}
+        onClose={() => setSessionsOpen(false)}
+        activeSessionId={sessionId}
+        busy={loading}
+        onSelectSession={onSelectSession}
+      />
 
       <ProfileDrawer
         open={profileOpen}

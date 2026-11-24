@@ -89,23 +89,23 @@ export const EvalDashboard: React.FC = () => {
   const renderExportButtons = (reportKey: string, traceId?: string) => (
     <div className="flex items-center gap-1.5">
       {traceId && (
-        <span className="px-2 py-0.5 rounded bg-slate-100 font-mono text-[10px] font-semibold text-indiaNavy">
+        <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-white/10 font-mono text-[10px] font-semibold text-indiaNavy dark:text-sky-300">
           {traceId}
         </span>
       )}
       <button
         type="button"
         onClick={() => downloadAuthenticatedFile(`/api/evals/export/${reportKey}?format=json`, `${reportKey}.json`)}
-        className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 hover:bg-slate-50 text-[10px] font-medium"
+        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-slate-300/80 bg-white/60 hover:bg-white text-[10px] font-medium text-slate-700 transition dark:border-white/15 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
       >
-        <FileJson className="w-3 h-3 text-indiaNavy" /> JSON
+        <FileJson className="w-3 h-3 text-indiaNavy dark:text-sky-300" /> JSON
       </button>
       <button
         type="button"
         onClick={() => downloadAuthenticatedFile(`/api/evals/export/${reportKey}?format=md`, `${reportKey}.md`)}
-        className="inline-flex items-center gap-1 px-2 py-1 rounded border border-slate-300 hover:bg-slate-50 text-[10px] font-medium"
+        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-slate-300/80 bg-white/60 hover:bg-white text-[10px] font-medium text-slate-700 transition dark:border-white/15 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
       >
-        <FileText className="w-3 h-3 text-emerald-700" /> MD
+        <FileText className="w-3 h-3 text-emerald-700 dark:text-emerald-400" /> MD
       </button>
     </div>
   )
@@ -114,18 +114,18 @@ export const EvalDashboard: React.FC = () => {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <BarChart3 className="w-4 h-4 text-indiaNavy" />
+          <h3 className="text-base font-bold text-indiaNavy dark:text-slate-100 flex items-center gap-2">
+            <BarChart3 className="w-4 h-4 text-indiaNavy dark:text-sky-300" />
             Track B Quantitative Benchmarks &amp; Downloadable Debug Traces
           </h3>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             Real evaluation outputs on fixed `Qwen/Qwen3-8B` + `bge-small-en-v1.5`, with one-click JSON/Markdown exports for debugging.
           </p>
         </div>
         <button
           type="button"
           onClick={load}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-xs font-medium"
+          className="btn-secondary gap-1.5 px-3 py-1.5 text-xs font-medium"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
           Reload ({data?.available_reports ?? 0}/{data?.total_expected ?? 4})
@@ -133,29 +133,29 @@ export const EvalDashboard: React.FC = () => {
       </div>
 
       {/* 1. Retrieval Ablation R1-R4 */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3">
+      <div className="glass p-5 space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h4 className="font-bold text-sm text-slate-900">
+          <h4 className="font-bold text-sm text-indiaNavy dark:text-slate-100">
             1. Retrieval Ablation (R1 BM25 vs R2 Dense vs R3 Hybrid RRF vs R4 Hybrid + Reranker)
           </h4>
           {retrieval && renderExportButtons('retrieval_ablation', retrieval.eval_trace_id)}
         </div>
         {!retrieval ? (
-          <p className="text-xs text-slate-400">Run `python eval/run_all_evals.py` to populate retrieval ablation metrics.</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">Run `python eval/run_all_evals.py` to populate retrieval ablation metrics.</p>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
             <div className="lg:col-span-6 space-y-2.5">
               {retrieval.configs.map((c) => (
                 <div key={c.id} className="space-y-1">
                   <div className="flex justify-between text-xs">
-                    <span className="font-semibold text-slate-800">{c.id}: {c.name}</span>
-                    <span className="font-mono text-indiaNavy">
+                    <span className="font-semibold text-slate-800 dark:text-slate-100">{c.id}: {c.name}</span>
+                    <span className="font-mono text-indiaNavy dark:text-sky-300">
                       R@5: {(c.recall_at_5 * 100).toFixed(1)}% | MRR@10: {c.mrr_at_10.toFixed(3)}
                     </span>
                   </div>
-                  <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+                  <div className="w-full h-3 bg-slate-200/80 dark:bg-white/10 rounded-full overflow-hidden">
                     <div
-                      className={`h-full rounded-full ${c.id === 'R4' ? 'bg-indiaGreen' : 'bg-indiaNavy/80'}`}
+                      className={`h-full rounded-full ${c.id === 'R4' ? 'bg-indiaGreen dark:bg-emerald-400' : 'bg-indiaNavy/80 dark:bg-sky-400/80'}`}
                       style={{ width: `${Math.min(100, c.recall_at_5 * 100)}%` }}
                     />
                   </div>
@@ -163,8 +163,8 @@ export const EvalDashboard: React.FC = () => {
               ))}
             </div>
             <div className="lg:col-span-6 overflow-x-auto">
-              <table className="w-full text-xs border border-slate-200 rounded-lg">
-                <thead className="bg-slate-50 text-slate-600">
+              <table className="w-full text-xs border border-slate-200/80 dark:border-white/10 rounded-lg">
+                <thead className="bg-slate-100/70 text-slate-600 dark:bg-white/10 dark:text-slate-300">
                   <tr>
                     <th className="p-2 text-left">Config</th>
                     <th className="p-2 text-right">R@3</th>
@@ -175,9 +175,9 @@ export const EvalDashboard: React.FC = () => {
                     <th className="p-2 text-right">Latency</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-mono">
+                <tbody className="divide-y divide-slate-200/70 dark:divide-white/10 font-mono">
                   {retrieval.configs.map((c) => (
-                    <tr key={c.id} className={c.id === 'R4' ? 'bg-emerald-50/50 font-semibold' : ''}>
+                    <tr key={c.id} className={c.id === 'R4' ? 'bg-emerald-50/50 font-semibold dark:bg-emerald-400/15 dark:text-emerald-200' : ''}>
                       <td className="p-2 font-sans">{c.id}</td>
                       <td className="p-2 text-right">{(c.recall_at_3 * 100).toFixed(1)}%</td>
                       <td className="p-2 text-right">{(c.recall_at_5 * 100).toFixed(1)}%</td>
@@ -195,20 +195,20 @@ export const EvalDashboard: React.FC = () => {
       </div>
 
       {/* 2. Prompting Comparison P1-P3 */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3">
+      <div className="glass p-5 space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h4 className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
+          <h4 className="font-bold text-sm text-indiaNavy dark:text-slate-100 flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-indiaSaffron" />
             2. Prompting Strategy Comparison (P1 Zero-Shot vs P2 Few-Shot vs P3 Planner-Critic)
           </h4>
           {prompts && renderExportButtons('prompt_comparison', prompts.eval_trace_id)}
         </div>
         {!prompts ? (
-          <p className="text-xs text-slate-400">Prompt comparison report not yet generated.</p>
+          <p className="text-xs text-slate-400 dark:text-slate-500">Prompt comparison report not yet generated.</p>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-xs border border-slate-200 rounded-lg">
-              <thead className="bg-slate-50 text-slate-600">
+            <table className="w-full text-xs border border-slate-200/80 dark:border-white/10 rounded-lg">
+              <thead className="bg-slate-100/70 text-slate-600 dark:bg-white/10 dark:text-slate-300">
                 <tr>
                   <th className="p-2.5 text-left">Strategy</th>
                   <th className="p-2.5 text-right">Answer Accuracy</th>
@@ -218,9 +218,9 @@ export const EvalDashboard: React.FC = () => {
                   <th className="p-2.5 text-right">Avg Tokens</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 font-mono">
+              <tbody className="divide-y divide-slate-200/70 dark:divide-white/10 font-mono">
                 {prompts.strategies.map((s) => (
-                  <tr key={s.id} className={s.id === 'P3' ? 'bg-emerald-50/50 font-semibold' : ''}>
+                  <tr key={s.id} className={s.id === 'P3' ? 'bg-emerald-50/50 font-semibold dark:bg-emerald-400/15 dark:text-emerald-200' : ''}>
                     <td className="p-2.5 font-sans">{s.id}: {s.name}</td>
                     <td className="p-2.5 text-right">{(s.answer_accuracy * 100).toFixed(1)}%</td>
                     <td className="p-2.5 text-right">{(s.citation_adherence * 100).toFixed(1)}%</td>
@@ -237,71 +237,71 @@ export const EvalDashboard: React.FC = () => {
 
       {/* 3 & 4. Agent Reliability & Red-Team Safety */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3">
+        <div className="glass p-5 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h4 className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
-              <Wrench className="w-4 h-4 text-indiaNavy" />
+            <h4 className="font-bold text-sm text-indiaNavy dark:text-slate-100 flex items-center gap-1.5">
+              <Wrench className="w-4 h-4 text-indiaNavy dark:text-sky-300" />
               3. Agent Reliability ({agent?.num_scenarios ?? 0})
             </h4>
             {agent && renderExportButtons('agent_reliability', agent.eval_trace_id)}
           </div>
           {!agent ? (
-            <p className="text-xs text-slate-400">Agent reliability report not yet generated.</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500">Agent reliability report not yet generated.</p>
           ) : (
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
-                <p className="text-[11px] text-slate-500">Tool Selection Accuracy</p>
-                <p className="text-xl font-bold text-indiaNavy">{(agent.metrics.tool_selection_accuracy * 100).toFixed(1)}%</p>
+              <div className="glass-subtle p-4">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Tool Selection Accuracy</p>
+                <p className="text-xl font-bold text-indiaNavy dark:text-sky-300">{(agent.metrics.tool_selection_accuracy * 100).toFixed(1)}%</p>
               </div>
-              <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
-                <p className="text-[11px] text-slate-500">JSON Repair Recovery</p>
-                <p className="text-xl font-bold text-emerald-700">{(agent.metrics.json_repair_recovery_rate * 100).toFixed(1)}%</p>
+              <div className="glass-subtle p-4">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">JSON Repair Recovery</p>
+                <p className="text-xl font-bold text-emerald-700 dark:text-emerald-400">{(agent.metrics.json_repair_recovery_rate * 100).toFixed(1)}%</p>
               </div>
-              <div className="p-3 rounded-lg bg-slate-50 border border-slate-200">
-                <p className="text-[11px] text-slate-500">Graceful 503/Timeout Fallback</p>
-                <p className="text-xl font-bold text-emerald-700">{(agent.metrics.graceful_fallback_rate * 100).toFixed(1)}%</p>
+              <div className="glass-subtle p-4">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">Graceful 503/Timeout Fallback</p>
+                <p className="text-xl font-bold text-emerald-700 dark:text-emerald-400">{(agent.metrics.graceful_fallback_rate * 100).toFixed(1)}%</p>
               </div>
-              <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-200">
-                <p className="text-[11px] text-emerald-800">HITL Gate Enforcement</p>
-                <p className="text-xl font-bold text-emerald-800">{(agent.metrics.hitl_enforcement_rate * 100).toFixed(1)}%</p>
+              <div className="glass-subtle p-4 bg-emerald-50/80 border-emerald-300/70 dark:bg-emerald-400/15 dark:border-emerald-400/30">
+                <p className="text-[11px] text-emerald-800 dark:text-emerald-300">HITL Gate Enforcement</p>
+                <p className="text-xl font-bold text-emerald-800 dark:text-emerald-300">{(agent.metrics.hitl_enforcement_rate * 100).toFixed(1)}%</p>
               </div>
             </div>
           )}
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-3">
+        <div className="glass p-5 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <h4 className="font-bold text-sm text-slate-900 flex items-center gap-1.5">
+            <h4 className="font-bold text-sm text-indiaNavy dark:text-slate-100 flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-indiaGreen" />
               4. Red-Team Safety ({redteam?.num_tests ?? 0})
             </h4>
             {redteam && renderExportButtons('red_team_report', redteam.eval_trace_id)}
           </div>
           {!redteam ? (
-            <p className="text-xs text-slate-400">Red-team report not yet generated.</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500">Red-team report not yet generated.</p>
           ) : (
             <div className="space-y-3">
               <div className="grid grid-cols-3 gap-2">
-                <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200">
-                  <p className="text-[10px] text-emerald-800">Overall Defense</p>
-                  <p className="text-lg font-bold text-emerald-800">{(redteam.overall_pass_rate * 100).toFixed(1)}%</p>
+                <div className="glass-subtle p-2.5 bg-emerald-50/80 border-emerald-300/70 dark:bg-emerald-400/15 dark:border-emerald-400/30">
+                  <p className="text-[10px] text-emerald-800 dark:text-emerald-300">Overall Defense</p>
+                  <p className="text-lg font-bold text-emerald-800 dark:text-emerald-300">{(redteam.overall_pass_rate * 100).toFixed(1)}%</p>
                 </div>
-                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                  <p className="text-[10px] text-slate-500">Injection Block</p>
-                  <p className="text-lg font-bold text-indiaNavy">{(redteam.injection_block_rate * 100).toFixed(1)}%</p>
+                <div className="glass-subtle p-2.5">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">Injection Block</p>
+                  <p className="text-lg font-bold text-indiaNavy dark:text-sky-300">{(redteam.injection_block_rate * 100).toFixed(1)}%</p>
                 </div>
-                <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
-                  <p className="text-[10px] text-slate-500">PII Masking</p>
-                  <p className="text-lg font-bold text-indiaNavy">{(redteam.pii_masking_rate * 100).toFixed(1)}%</p>
+                <div className="glass-subtle p-2.5">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">PII Masking</p>
+                  <p className="text-lg font-bold text-indiaNavy dark:text-sky-300">{(redteam.pii_masking_rate * 100).toFixed(1)}%</p>
                 </div>
               </div>
               {redteam.failure_taxonomy && redteam.failure_taxonomy.length > 0 && (
                 <div className="text-xs space-y-1">
-                  <p className="font-semibold text-slate-700">Tracked Failure Taxonomy</p>
+                  <p className="font-semibold text-slate-700 dark:text-slate-200">Tracked Failure Taxonomy</p>
                   {redteam.failure_taxonomy.map((ft) => (
-                    <div key={ft.code} className="flex items-center justify-between bg-slate-50 px-2.5 py-1.5 rounded">
+                    <div key={ft.code} className="flex items-center justify-between bg-white/50 dark:bg-white/5 px-2.5 py-1.5 rounded-lg">
                       <span><strong>{ft.code}</strong>: {ft.category}</span>
-                      <span className="font-mono text-slate-500">count: {ft.count}</span>
+                      <span className="font-mono text-slate-500 dark:text-slate-400">count: {ft.count}</span>
                     </div>
                   ))}
                 </div>
@@ -312,22 +312,22 @@ export const EvalDashboard: React.FC = () => {
       </div>
 
       {/* 5. Recent Live Traces Quick-Export Table right inside Evals */}
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-        <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
-          <h4 className="font-bold text-xs text-slate-800">
+      <div className="glass overflow-hidden">
+        <div className="px-4 py-3 bg-white/40 dark:bg-white/5 border-b border-slate-200/70 dark:border-white/10 flex flex-wrap items-center justify-between gap-2">
+          <h4 className="font-bold text-xs text-indiaNavy dark:text-slate-100">
             5. Recent Live Execution Traces (Download Structured JSON / Markdown by Trace ID)
           </h4>
           <button
             type="button"
             onClick={() => downloadAuthenticatedFile('/api/traces/export/all?format=json&hide_erased=true', 'jansahayak_traces.json')}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-indiaNavy text-white text-[11px] font-medium"
+            className="btn-primary gap-1 px-3 py-1.5 text-[11px] font-medium"
           >
             <Download className="w-3 h-3" /> Export All Traces (JSON)
           </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
-            <thead className="bg-slate-50 text-slate-500 border-b border-slate-200">
+            <thead className="bg-slate-100/70 text-slate-600 dark:bg-white/10 dark:text-slate-300 border-b border-slate-200/70 dark:border-white/10">
               <tr>
                 <th className="p-2.5 text-left">Trace ID</th>
                 <th className="p-2.5 text-left">Persona</th>
@@ -337,12 +337,12 @@ export const EvalDashboard: React.FC = () => {
                 <th className="p-2.5 text-right">Download</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-200/70 dark:divide-white/10">
               {recentTraces.map((t) => (
-                <tr key={t.trace_id} className="hover:bg-slate-50">
-                  <td className="p-2.5 font-mono font-semibold text-indiaNavy">{t.trace_id}</td>
-                  <td className="p-2.5 text-slate-600">@{t.user_id || 'anonymous'}</td>
-                  <td className="p-2.5 max-w-xs truncate text-slate-800">{t.user_query_masked}</td>
+                <tr key={t.trace_id} className="hover:bg-white/60 dark:hover:bg-white/10 transition">
+                  <td className="p-2.5 font-mono font-semibold text-indiaNavy dark:text-sky-300">{t.trace_id}</td>
+                  <td className="p-2.5 text-slate-600 dark:text-slate-300">@{t.user_id || 'anonymous'}</td>
+                  <td className="p-2.5 max-w-xs truncate text-slate-800 dark:text-slate-200">{t.user_query_masked}</td>
                   <td className="p-2.5 text-right font-mono">{(t.total_latency_ms / 1000).toFixed(2)}s</td>
                   <td className="p-2.5 text-right font-mono">{t.prompt_tokens + t.completion_tokens}</td>
                   <td className="p-2.5 text-right">
@@ -350,14 +350,14 @@ export const EvalDashboard: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => downloadAuthenticatedFile(`/api/traces/${t.trace_id}/export?format=json`, `trace_${t.trace_id}.json`)}
-                        className="px-2 py-0.5 rounded border border-slate-300 hover:bg-slate-100 text-[10px] font-mono"
+                        className="px-2 py-0.5 rounded-full border border-slate-300/80 bg-white/60 hover:bg-white text-[10px] font-mono text-slate-700 transition dark:border-white/15 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
                       >
                         JSON
                       </button>
                       <button
                         type="button"
                         onClick={() => downloadAuthenticatedFile(`/api/traces/${t.trace_id}/export?format=md`, `trace_${t.trace_id}.md`)}
-                        className="px-2 py-0.5 rounded border border-slate-300 hover:bg-slate-100 text-[10px] font-mono"
+                        className="px-2 py-0.5 rounded-full border border-slate-300/80 bg-white/60 hover:bg-white text-[10px] font-mono text-slate-700 transition dark:border-white/15 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10"
                       >
                         MD
                       </button>
@@ -367,7 +367,7 @@ export const EvalDashboard: React.FC = () => {
               ))}
               {recentTraces.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="p-4 text-center text-slate-400">
+                  <td colSpan={6} className="p-4 text-center text-slate-500 dark:text-slate-400">
                     No active live traces yet. Send a message in Citizen Copilot.
                   </td>
                 </tr>

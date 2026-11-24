@@ -400,23 +400,8 @@ async def list_user_sessions(
 ) -> dict[str, Any]:
     repo = Repository()
     prefix = f"{user['username']}-" if user else "citizen-"
-    items = repo.list_sessions_for_prefix(prefix=prefix, limit=20)
-    # Also include the user's primary persona session if present
-    if user:
-        primary_id = user.get("session_id", "")
-        if primary_id and not any(x["session_id"] == primary_id for x in items):
-            sess = repo.get_or_create_session(primary_id, preferred_language=user.get("preferred_language", "en"))
-            msgs = repo.get_messages(primary_id, limit=1)
-            items.insert(
-                0,
-                {
-                    "session_id": primary_id,
-                    "preferred_language": sess["preferred_language"],
-                    "updated_at": sess["updated_at"],
-                    "message_count": len(msgs),
-                    "first_question": msgs[0]["content"] if msgs else None,
-                },
-            )
+    primary_id = user.get("session_id") if user else None
+    items = repo.list_sessions_for_prefix(prefix=prefix, extra_session_id=primary_id, limit=20)
     return {"sessions": items}
 
 

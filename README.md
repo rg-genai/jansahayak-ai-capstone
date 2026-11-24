@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/assets/jansahayak-header.png" alt="JanSahayak AI header with logo over a cloud sky background" width="100%">
+</p>
+
 # JanSahayak AI — Multilingual Indian Citizen Welfare Copilot & Assisted CPGRAMS Grievance Agent
 
 **IIT Kharagpur — Executive PG Certificate in Generative AI & Agentic AI (Track B Capstone Project)**
@@ -14,6 +18,79 @@ JanSahayak AI is a production-styled, voice-and-text multilingual citizen copilo
 - **6 Indian Languages + Voice I/O:** English, Hindi, Hinglish, Marathi, Bengali, Tamil, and Telugu with English-pivot cross-lingual consistency, Browser Web Speech STT, and zero-key server MP3 TTS (`POST /api/voice/tts` via `gTTS` + `edge-tts`).
 - **HITL CPGRAMS Grievance Action + Real Email:** Formal `<= 2,000`-char drafts mapped to 51 Ministries, strict `user_confirmed=True` code gate, **real Gmail SMTP HTML confirmation receipts** (+ built-in HTML Sandbox Outbox), and **Assisted Real-Portal Handoff Packet** (`pgportal.gov.in`).
 - **Safety, DPDP Privacy & Admin Observability:** Regex PII masking (Aadhaar, PAN, Phone, Bank, IFSC), Right to Erasure (`DELETE /api/sessions/{id}`), Persona Login RBAC (Admin + 4 Citizens), and Langfuse-style Span Explorer with JSON/Markdown/CSV exports.
+
+---
+
+## Screenshots
+
+Every view supports light and dark mode (toggle in the header). The cloud background switches from a blue sky with white clouds in light mode to a dark blue sky with grey clouds in dark mode, and panels use frosted glass tinted to match the theme.
+
+### Login — Light and Dark
+
+<p align="center">
+  <img src="docs/screenshots/login-light.png" alt="Login screen in light mode" width="49%">
+  <img src="docs/screenshots/login-dark.png" alt="Login screen in dark mode" width="49%">
+</p>
+
+- Landing hero with the 649-scheme value proposition, trust badges, and feature cards.
+- Citizen Login and Administrator tabs, plus a collapsible panel for sandbox / evaluator demo accounts.
+
+### Citizen Helpdesk — Light and Dark
+
+<p align="center">
+  <img src="docs/screenshots/helpdesk-chat-light.png" alt="Citizen Helpdesk chat in light mode" width="49%">
+  <img src="docs/screenshots/helpdesk-chat-dark.png" alt="Citizen Helpdesk chat in dark mode" width="49%">
+</p>
+
+- Multilingual chat copilot with voice input, a per-answer Listen button for text-to-speech, and a language selector.
+- Each answer shows a trace ID (`TRC-…`) that matches an entry in the admin Traces & Evals debugger.
+- Toolbar actions: New Chat, Sessions, Close Session, Raise Grievance, and My Profile.
+
+### Session History Sidebar
+
+<img src="docs/screenshots/sessions-sidebar.png" alt="Session History sidebar open on the left" width="100%">
+
+- Left-side panel listing the signed-in citizen's past conversations with message counts and timestamps.
+- Selecting a conversation reopens it. The panel closes on an outside click or the Escape key.
+
+### Citizen Profile Drawer
+
+<img src="docs/screenshots/profile-drawer.png" alt="Citizen Profile drawer open on the right" width="100%">
+
+- Profile fields (age, state, income, social category, occupation, education, BPL, disability) are extracted from chat or edited by hand, which sharpens eligibility matching.
+- DPDP Act 2023 notice, with a "Delete My Data" right-to-erasure action.
+
+### Raise a Public Grievance (CPGRAMS Form)
+
+<img src="docs/screenshots/grievance-modal.png" alt="Raise a Public Grievance form with a searchable scheme picker" width="100%">
+
+- Searchable scheme picker that routes the grievance to the correct Central Ministry.
+- Applicant details, an optional reference ID (full Aadhaar numbers must not be entered), and a description of the issue.
+- "Generate Formal CPGRAMS Draft" produces a draft for the citizen to confirm before anything is submitted.
+
+### Central Government Scheme Explorer
+
+<img src="docs/screenshots/scheme-explorer.png" alt="Scheme Explorer with scheme cards" width="100%">
+
+- Browse all 649 central schemes across 51 ministries, each with its FAQ count and audience tags such as MSME, Farmer, or Student.
+- Search by name or keyword, filter by ministry, and toggle DBT-only schemes.
+
+### All Grievances (CPGRAMS Sandbox Ledger)
+
+<img src="docs/screenshots/all-grievances.png" alt="All Grievances ledger with registration IDs and statuses" width="100%">
+
+- Ledger of sandbox drafts and registered grievances with registration IDs, scheme and ministry, status, and timestamps.
+- Raise a new grievance, track a status by registration number, and open the pgportal.gov.in handoff.
+
+### Traces & Evals (Admin Only)
+
+<img src="docs/screenshots/trace-dashboard.png" alt="Live trace and span debugger" width="100%">
+
+- **Live Trace & Span Debugger:** per-request view with PII-masked input, the final assistant output, and each execution span with its latency and token count. Export as JSON, CSV, or a Markdown debug report.
+
+<img src="docs/screenshots/eval-dashboard.png" alt="Benchmark evals dashboard" width="100%">
+
+- **Benchmark Evals & Downloads:** Track B suites for retrieval ablation, prompting strategy, agent reliability, and red-team safety, each downloadable as JSON or Markdown.
 
 ---
 
