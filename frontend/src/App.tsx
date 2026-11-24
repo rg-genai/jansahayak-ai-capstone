@@ -248,7 +248,12 @@ export default function App() {
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-5 py-4">
         {tab === 'copilot' && (
-          <ChatWorkspace user={auth.user} sessionId={sessionId} onNewSession={resetSession} />
+          <ChatWorkspace
+            user={auth.user}
+            sessionId={sessionId}
+            onNewSession={resetSession}
+            onSelectSession={setSessionId}
+          />
         )}
 
         {tab === 'schemes' && <SchemeExplorer />}

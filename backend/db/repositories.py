@@ -434,19 +434,29 @@ class Repository:
                 ).fetchall()
         return [dict(r) for r in rows]
 
-    def list_sessions_for_prefix(self, prefix: str, limit: int = 20) -> list[dict[str, Any]]:
+    def list_sessions_for_prefix(
+        self, prefix: str, extra_session_id: str | None = None, limit: int = 20
+    ) -> list[dict[str, Any]]:
+        """Sessions with at least one message, most recently active first.
+
+        Persona primary sessions (e.g. citizen-ramesh-01) do not share the username prefix,
+        so they are matched explicitly via extra_session_id.
+        """
         with get_connection(self.db_path) as conn:
             rows = conn.execute(
                 """
-                SELECT s.session_id, s.preferred_language, s.updated_at,
-                       (SELECT COUNT(*) FROM messages m WHERE m.session_id = s.session_id) as message_count,
-                       (SELECT content FROM messages m WHERE m.session_id = s.session_id AND m.role = 'user' ORDER BY m.id ASC LIMIT 1) as first_question
+                SELECT s.session_id, s.preferred_language,
+                       MAX(m.created_at) as last_message_at,
+                       COUNT(m.id) as message_count,
+                       (SELECT content FROM messages fq WHERE fq.session_id = s.session_id AND fq.role = 'user' ORDER BY fq.id ASC LIMIT 1) as first_question
                 FROM sessions s
-                WHERE s.session_id LIKE ?
-                ORDER BY s.updated_at DESC
+                JOIN messages m ON m.session_id = s.session_id
+                WHERE s.session_id LIKE ? OR s.session_id = ?
+                GROUP BY s.session_id
+                ORDER BY MAX(m.id) DESC
                 LIMIT ?
                 """,
-                (f"{prefix}%", limit),
+                (f"{prefix}%", extra_session_id, limit),
             ).fetchall()
         return [dict(r) for r in rows]
 

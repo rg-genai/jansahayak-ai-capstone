@@ -18,6 +18,7 @@ import {
   MessageSquarePlus,
   RotateCcw,
   FilePlus2,
+  History,
 } from 'lucide-react'
 import {
   AuthUser,
@@ -33,6 +34,7 @@ import { useVoiceIO } from '../hooks/useVoiceIO'
 import { EligibilityCard } from './EligibilityCard'
 import { GrievanceModal } from './GrievanceModal'
 import { ProfileDrawer } from './ProfileDrawer'
+import { SessionsSidebar } from './SessionsSidebar'
 
 interface Props {
   user: AuthUser
@@ -40,6 +42,7 @@ interface Props {
   initialPrompt?: string | null
   onClearInitialPrompt?: () => void
   onNewSession: () => void
+  onSelectSession: (sessionId: string) => void
   onTraceCreated?: () => void
 }
 
@@ -286,6 +289,7 @@ export const ChatWorkspace: React.FC<Props> = ({
   initialPrompt,
   onClearInitialPrompt,
   onNewSession,
+  onSelectSession,
   onTraceCreated,
 }) => {
   const [language, setLanguage] = useState<string>(user.preferred_language || 'en')
@@ -295,6 +299,7 @@ export const ChatWorkspace: React.FC<Props> = ({
   const [liveStep, setLiveStep] = useState<string | null>(null)
   const [profile, setProfile] = useState<CitizenProfile>(user.default_profile || {})
   const [profileOpen, setProfileOpen] = useState(false)
+  const [sessionsOpen, setSessionsOpen] = useState(false)
   const [grievanceModalOpen, setGrievanceModalOpen] = useState(false)
   const [activeDraft, setActiveDraft] = useState<GrievanceDraft | null>(null)
   const [activeReceipt, setActiveReceipt] = useState<GrievanceReceipt | null>(null)
@@ -316,10 +321,13 @@ export const ChatWorkspace: React.FC<Props> = ({
   }, [initialPrompt, onClearInitialPrompt])
 
   useEffect(() => {
+    let cancelled = false
     setLanguage(user.preferred_language || 'en')
+    setMessages([])
     apiFetch(`/api/sessions/${sessionId}`)
       .then((r) => r.json())
       .then((data) => {
+        if (cancelled) return
         if (data?.session?.profile && Object.keys(data.session.profile).length > 0) {
           setProfile(data.session.profile)
         } else {
@@ -345,6 +353,9 @@ export const ChatWorkspace: React.FC<Props> = ({
         }
       })
       .catch(() => {})
+    return () => {
+      cancelled = true
+    }
   }, [sessionId, user])
 
   const appendFinalAssistantPayload = (p: {
@@ -546,6 +557,16 @@ export const ChatWorkspace: React.FC<Props> = ({
           >
             <MessageSquarePlus className="w-3.5 h-3.5 text-indiaNavy" />
             New Chat
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setSessionsOpen(true)}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-xs font-medium text-slate-700 transition"
+            title="View your past conversations"
+          >
+            <History className="w-3.5 h-3.5 text-indiaNavy" />
+            Sessions
           </button>
 
           {messages.length > 0 && (
@@ -852,6 +873,14 @@ export const ChatWorkspace: React.FC<Props> = ({
           <span className="hidden sm:inline">Ask</span>
         </button>
       </form>
+
+      <SessionsSidebar
+        open={sessionsOpen}
+        onClose={() => setSessionsOpen(false)}
+        activeSessionId={sessionId}
+        busy={loading}
+        onSelectSession={onSelectSession}
+      />
 
       <ProfileDrawer
         open={profileOpen}
