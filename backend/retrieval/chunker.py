@@ -19,6 +19,8 @@ except Exception:
 # Hard upper bound in conservative token estimation (leaves generous margin under BERT 512 WordPiece tokens)
 MAX_SAFE_TOKENS = 440
 HARD_TOKEN_LIMIT = 512
+# Section label of chunks built from a scheme's FAQ pairs (the retriever can exclude them for evaluation).
+FAQ_SECTION = "faq_group"
 
 
 def estimate_tokens(text: str) -> int:
@@ -254,7 +256,7 @@ def chunk_scheme(scheme: EnrichedScheme) -> list[SchemeChunk]:
             faq_chunks.append(f"{hdr}\n" + "\n".join(cur_entries))
             faq_num_lists.append(list(cur_nums))
 
-        _emit("faq_group", faq_chunks, faq_num_lists)
+        _emit(FAQ_SECTION, faq_chunks, faq_num_lists)
 
     return chunks
 

@@ -32,6 +32,14 @@ class Settings(BaseSettings):
     llm_max_rpm: int = Field(default=55, ge=1, le=60)
     llm_max_output_tokens: int = Field(default=1024, ge=64, le=1024)
 
+    # Google Gemini (evals only: second LLM compared with Qwen, and LLM-as-judge). Free tier: keep request rates low.
+    gemini_base_url: str = Field(default="https://generativelanguage.googleapis.com/v1beta/openai")
+    gemini_api_key: SecretStr = Field(default=SecretStr(""))
+    gemini_model: str = Field(default="gemini-3.5-flash-lite")  # the second LLM
+    gemini_judge_model: str = Field(default="gemini-3.5-flash-lite")  # 3.8 Flash free tier: only 20 requests/day
+    gemini_reasoning_effort: Literal["minimal", "low", "medium", "high"] = Field(default="low")
+    gemini_max_rpm: int = Field(default=5, ge=1, le=60)
+
     # Track B Hosted Embeddings API (bge-small-en-v1.5)
     embedding_base_url: str = Field(default="https://103.42.50.41:1035/v1")
     embedding_model: str = Field(default="bge-small-en-v1.5")
@@ -47,6 +55,9 @@ class Settings(BaseSettings):
     web_fallback_threshold: float = Field(default=0.25)
     semantic_cache_threshold: float = Field(default=0.96)
     rate_limit_rpm_per_session: int = Field(default=15, ge=1, le=120)
+    # Evaluation switches; the defaults keep the live chatbot unchanged.
+    retrieval_exclude_faq_chunks: bool = Field(default=False)  # True = FAQ chunks are never returned (gold-set leakage control)
+    retrieval_top_k_override: int | None = Field(default=None, ge=1, le=8)  # set = each search returns k chunks and the answer sees at most k
 
     # Agent loop (planner -> executor -> reflector -> ...) safety limits
     agent_reflection_enabled: bool = Field(default=True)  # False = single-pass pipeline (ablation baseline)

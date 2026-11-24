@@ -22,10 +22,11 @@ from backend.agent.profile_matching import (
 )
 from backend.agent.prompts import JSON_REPAIR_SYSTEM_PROMPT
 from backend.agent.state import CitizenProfile
+from backend.config import get_settings
 from backend.db.repositories import Repository
 from backend.gateway.llm_client import LLMGateway, get_llm_gateway, strip_thinking
 from backend.guardrails.pii import mask_pii
-from backend.retrieval.hybrid_retriever import HybridRetriever, get_hybrid_retriever
+from backend.retrieval.hybrid_retriever import HybridRetriever, RetrievalMode, get_hybrid_retriever
 from backend.retrieval.web_search import search_gov_web
 from backend.services.grievance_provider import PGPORTAL_URL, GrievanceProvider, get_grievance_provider
 
@@ -33,6 +34,9 @@ logger = logging.getLogger(__name__)
 
 TModel = TypeVar("TModel", bound=BaseModel)
 CPGRAMS_MAX_CHARS = 2000
+# Live search returns 5-8 chunks whatever the planner asks; RETRIEVAL_TOP_K_OVERRIDE replaces this for evals.
+_SEARCH_MIN_TOP_K = 5
+_SEARCH_MAX_TOP_K = 8
 
 
 # ==============================================================================
@@ -209,10 +213,12 @@ class AgentToolbox:
         retriever: HybridRetriever | None = None,
         repo: Repository | None = None,
         grievance_provider: GrievanceProvider | None = None,
+        retrieval_mode: RetrievalMode = "hybrid_rerank",
     ):
         self._retriever = retriever
         self.repo = repo or Repository()
         self._grievance_provider = grievance_provider
+        self.retrieval_mode: RetrievalMode = retrieval_mode  # evals compare bm25 / dense / hybrid in the full agent
 
     @property
     def retriever(self) -> HybridRetriever:
@@ -249,11 +255,13 @@ class AgentToolbox:
             if citizen_profile.get("social_category"):
                 filters["social_category"] = citizen_profile["social_category"]
 
-        effective_top_k = max(5, min(int(args.top_k), 8))
+        effective_top_k = get_settings().retrieval_top_k_override or max(
+            _SEARCH_MIN_TOP_K, min(int(args.top_k), _SEARCH_MAX_TOP_K)
+        )
         out = await self.retriever.search(
             query=args.query,
             top_k=effective_top_k,
-            mode="hybrid_rerank",
+            mode=self.retrieval_mode,
             filters=filters or None,
         )
         # Safety net: if LLM-emitted metadata filter overly narrowed results (low rerank score),
@@ -262,7 +270,7 @@ class AgentToolbox:
             unfiltered = await self.retriever.search(
                 query=args.query,
                 top_k=effective_top_k,
-                mode="hybrid_rerank",
+                mode=self.retrieval_mode,
                 filters=None,
             )
             if unfiltered.top_rerank_score > out.top_rerank_score:

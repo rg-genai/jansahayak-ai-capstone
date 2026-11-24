@@ -1,0 +1,1458 @@
+{
+  "meta": {
+    "top_k": 5,
+    "faq_chunks_excluded": true,
+    "questions": 60,
+    "created_at": "2026-11-24T22:28:40+05:30"
+  },
+  "modes": {
+    "bm25": [
+      {
+        "id": "GQA-001",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 76.62
+      },
+      {
+        "id": "GQA-002",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 76.6
+      },
+      {
+        "id": "GQA-003",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 96.21
+      },
+      {
+        "id": "GQA-004",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 107.75
+      },
+      {
+        "id": "GQA-005",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 61.19
+      },
+      {
+        "id": "GQA-006",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 71.34
+      },
+      {
+        "id": "GQA-007",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 87.32
+      },
+      {
+        "id": "GQA-008",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 59.55
+      },
+      {
+        "id": "GQA-009",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 72.61
+      },
+      {
+        "id": "GQA-010",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 103.76
+      },
+      {
+        "id": "GQA-011",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 77.97
+      },
+      {
+        "id": "GQA-012",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 53.45
+      },
+      {
+        "id": "GQA-013",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 71.02
+      },
+      {
+        "id": "GQA-014",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 79.45
+      },
+      {
+        "id": "GQA-015",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 65.8
+      },
+      {
+        "id": "GQA-016",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 118.03
+      },
+      {
+        "id": "GQA-017",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 104.29
+      },
+      {
+        "id": "GQA-018",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 75.98
+      },
+      {
+        "id": "GQA-019",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 67.04
+      },
+      {
+        "id": "GQA-020",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 74.75
+      },
+      {
+        "id": "GQA-021",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 121.31
+      },
+      {
+        "id": "GQA-022",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 142.63
+      },
+      {
+        "id": "GQA-023",
+        "gold_scheme_rank": 2,
+        "source_section_hit": true,
+        "latency_ms": 76.18
+      },
+      {
+        "id": "GQA-024",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 177.77
+      },
+      {
+        "id": "GQA-025",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 108.32
+      },
+      {
+        "id": "GQA-026",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 77.06
+      },
+      {
+        "id": "GQA-027",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 97.19
+      },
+      {
+        "id": "GQA-028",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 69.54
+      },
+      {
+        "id": "GQA-029",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 85.33
+      },
+      {
+        "id": "GQA-030",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 159.72
+      },
+      {
+        "id": "GQA-031",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 88.47
+      },
+      {
+        "id": "GQA-032",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 68.5
+      },
+      {
+        "id": "GQA-033",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 148.21
+      },
+      {
+        "id": "GQA-034",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 56.73
+      },
+      {
+        "id": "GQA-035",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 54.58
+      },
+      {
+        "id": "GQA-036",
+        "gold_scheme_rank": 1,
+        "source_section_hit": false,
+        "latency_ms": 67.28
+      },
+      {
+        "id": "GQA-037",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 95.06
+      },
+      {
+        "id": "GQA-038",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 67.81
+      },
+      {
+        "id": "GQA-039",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 71.26
+      },
+      {
+        "id": "GQA-040",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 67.09
+      },
+      {
+        "id": "GQA-041",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 58.72
+      },
+      {
+        "id": "GQA-042",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 88.88
+      },
+      {
+        "id": "GQA-043",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 109.82
+      },
+      {
+        "id": "GQA-044",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 76.83
+      },
+      {
+        "id": "GQA-045",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 90.53
+      },
+      {
+        "id": "GQA-046",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 116.92
+      },
+      {
+        "id": "GQA-047",
+        "gold_scheme_rank": 2,
+        "source_section_hit": true,
+        "latency_ms": 52.51
+      },
+      {
+        "id": "GQA-048",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 138.0
+      },
+      {
+        "id": "GQA-049",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 87.72
+      },
+      {
+        "id": "GQA-050",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 88.99
+      },
+      {
+        "id": "GQA-051",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 83.81
+      },
+      {
+        "id": "GQA-052",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 53.63
+      },
+      {
+        "id": "GQA-053",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 73.35
+      },
+      {
+        "id": "GQA-054",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 91.47
+      },
+      {
+        "id": "GQA-055",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 64.92
+      },
+      {
+        "id": "GQA-056",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 92.85
+      },
+      {
+        "id": "GQA-057",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 116.63
+      },
+      {
+        "id": "GQA-058",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 140.9
+      },
+      {
+        "id": "GQA-059",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 80.95
+      },
+      {
+        "id": "GQA-060",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 82.97
+      }
+    ],
+    "dense": [
+      {
+        "id": "GQA-001",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 5.42
+      },
+      {
+        "id": "GQA-002",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.39
+      },
+      {
+        "id": "GQA-003",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.97
+      },
+      {
+        "id": "GQA-004",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.63
+      },
+      {
+        "id": "GQA-005",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.14
+      },
+      {
+        "id": "GQA-006",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.44
+      },
+      {
+        "id": "GQA-007",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.72
+      },
+      {
+        "id": "GQA-008",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.84
+      },
+      {
+        "id": "GQA-009",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.54
+      },
+      {
+        "id": "GQA-010",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.47
+      },
+      {
+        "id": "GQA-011",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.11
+      },
+      {
+        "id": "GQA-012",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.6
+      },
+      {
+        "id": "GQA-013",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.95
+      },
+      {
+        "id": "GQA-014",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.56
+      },
+      {
+        "id": "GQA-015",
+        "gold_scheme_rank": 2,
+        "source_section_hit": true,
+        "latency_ms": 3.83
+      },
+      {
+        "id": "GQA-016",
+        "gold_scheme_rank": 2,
+        "source_section_hit": true,
+        "latency_ms": 3.89
+      },
+      {
+        "id": "GQA-017",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.69
+      },
+      {
+        "id": "GQA-018",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.88
+      },
+      {
+        "id": "GQA-019",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.98
+      },
+      {
+        "id": "GQA-020",
+        "gold_scheme_rank": 2,
+        "source_section_hit": true,
+        "latency_ms": 3.79
+      },
+      {
+        "id": "GQA-021",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.96
+      },
+      {
+        "id": "GQA-022",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 5.57
+      },
+      {
+        "id": "GQA-023",
+        "gold_scheme_rank": null,
+        "source_section_hit": false,
+        "latency_ms": 4.08
+      },
+      {
+        "id": "GQA-024",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.75
+      },
+      {
+        "id": "GQA-025",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.76
+      },
+      {
+        "id": "GQA-026",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.74
+      },
+      {
+        "id": "GQA-027",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.39
+      },
+      {
+        "id": "GQA-028",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.77
+      },
+      {
+        "id": "GQA-029",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.9
+      },
+      {
+        "id": "GQA-030",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.67
+      },
+      {
+        "id": "GQA-031",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.53
+      },
+      {
+        "id": "GQA-032",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.81
+      },
+      {
+        "id": "GQA-033",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.09
+      },
+      {
+        "id": "GQA-034",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.05
+      },
+      {
+        "id": "GQA-035",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.04
+      },
+      {
+        "id": "GQA-036",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.11
+      },
+      {
+        "id": "GQA-037",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.87
+      },
+      {
+        "id": "GQA-038",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.75
+      },
+      {
+        "id": "GQA-039",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.97
+      },
+      {
+        "id": "GQA-040",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.78
+      },
+      {
+        "id": "GQA-041",
+        "gold_scheme_rank": 2,
+        "source_section_hit": true,
+        "latency_ms": 3.66
+      },
+      {
+        "id": "GQA-042",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.58
+      },
+      {
+        "id": "GQA-043",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.7
+      },
+      {
+        "id": "GQA-044",
+        "gold_scheme_rank": 2,
+        "source_section_hit": true,
+        "latency_ms": 3.78
+      },
+      {
+        "id": "GQA-045",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.6
+      },
+      {
+        "id": "GQA-046",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.93
+      },
+      {
+        "id": "GQA-047",
+        "gold_scheme_rank": 3,
+        "source_section_hit": true,
+        "latency_ms": 3.75
+      },
+      {
+        "id": "GQA-048",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.97
+      },
+      {
+        "id": "GQA-049",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.59
+      },
+      {
+        "id": "GQA-050",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.63
+      },
+      {
+        "id": "GQA-051",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.63
+      },
+      {
+        "id": "GQA-052",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.75
+      },
+      {
+        "id": "GQA-053",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.81
+      },
+      {
+        "id": "GQA-054",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.03
+      },
+      {
+        "id": "GQA-055",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.46
+      },
+      {
+        "id": "GQA-056",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.58
+      },
+      {
+        "id": "GQA-057",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.74
+      },
+      {
+        "id": "GQA-058",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 4.0
+      },
+      {
+        "id": "GQA-059",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.87
+      },
+      {
+        "id": "GQA-060",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 3.58
+      }
+    ],
+    "hybrid_rrf": [
+      {
+        "id": "GQA-001",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 82.87
+      },
+      {
+        "id": "GQA-002",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 77.15
+      },
+      {
+        "id": "GQA-003",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 96.01
+      },
+      {
+        "id": "GQA-004",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 120.57
+      },
+      {
+        "id": "GQA-005",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 64.74
+      },
+      {
+        "id": "GQA-006",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 71.01
+      },
+      {
+        "id": "GQA-007",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 91.34
+      },
+      {
+        "id": "GQA-008",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 63.82
+      },
+      {
+        "id": "GQA-009",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 68.89
+      },
+      {
+        "id": "GQA-010",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 97.62
+      },
+      {
+        "id": "GQA-011",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 77.78
+      },
+      {
+        "id": "GQA-012",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 55.97
+      },
+      {
+        "id": "GQA-013",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 72.46
+      },
+      {
+        "id": "GQA-014",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 79.21
+      },
+      {
+        "id": "GQA-015",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 66.9
+      },
+      {
+        "id": "GQA-016",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 119.17
+      },
+      {
+        "id": "GQA-017",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 116.44
+      },
+      {
+        "id": "GQA-018",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 84.21
+      },
+      {
+        "id": "GQA-019",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 69.54
+      },
+      {
+        "id": "GQA-020",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 67.86
+      },
+      {
+        "id": "GQA-021",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 138.0
+      },
+      {
+        "id": "GQA-022",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 136.58
+      },
+      {
+        "id": "GQA-023",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 72.53
+      },
+      {
+        "id": "GQA-024",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 170.66
+      },
+      {
+        "id": "GQA-025",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 100.58
+      },
+      {
+        "id": "GQA-026",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 79.38
+      },
+      {
+        "id": "GQA-027",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 99.94
+      },
+      {
+        "id": "GQA-028",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 70.93
+      },
+      {
+        "id": "GQA-029",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 85.42
+      },
+      {
+        "id": "GQA-030",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 143.5
+      },
+      {
+        "id": "GQA-031",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 72.03
+      },
+      {
+        "id": "GQA-032",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 61.78
+      },
+      {
+        "id": "GQA-033",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 143.26
+      },
+      {
+        "id": "GQA-034",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 56.1
+      },
+      {
+        "id": "GQA-035",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 55.18
+      },
+      {
+        "id": "GQA-036",
+        "gold_scheme_rank": 1,
+        "source_section_hit": false,
+        "latency_ms": 68.67
+      },
+      {
+        "id": "GQA-037",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 94.25
+      },
+      {
+        "id": "GQA-038",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 79.77
+      },
+      {
+        "id": "GQA-039",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 73.77
+      },
+      {
+        "id": "GQA-040",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 70.0
+      },
+      {
+        "id": "GQA-041",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 63.27
+      },
+      {
+        "id": "GQA-042",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 83.52
+      },
+      {
+        "id": "GQA-043",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 121.88
+      },
+      {
+        "id": "GQA-044",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 76.81
+      },
+      {
+        "id": "GQA-045",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 93.68
+      },
+      {
+        "id": "GQA-046",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 118.6
+      },
+      {
+        "id": "GQA-047",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 54.89
+      },
+      {
+        "id": "GQA-048",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 123.37
+      },
+      {
+        "id": "GQA-049",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 87.05
+      },
+      {
+        "id": "GQA-050",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 94.09
+      },
+      {
+        "id": "GQA-051",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 84.71
+      },
+      {
+        "id": "GQA-052",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 56.89
+      },
+      {
+        "id": "GQA-053",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 72.1
+      },
+      {
+        "id": "GQA-054",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 91.35
+      },
+      {
+        "id": "GQA-055",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 69.32
+      },
+      {
+        "id": "GQA-056",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 95.18
+      },
+      {
+        "id": "GQA-057",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 112.43
+      },
+      {
+        "id": "GQA-058",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 144.65
+      },
+      {
+        "id": "GQA-059",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 91.27
+      },
+      {
+        "id": "GQA-060",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 84.85
+      }
+    ],
+    "hybrid_rerank": [
+      {
+        "id": "GQA-001",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 31397.18
+      },
+      {
+        "id": "GQA-002",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1861.73
+      },
+      {
+        "id": "GQA-003",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1864.48
+      },
+      {
+        "id": "GQA-004",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1981.05
+      },
+      {
+        "id": "GQA-005",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1853.67
+      },
+      {
+        "id": "GQA-006",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1936.36
+      },
+      {
+        "id": "GQA-007",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1962.76
+      },
+      {
+        "id": "GQA-008",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1793.08
+      },
+      {
+        "id": "GQA-009",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1920.51
+      },
+      {
+        "id": "GQA-010",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 2047.22
+      },
+      {
+        "id": "GQA-011",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 2033.28
+      },
+      {
+        "id": "GQA-012",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1643.05
+      },
+      {
+        "id": "GQA-013",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 2055.61
+      },
+      {
+        "id": "GQA-014",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1734.4
+      },
+      {
+        "id": "GQA-015",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1707.19
+      },
+      {
+        "id": "GQA-016",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1908.02
+      },
+      {
+        "id": "GQA-017",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1886.23
+      },
+      {
+        "id": "GQA-018",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1934.38
+      },
+      {
+        "id": "GQA-019",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1897.84
+      },
+      {
+        "id": "GQA-020",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1911.64
+      },
+      {
+        "id": "GQA-021",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 2449.05
+      },
+      {
+        "id": "GQA-022",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1939.6
+      },
+      {
+        "id": "GQA-023",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1663.26
+      },
+      {
+        "id": "GQA-024",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1973.4
+      },
+      {
+        "id": "GQA-025",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1857.07
+      },
+      {
+        "id": "GQA-026",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1915.94
+      },
+      {
+        "id": "GQA-027",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1840.31
+      },
+      {
+        "id": "GQA-028",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1880.59
+      },
+      {
+        "id": "GQA-029",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1941.13
+      },
+      {
+        "id": "GQA-030",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 2357.03
+      },
+      {
+        "id": "GQA-031",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1676.19
+      },
+      {
+        "id": "GQA-032",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 2014.68
+      },
+      {
+        "id": "GQA-033",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 2103.91
+      },
+      {
+        "id": "GQA-034",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1832.94
+      },
+      {
+        "id": "GQA-035",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1646.92
+      },
+      {
+        "id": "GQA-036",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1770.62
+      },
+      {
+        "id": "GQA-037",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1888.15
+      },
+      {
+        "id": "GQA-038",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1769.49
+      },
+      {
+        "id": "GQA-039",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1862.15
+      },
+      {
+        "id": "GQA-040",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1645.2
+      },
+      {
+        "id": "GQA-041",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1786.71
+      },
+      {
+        "id": "GQA-042",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1713.55
+      },
+      {
+        "id": "GQA-043",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1910.39
+      },
+      {
+        "id": "GQA-044",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1711.26
+      },
+      {
+        "id": "GQA-045",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1906.17
+      },
+      {
+        "id": "GQA-046",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1691.84
+      },
+      {
+        "id": "GQA-047",
+        "gold_scheme_rank": 5,
+        "source_section_hit": true,
+        "latency_ms": 1715.17
+      },
+      {
+        "id": "GQA-048",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1887.57
+      },
+      {
+        "id": "GQA-049",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1668.35
+      },
+      {
+        "id": "GQA-050",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1754.55
+      },
+      {
+        "id": "GQA-051",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1712.61
+      },
+      {
+        "id": "GQA-052",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1635.42
+      },
+      {
+        "id": "GQA-053",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1713.48
+      },
+      {
+        "id": "GQA-054",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1752.05
+      },
+      {
+        "id": "GQA-055",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1724.57
+      },
+      {
+        "id": "GQA-056",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1733.2
+      },
+      {
+        "id": "GQA-057",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1781.75
+      },
+      {
+        "id": "GQA-058",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1901.6
+      },
+      {
+        "id": "GQA-059",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1846.19
+      },
+      {
+        "id": "GQA-060",
+        "gold_scheme_rank": 1,
+        "source_section_hit": true,
+        "latency_ms": 1760.22
+      }
+    ]
+  }
+}

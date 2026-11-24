@@ -14,6 +14,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 from sse_starlette.sse import EventSourceResponse
 
+from backend.agent.followups import suggest_followups
 from backend.agent.graph import JanSahayakAgent
 from backend.agent.state import CitizenProfile
 from backend.config import get_settings
@@ -23,7 +24,7 @@ from backend.gateway.translation_client import detect_language
 from backend.guardrails.cache import TwoTierResponseCache
 from backend.guardrails.injection import check_input_guardrails
 from backend.guardrails.pii import mask_pii
-from backend.services.auth import get_optional_user
+from backend.services.auth import ensure_session_access, get_optional_user
 
 router = APIRouter(prefix="/api", tags=["Chat & Sessions"])
 
@@ -321,6 +322,13 @@ async def _run_chat_turn(
             "total": state.get("prompt_tokens", 0) + state.get("completion_tokens", 0),
         },
         "status": state.get("status") or "ok",
+        "suggested_followups": suggest_followups(
+            state.get("query_en") or "",
+            (state.get("planner_output") or {}).get("intent"),
+            state.get("status") or "ok",
+            eligibility_cards,
+            citations,
+        ),
     }
 
     # Populate Two-Tier Cache for clean, read-only Q&A turns
@@ -355,6 +363,7 @@ async def chat_sync(
     req: ChatRequest,
     user: dict[str, Any] | None = Depends(get_optional_user),
 ) -> dict[str, Any]:
+    ensure_session_access(req.session_id, user)
     _enforce_rate_limit(request, req.session_id)
     return await _run_chat_turn(request, req, user=user)
 
@@ -365,6 +374,7 @@ async def chat_stream(
     req: ChatRequest,
     user: dict[str, Any] | None = Depends(get_optional_user),
 ):
+    ensure_session_access(req.session_id, user)
     _enforce_rate_limit(request, req.session_id)
     queue: asyncio.Queue[tuple[str, dict[str, Any]] | None] = asyncio.Queue()
 
@@ -410,6 +420,7 @@ async def get_session(
     session_id: str,
     user: dict[str, Any] | None = Depends(get_optional_user),
 ) -> dict[str, Any]:
+    ensure_session_access(session_id, user)
     repo = Repository()
     sess = _seed_owner_profile(repo, repo.get_or_create_session(session_id), user)
     messages = repo.get_messages(session_id, limit=50)
@@ -422,7 +433,12 @@ async def get_session(
 
 
 @router.put("/sessions/{session_id}")
-async def update_session(session_id: str, req: SessionUpdateRequest) -> dict[str, Any]:
+async def update_session(
+    session_id: str,
+    req: SessionUpdateRequest,
+    user: dict[str, Any] | None = Depends(get_optional_user),
+) -> dict[str, Any]:
+    ensure_session_access(session_id, user)
     repo = Repository()
     sess = repo.get_or_create_session(session_id)
     updated_profile = sess["profile"]
@@ -438,8 +454,12 @@ async def update_session(session_id: str, req: SessionUpdateRequest) -> dict[str
 
 
 @router.delete("/sessions/{session_id}")
-async def delete_session(session_id: str) -> dict[str, Any]:
-    """DPDP Act 2023 Right to Erasure endpoint."""
+async def delete_session(
+    session_id: str,
+    user: dict[str, Any] | None = Depends(get_optional_user),
+) -> dict[str, Any]:
+    """DPDP Act 2023 Right to Erasure endpoint (only the session's owner or an admin)."""
+    ensure_session_access(session_id, user)
     repo = Repository()
     summary = repo.delete_session(session_id)
     return {

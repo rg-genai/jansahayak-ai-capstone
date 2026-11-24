@@ -217,10 +217,66 @@ def test_new_chat_session_inherits_owner_profile():
             assert prof["occupation"] == "Student"
             assert prof["age"] == 19
 
-            # Someone else's session is never seeded with Priya's profile
+            # Priya cannot open (and so never seeds) someone else's session
             other_sid = f"ramesh-test{uuid.uuid4().hex[:6]}"
-            other = client.get(f"/api/sessions/{other_sid}", headers=headers).json()["session"]["profile"]
-            assert not other.get("occupation")
-            client.delete(f"/api/sessions/{other_sid}", headers=headers)
+            assert client.get(f"/api/sessions/{other_sid}", headers=headers).status_code == 403
         finally:
             client.delete(f"/api/sessions/{new_sid}", headers=headers)
+
+
+def test_grievances_and_their_emails_stay_with_their_owner():
+    """Without login, GET /api/grievances listed every citizen's grievances and the email outbox was open."""
+    app = create_app()
+    with TestClient(app) as client:
+        priya, ramesh, admin = (_login(client, u, p) for u, p in
+                                [("priya", "citizen123"), ("ramesh", "citizen123"), ("admin", "admin123")])
+        ramesh_sid = f"ramesh-test{uuid.uuid4().hex[:6]}"
+        body = {"scheme_name": "Pradhan Mantri Kisan Samman Nidhi", "ministry": "Ministry Of Agriculture and Farmers Welfare",
+                "issue_summary": "PM-KISAN installment delayed for 2 cycles.", "state": "Uttar Pradesh",
+                "session_id": ramesh_sid}
+        try:
+            assert client.post("/api/grievances/draft", headers=priya, json=body).status_code == 403
+            draft_id = client.post("/api/grievances/draft", headers=ramesh, json=body).json()["draft"]["draft_id"]
+            assert client.post(f"/api/grievances/{draft_id}/confirm", headers=priya, json={"confirmed": True}).status_code == 403
+            ok = client.post(f"/api/grievances/{draft_id}/confirm", headers=ramesh, json={"confirmed": True})
+            reg_no = ok.json()["receipt"]["registration_number"]
+
+            assert client.get("/api/grievances").status_code == 401
+            assert client.get("/api/grievances/emails/outbox").status_code == 401
+            outbox = f"/api/grievances/emails/outbox?registration_number={reg_no}"
+            assert client.get(outbox, headers=priya).status_code == 403
+            assert client.get(outbox, headers=ramesh).status_code == 200
+            assert client.get("/api/grievances/emails/outbox", headers=priya).status_code == 403
+            assert client.get("/api/grievances/emails/outbox", headers=admin).status_code == 200
+            priya_list = client.get("/api/grievances", headers=priya).json()["items"]
+            assert all(g["registration_number"] != reg_no for g in priya_list)
+        finally:
+            client.delete(f"/api/sessions/{ramesh_sid}", headers=ramesh)
+
+
+def test_citizen_cannot_read_change_chat_in_or_erase_another_citizens_session():
+    """Session endpoints checked no ownership: anyone with a session ID could read, edit or erase it."""
+    app = create_app()
+    rate_limiter.reset()
+    with TestClient(app) as client:
+        priya, ramesh, admin = (_login(client, u, p) for u, p in
+                                [("priya", "citizen123"), ("ramesh", "citizen123"), ("admin", "admin123")])
+        ramesh_sid = f"ramesh-test{uuid.uuid4().hex[:6]}"
+        try:
+            assert client.put(f"/api/sessions/{ramesh_sid}", headers=ramesh,
+                              json={"profile": {"age": 52, "occupation": "Farmer"}}).status_code == 200
+
+            chat = {"session_id": ramesh_sid, "message": "What is PM-KISAN?", "language": "en"}
+            for headers, expected in ((priya, 403), ({}, 401)):
+                assert client.get(f"/api/sessions/{ramesh_sid}", headers=headers).status_code == expected
+                assert client.put(f"/api/sessions/{ramesh_sid}", headers=headers, json={"profile": {}}).status_code == expected
+                assert client.delete(f"/api/sessions/{ramesh_sid}", headers=headers).status_code == expected
+                assert client.post("/api/chat", headers=headers, json=chat).status_code == expected
+                assert client.post("/api/chat/stream", headers=headers, json=chat).status_code == expected
+
+            assert client.get(f"/api/sessions/{ramesh_sid}", headers=admin).status_code == 200
+            profile = client.get(f"/api/sessions/{ramesh_sid}", headers=ramesh).json()["session"]["profile"]
+            assert profile["age"] == 52, "the refused requests must not have changed or erased anything"
+        finally:
+            client.delete(f"/api/sessions/{ramesh_sid}", headers=ramesh)
+    rate_limiter.reset()

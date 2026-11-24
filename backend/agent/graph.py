@@ -111,6 +111,9 @@ _WORD_RE = re.compile(r"[A-Za-z]{2,}")
 _ACRONYM_MAX_LEN = 5
 # Opening line of every clarifying question this agent asks (lets the next turn recognise an answer to it).
 _CLARIFY_PREFIX = "To give you an accurate answer, I need a little more information."
+# A question about the citizen's own situation says "I / my / we ...". Without that it is a general rule question
+# ("What is the minimum age for X?"), which the 8B Reflector still answered by asking the citizen's age (gold eval).
+_FIRST_PERSON_RE = re.compile(r"\b(i|i'm|i've|me|my|mine|myself|we|our|ours|us)\b", re.IGNORECASE)
 
 _BARE_ID_QUESTION = (
     "I can see you've shared a number or ID. What would you like me to do with it? For example: track a "
@@ -242,6 +245,9 @@ def _validate_reflection(
 
     if decision.decision == "ask_user" and not (decision.question or "").strip():
         return answer("empty_clarifying_question")
+
+    if decision.decision == "ask_user" and not _FIRST_PERSON_RE.search(state.get("query_en") or ""):
+        return answer("general_question_not_about_citizen")  # gold eval GQA-031: asked age for a rule question
 
     return decision, None
 
@@ -774,6 +780,11 @@ class JanSahayakAgent:
         else:
             parsed.continues_request = None
 
+        # Gold eval GQA-045: a question that names a catalog scheme was refused as OUT_OF_SCOPE ("email address").
+        scope_guard = None
+        if parsed.intent == "OUT_OF_SCOPE" and get_catalog_vocabulary(self.repo).mentions_specific_scheme(query_en):
+            parsed.intent, scope_guard = "SCHEME_QA", "named_catalog_scheme_is_in_scope"
+
         # CONSISTENCY GUARANTEE: For SCHEME_QA & ELIGIBILITY_CHECK, ALWAYS execute search_schemes FIRST
         # using the faithful English query (`query_en`), so English, Hindi, Tamil, Marathi, Bengali & Telugu
         # always retrieve the exact same canonical top schemes instead of skipping search or dropping keywords like "OBC"!
@@ -801,6 +812,7 @@ class JanSahayakAgent:
 
         planner_dict = parsed.model_dump()
         planner_dict["json_repair_diag"] = repair_diag
+        planner_dict["guard"] = scope_guard
 
         lat = round((time.perf_counter() - t0) * 1000.0, 2)
         step_lat = dict(state.get("step_latencies") or {})
@@ -902,7 +914,9 @@ class JanSahayakAgent:
                     searched_queries.append(inp.query)
                     # Newer results first; keep earlier evidence the agent may still cite (deduped, capped).
                     merged = {c["citation_id"]: c for c in [*res["results"], *(retrieved_chunks if round_no else [])]}
-                    retrieved_chunks = list(merged.values())[:_MAX_EVIDENCE_CHUNKS]
+                    # With a top-k override (evals) the answer sees at most k chunks in total, across all rounds.
+                    evidence_cap = settings.retrieval_top_k_override or _MAX_EVIDENCE_CHUNKS
+                    retrieved_chunks = list(merged.values())[:evidence_cap]
                     low_confidence = bool(res.get("low_confidence"))
                     for r in retrieved_chunks[:3]:
                         if r["scheme_slug"] and r["scheme_slug"] not in active_slugs:

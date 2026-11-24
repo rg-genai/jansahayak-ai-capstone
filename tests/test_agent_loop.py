@@ -144,6 +144,49 @@ def test_guard_rejects_empty_question():
     assert d.decision == "answer" and guard == "empty_clarifying_question"
 
 
+@pytest.mark.parametrize("query", [
+    "What is the minimum age requirement for someone to apply for the Craftsmen Training Scheme?",  # GQA-031
+    "Can someone working in a Non-Governmental Organisation apply for the National Renewable Energy Internship Scheme?",
+])
+def test_guard_answers_general_rule_questions_instead_of_asking_age(query):
+    """Regression gold eval GQA-031 / GQA-038: the Reflector asked the citizen's age for a question about the rules."""
+    d, guard = _validate_reflection(
+        ReflectionOutput(decision="ask_user", question="What is your current age (in years)?"), _state(query_en=query), 10
+    )
+    assert d.decision == "answer" and guard == "general_question_not_about_citizen"
+
+
+def test_guard_still_lets_personal_questions_ask():
+    d, guard = _validate_reflection(
+        ReflectionOutput(decision="ask_user", question="What is your age?"), _state(query_en="Am I eligible for PM-KISAN?"), 10
+    )
+    assert d.decision == "ask_user" and guard is None
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("query", [
+    "What is the email address for submitting a proposal for a research study under the Research Study/Seminar "
+    "(Grant-in-Aid Scheme)?",  # GQA-045
+    "What email address should be used to contact SFIO for clarifications about the Internship Programme At Serious "
+    "Fraud Investigation Office?",  # GQA-060
+])
+async def test_question_naming_a_catalog_scheme_is_not_out_of_scope(query):
+    """Regression gold eval GQA-045 / GQA-060: the planner refused these as OUT_OF_SCOPE."""
+    llm = ScriptedLLM({"intent": "OUT_OF_SCOPE", "tool_calls": [], "reasoning": "contact details"}, [])
+    state = await JanSahayakAgent(llm=llm).run(query, "test-loop-10", citizen_profile={})
+
+    assert state["planner_output"]["intent"] == "SCHEME_QA"
+    assert state["planner_output"]["guard"] == "named_catalog_scheme_is_in_scope"
+    assert _searches(state) and "synthesizer" in llm.calls
+
+
+@pytest.mark.asyncio
+async def test_out_of_scope_without_a_scheme_name_is_still_refused():
+    llm = ScriptedLLM({"intent": "OUT_OF_SCOPE", "tool_calls": [], "reasoning": "cricket"}, [])
+    state = await JanSahayakAgent(llm=llm).run("Who won the cricket world cup?", "test-loop-11", citizen_profile={})
+    assert state["planner_output"]["intent"] == "OUT_OF_SCOPE" and not state.get("tool_calls_log")
+
+
 @pytest.mark.parametrize("message", ["1234 5678 9012", "NSP/2024/123456", "[AADHAAR_MASKED:XXXX-XXXX-0124]", "MH12AB1234"])
 def test_bare_identifier_detected(message):
     assert _is_bare_identifier(message)

@@ -231,6 +231,28 @@ def require_user(
     return user
 
 
+def session_owner(session_id: str) -> str | None:
+    """Username of the persona that owns a session: its primary session or one named '<username>-...'."""
+    for username, persona in DEMO_PERSONAS.items():
+        if session_id == persona["session_id"] or session_id.startswith(f"{username}-"):
+            return username
+    return None
+
+
+def ensure_session_access(session_id: str, user: dict[str, Any] | None) -> None:
+    """Stop one citizen reading, changing, chatting in or erasing another citizen's session.
+
+    Admins may open any session. A persona's session needs that persona's login (401 if not logged in,
+    403 for anyone else). Sessions owned by no persona (created by scripts/tests, never by the UI) stay open."""
+    owner = session_owner(session_id)
+    if owner is None or (user and user.get("role") == "admin"):
+        return
+    if not user:
+        raise HTTPException(status_code=401, detail="Please log in to open this chat session.")
+    if user.get("username") != owner:
+        raise HTTPException(status_code=403, detail="This chat session belongs to another user.")
+
+
 def require_admin(
     user: dict[str, Any] | None = Depends(get_optional_user),
 ) -> dict[str, Any]:

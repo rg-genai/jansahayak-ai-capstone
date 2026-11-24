@@ -11,7 +11,7 @@ from backend.agent.tools import AgentToolbox, DraftGrievanceInput, SubmitOrTrack
 from backend.db.database import get_connection
 from backend.db.repositories import Repository
 from backend.guardrails.pii import mask_pii
-from backend.services.auth import get_optional_user, require_admin
+from backend.services.auth import ensure_session_access, get_optional_user, require_admin, require_user
 from backend.services.email_service import dispatch_grievance_confirmation_email
 from backend.services.grievance_provider import get_grievance_provider
 
@@ -95,6 +95,7 @@ async def create_grievance_draft(
     payload = req.model_dump()
     if not payload.get("session_id") and user:
         payload["session_id"] = user.get("session_id", "")
+    ensure_session_access(payload.get("session_id") or "", user)
     draft = await toolbox.draft_grievance(DraftGrievanceInput.model_validate(payload))
 
     # Persist optional applicant name/email on the draft
@@ -127,6 +128,7 @@ async def confirm_and_submit_grievance(
     draft = repo.get_grievance_by_draft_id(draft_id)
     if not draft:
         raise HTTPException(status_code=404, detail=f"Grievance draft '{draft_id}' not found.")
+    ensure_session_access(draft.get("session_id") or "", user)  # only the draft's owner (or admin) submits it
 
     new_text = mask_pii(req.grievance_text if req.grievance_text is not None else draft["grievance_text"]).masked_text
     if len(new_text) > 2000:
@@ -174,12 +176,11 @@ async def confirm_and_submit_grievance(
 async def list_grievances(
     session_id: str | None = Query(default=None),
     limit: int = Query(default=50, ge=1, le=200),
-    user: dict[str, Any] | None = Depends(get_optional_user),
+    user: dict[str, Any] = Depends(require_user),
 ) -> dict[str, Any]:
+    """Citizens see their own grievances; admins see all (or one session's). No login: 401."""
     repo = Repository()
-    effective_session = session_id
-    if user and user.get("role") != "admin":
-        effective_session = user.get("session_id")
+    effective_session = session_id if user.get("role") == "admin" else user.get("session_id")
     items = repo.list_grievances(session_id=effective_session, limit=limit)
     return {"count": len(items), "items": items}
 
@@ -188,8 +189,17 @@ async def list_grievances(
 async def list_grievance_emails(
     registration_number: str | None = Query(default=None),
     limit: int = Query(default=30, ge=1, le=100),
+    user: dict[str, Any] = Depends(require_user),
 ) -> dict[str, Any]:
+    """Confirmation emails hold names and email addresses: admins see all, citizens only their own ticket's."""
     repo = Repository()
+    if user.get("role") != "admin":
+        if not registration_number:
+            raise HTTPException(status_code=403, detail="Citizens can only view emails for one of their own tickets.")
+        grievance = repo.get_grievance_by_reg_no(registration_number)
+        if not grievance:
+            raise HTTPException(status_code=404, detail=f"Grievance '{registration_number}' not found.")
+        ensure_session_access(grievance.get("session_id") or "", user)
     items = repo.list_email_notifications(registration_number=registration_number, limit=limit)
     return {"count": len(items), "items": items}
 

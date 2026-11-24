@@ -1,0 +1,1640 @@
+{
+  "meta": {
+    "description": "Gold Q&A pairs written from scheme text (not from the FAQs), with reference answers.",
+    "created_at": "2026-11-24T21:45:23+05:30",
+    "prompt_version": "c8b49b791dd6",
+    "sampling_seed": 42,
+    "thresholds": {
+      "min_section_chars": 200,
+      "max_section_chars": 2500,
+      "max_answer_words": 80,
+      "min_quote_words": 5,
+      "faq_similarity_max": 0.5
+    },
+    "updated_at": "2026-11-24T21:50:37+05:30",
+    "counts": {
+      "items": 60,
+      "by_aspect": {
+        "benefits": 15,
+        "documents_required": 15,
+        "eligibility": 15,
+        "application_process": 15
+      },
+      "by_review_status": {
+        "unreviewed": 60
+      },
+      "rejected": 35,
+      "rejected_by_reason": {
+        "quote_not_in_section": 8,
+        "too_close_to_faq": 25,
+        "question_missing_scheme_name": 7,
+        "answer_too_long": 1
+      }
+    }
+  },
+  "items": [
+    {
+      "id": "GQA-001",
+      "scheme_slug": "crss",
+      "scheme_name": "Supporting Community Radio Movement in India",
+      "aspect": "benefits",
+      "question": "What is the financial assistance provided under the Supporting Community Radio Movement in India scheme for?",
+      "reference_answer": "The financial assistance is provided once the Community Radio Station (CRS) is made operational by the Licensee.",
+      "evidence_quote": "Financial assistance is provided once the CRS is made operational by Licensee.",
+      "closest_faq": "Who Can apply for financial assistance.",
+      "faq_similarity": 0.25,
+      "ministry_code": "MOIAB",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/crss",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-002",
+      "scheme_slug": "plisaaci",
+      "scheme_name": "Production Linked Incentive Scheme For Automobile And Auto Component Industry",
+      "aspect": "documents_required",
+      "question": "What documents are required for the Production Linked Incentive Scheme For Automobile And Auto Component Industry application?",
+      "reference_answer": "The required documents include Certificate of Incorporation, Memorandum & Articles of Association, PAN Card, Import Export Code (IEC) Registration Certificate, and a Letter of Authorization by Board of Directors or Managing Director.",
+      "evidence_quote": "Certificate of Incorporation (Issued by ROC); Memorandum & Articles of Association (Submitted to ROC); PAN Card; Import Export Code (IEC) Registration Certificate; Letter of Authorization by Board of Directors or Managing Director or Equivalent (incl. subsidiary(ies));",
+      "closest_faq": "What are the circumstances under which an applicant may be ineligible for the scheme?",
+      "faq_similarity": 0.381,
+      "ministry_code": "MOHIN",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/plisaaci",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-003",
+      "scheme_slug": "nccsra",
+      "scheme_name": "National Centre for Communication Security (NCCS) Research Associates Scheme",
+      "aspect": "eligibility",
+      "question": "What is the minimum percentage required for post-graduation in the National Centre for Communication Security (NCCS) Research Associates Scheme?",
+      "reference_answer": "The minimum percentage required for post-graduation is 60%.",
+      "evidence_quote": "Post-Graduation/ Master Degree in Electronics/ Communications/Telecommunications/ Information Technology/ Computers or related discipline with minimum 60% marks (with valid Gate Score at the time of admission).",
+      "closest_faq": "What is the methodology for shortlisting of candidates?",
+      "faq_similarity": 0.421,
+      "ministry_code": "MOCOM",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/nccsra",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-004",
+      "scheme_slug": "necms",
+      "scheme_name": "Financial Support To The Students Of N.E.R For Higher Professional Courses (NEC Merit Scholarship)",
+      "aspect": "application_process",
+      "question": "What is the process to apply for the Financial Support To The Students Of N.E.R For Higher Professional Courses (NEC Merit Scholarship)?",
+      "reference_answer": "The application process involves registering on the National Scholarship Portal, creating an application ID and password, logging in, and filling out the application form with required details and document uploads.",
+      "evidence_quote": "Step 1: Go to [http://www.scholarships.gov.in/]() and click “New Registration”. | Guidelines for Registration will appear. Scroll to the bottom. | Read carefully the undertaking. Accept the Terms. Click “Continue”. | Step 2: A Registration Form will appear. (The fields marked as are compulsory) | Fill the details and click “Register”. | Your Application ID and password will be displayed. | The same will also be sent as an SMS on your registered mobile number.",
+      "closest_faq": "What Is The Criterion For Selection Of Students For Scholarships?",
+      "faq_similarity": 0.444,
+      "ministry_code": "DONER",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/necms",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-005",
+      "scheme_slug": "icroaip",
+      "scheme_name": "ICRO Amrit Internship Programme",
+      "aspect": "benefits",
+      "question": "What is the monthly stipend provided under the ICRO Amrit Internship Programme?",
+      "reference_answer": "The selected intern is entitled to ₹ 6,000 per month as a stipend during the internship period.",
+      "evidence_quote": "The selected intern shall be entitled to ₹ 6,000/- per month as a stipend during the period of internship.",
+      "closest_faq": "What Is The Objective Of The Collaboration Between IPL And NPC?",
+      "faq_similarity": 0.421,
+      "ministry_code": "MOCAF",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/icroaip",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-006",
+      "scheme_slug": "pmjvk",
+      "scheme_name": "Pradhan Mantri Jan vikas karyakram",
+      "aspect": "eligibility",
+      "question": "What is the condition for a project to be considered under Pradhan Mantri Jan vikas karyakram?",
+      "reference_answer": "The project area must have a minority population of more than 25% within a 15Km radius catchment area.",
+      "evidence_quote": "The projects under PMJVK can be proposed in the identified areas as approved and certified by the SLC (where the minority population is more than 25% of the total population in the catchment area - 15Km radius).",
+      "closest_faq": "What is the Pradhan Mantri Jan Vikas Karyakram (PMJVK)?",
+      "faq_similarity": 0.429,
+      "ministry_code": "MOMAF",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/pmjvk",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-007",
+      "scheme_slug": "rgnfscc",
+      "scheme_name": "Rajiv Gandhi National Fellowship For Scheduled Caste Candidates",
+      "aspect": "eligibility",
+      "question": "What is the requirement for a candidate to be eligible for the Rajiv Gandhi National Fellowship For Scheduled Caste Candidates?",
+      "reference_answer": "The candidate must belong to SC/ST and have passed the Post Graduate Examination. They must also be registered for M.Phil./Ph.D.",
+      "evidence_quote": "i. The candidate should belong to SC/ST and should have passed the Post Graduate Examination. | ii. The Candidate must be registered for M.Phil./Ph.D.",
+      "closest_faq": "Are The Candidates Eligible For Maternity/Paternity Leave?",
+      "faq_similarity": 0.4,
+      "ministry_code": "MOEDU",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/rgnfscc",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-008",
+      "scheme_slug": "dfft-scheme",
+      "scheme_name": "Domestic Funding Of Foreign Training",
+      "aspect": "documents_required",
+      "question": "What documents are required for applying under the Domestic Funding Of Foreign Training scheme?",
+      "reference_answer": "The required documents include a valid Email ID, preferably a NIC Email ID; service details of the officers; mobile number; proof of achievements (if any); a signed copy of the undertaking; and any other documents as required for the programme.",
+      "evidence_quote": "Valid Email ID, preferably NIC Email ID; Service details of the officers; Mobile Number; Proof of achievements (if any); A signed copy of the undertaking; Any other documents as required for the programme",
+      "closest_faq": "How and when can I apply under the Scheme?",
+      "faq_similarity": 0.444,
+      "ministry_code": "DARPG",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/dfft-scheme",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-009",
+      "scheme_slug": "pmay-g",
+      "scheme_name": "Pradhan Mantri Awaas Yojana - Gramin",
+      "aspect": "application_process",
+      "question": "What is the process to register a beneficiary under Pradhan Mantri Awaas Yojana - Gramin?",
+      "reference_answer": "To register a beneficiary, visit the PMAY-G official website, fill in personal details, upload the Aadhaar consent form, search for the beneficiary, select to register, and fill in remaining details like ownership type and bank account information.",
+      "evidence_quote": "Visit the official website for login PMAY-G. - Fill in the details required in the personal details section (such as gender, mobile number, Aadhaar number, etc.)",
+      "closest_faq": "What is the amount and the purpose of loan provided under PMAY-G?",
+      "faq_similarity": 0.4,
+      "ministry_code": "MORUD",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/pmay-g",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-010",
+      "scheme_slug": "dsctawa",
+      "scheme_name": "Development Support for Coffee in Traditional Areas: Water Augmentation",
+      "aspect": "benefits",
+      "question": "What is the maximum subsidy amount a beneficiary can receive under the Development Support for Coffee in Traditional Areas: Water Augmentation scheme?",
+      "reference_answer": "The maximum subsidy amount a beneficiary can receive is ₹2,50,000 per beneficiary for all components under the water augmentation scheme.",
+      "evidence_quote": "40% of the unit cost, with a ceiling of ₹2,50,000 per beneficiary for all the components put together under the water augmentation scheme.",
+      "closest_faq": "How is the subsidy amount released to the beneficiaries?",
+      "faq_similarity": 0.455,
+      "ministry_code": "MOCAI",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/dsctawa",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-011",
+      "scheme_slug": "clssmig",
+      "scheme_name": "Credit Linked Subsidy Scheme for Middle Income Group",
+      "aspect": "application_process",
+      "question": "How can I track my application for the Credit Linked Subsidy Scheme for Middle Income Group?",
+      "reference_answer": "The applicant can track their application by visiting the CLAP Portal, entering the Application ID received via SMS, and entering the OTP code sent to their registered mobile number.",
+      "evidence_quote": "Step 01: Applicant will visit CLAP Portal. | Step 02: On the Home Page, there is CLSS tracker, where the applicant will enter the Application ID as received through SMS from CLAP. | Step 03: On entering of valid Application ID, the system will send an OTP code on the mobile numbers of the applicant as registered in CLAP Portal during Process-1 through PLIs.",
+      "closest_faq": "How subsidy is disbursed to the CNAs?",
+      "faq_similarity": 0.267,
+      "ministry_code": "MOHUA",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/clssmig",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-012",
+      "scheme_slug": "neca",
+      "scheme_name": "National Energy Conservation Award",
+      "aspect": "application_process",
+      "question": "What are the steps to register for the National Energy Conservation Award?",
+      "reference_answer": "The registration steps include visiting the official website, clicking the Registration button, selecting Individual or Organization, filling in required details, and clicking Submit.",
+      "evidence_quote": "Step 1: Visit the official website and click on the Registration button. | Step 2: Select your category: Individual or Organization. | Step 3: Fill in the required details: | Individual: Name, Date of Birth, Nominator Type, Mobile, Email, Aadhaar Number. | Organization: Type, Authorized Person Name, Date of Birth, Organization Description, Designation, Mobile, Email, Aadhaar Number. | Step 4: Click Submit to complete registration.",
+      "closest_faq": "Who is eligible to apply for the award?",
+      "faq_similarity": 0.375,
+      "ministry_code": "MOPWR",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/neca",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-013",
+      "scheme_slug": "ndaa",
+      "scheme_name": "National Dhanwantari Ayurveda Award",
+      "aspect": "documents_required",
+      "question": "What documents are needed to prove contributions to Ayurveda for the National Dhanwantari Ayurveda Award?",
+      "reference_answer": "Documents showing contributions to Ayurveda such as promotion, research, teaching, policy, or integration in national programs are required.",
+      "evidence_quote": "Documents showing contributions to Ayurveda (promotion, research, teaching, policy, or integration in national programs).",
+      "closest_faq": "What is the National Dhanwantari Ayurveda Award?",
+      "faq_similarity": 0.286,
+      "ministry_code": "AYUSH",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/ndaa",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-014",
+      "scheme_slug": "ncessis",
+      "scheme_name": "National Centre for Earth Science Studies Internship Scheme",
+      "aspect": "benefits",
+      "question": "Does the National Centre for Earth Science Studies Internship Scheme provide any financial aid or stipend to interns?",
+      "reference_answer": "No financial aid or stipend is provided by the Directorate to the interns.",
+      "evidence_quote": "Note: No financial aid /stipend will be provided by this Directorate to the interns.",
+      "closest_faq": "Will accommodation and transport be provided to project students?",
+      "faq_similarity": 0.211,
+      "ministry_code": "MOESC",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/ncessis",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-015",
+      "scheme_slug": "tfrs",
+      "scheme_name": "Testing Fee Reimbursement Scheme",
+      "aspect": "eligibility",
+      "question": "What type of industry is eligible for the Testing Fee Reimbursement Scheme?",
+      "reference_answer": "The applicant must have a micro or small scale industry.",
+      "evidence_quote": "Applicant should have a micro or small scale industry.",
+      "closest_faq": "What is the login URL?",
+      "faq_similarity": 0.462,
+      "ministry_code": "MSMEI",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/tfrs",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-016",
+      "scheme_slug": "pfifllesrs",
+      "scheme_name": "Programme For Internship For LL.B./ LL.M./ Environmental Studies/ Research Students",
+      "aspect": "documents_required",
+      "question": "What document must be submitted by the interns at the end of their study under the Programme For Internship For LL.B./ LL.M./ Environmental Studies/ Research Students?",
+      "reference_answer": "The interns must present a research paper/report on a selected topic and prepare notes on it for submission to the concerned officer.",
+      "evidence_quote": "Interns will be required to present a research paper/report on a selected topic at the end of their study and also undergo other studies assigned and prepare notes on it and submit to the concerned officer for evaluation and Suggestions, if any, by the Commission.",
+      "closest_faq": "What Shall Be The Duration Of The Internship Programme?",
+      "faq_similarity": 0.4,
+      "ministry_code": "MOLAJ",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/pfifllesrs",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-017",
+      "scheme_slug": "pmfmpe",
+      "scheme_name": "Pradhan Mantri Formalisation Of Micro Food Processing Enterprises",
+      "aspect": "eligibility",
+      "question": "Can I include the cost of a long lease workshed in my project cost under the Pradhan Mantri Formalisation Of Micro Food Processing Enterprises scheme?",
+      "reference_answer": "Yes, the cost of a long lease or rental workshed can be included in the project cost, but the lease rental should be for a maximum period of 3 years.",
+      "evidence_quote": "The cost of the ready-built, as well as the long lease or rental workshed, could be included in the project cost. The lease rental of the workshed to be included in the project cost should be for a maximum period of 3 years only.",
+      "closest_faq": "Can I Avail Of Other Government Schemes With The PMFME Scheme?",
+      "faq_similarity": 0.357,
+      "ministry_code": "MOFPI",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/pmfmpe",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-018",
+      "scheme_slug": "sipgrs-mospi",
+      "scheme_name": "Scheme of Internship for Post-Graduate/Research Students",
+      "aspect": "benefits",
+      "question": "What is the total token stipend amount for the Scheme of Internship for Post-Graduate/Research Students?",
+      "reference_answer": "The total token stipend is ₹10,000/-, paid in two installments of ₹5,000/- each.",
+      "evidence_quote": "A token stipend of ₹10,000/- (consolidated) @ ₹5,000/- per month would be paid to the selected intern on successful completion of his /her internship, at the end of the internship period.",
+      "closest_faq": "What Are The Objectives Of The \"Scheme Of Internship For Post-Graduate/Research Students By MoSPI\"?",
+      "faq_similarity": 0.353,
+      "ministry_code": "MOSPI",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/sipgrs-mospi",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-019",
+      "scheme_slug": "hriday",
+      "scheme_name": "HRIDAY: Heritage City Development & Augmentation Yojana",
+      "aspect": "benefits",
+      "question": "What specific amenities are provided to tourists under the HRIDAY: Heritage City Development & Augmentation Yojana scheme?",
+      "reference_answer": "Tourists are provided with improved signage, interpretation centres, and guided tours under the HRIDAY scheme.",
+      "evidence_quote": "Enhanced amenities and facilities for tourists, including improved signage, interpretation centres, and guided tours.",
+      "closest_faq": "What are the key steps cities need to take to avail assistance under the HRIDAY scheme?",
+      "faq_similarity": 0.48,
+      "ministry_code": "MOTOU",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/hriday",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-020",
+      "scheme_slug": "pmuy2",
+      "scheme_name": "Pradhan Mantri Ujjwala Yojana 2.0",
+      "aspect": "documents_required",
+      "question": "What documents are required for a migrant applicant under Pradhan Mantri Ujjwala Yojana 2.0?",
+      "reference_answer": "A migrant applicant needs to submit a Self-Declaration as per Annexure I.",
+      "evidence_quote": "Self-Declaration as per Annexure I (for migrant applicants)",
+      "closest_faq": "Which Documents are mandatory to be submitted by applicant for enrolment under ujjwala 2.0?",
+      "faq_similarity": 0.333,
+      "ministry_code": "MOPNG",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/pmuy2",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-021",
+      "scheme_slug": "fapgsprg",
+      "scheme_name": "Financial Assistance For Promotion Of Guru-Shishya Parampara (Repertory Grant)",
+      "aspect": "application_process",
+      "question": "Do I need to register with the NGO-PS Portal to apply for the Financial Assistance For Promotion Of Guru-Shishya Parampara (Repertory Grant)?",
+      "reference_answer": "Yes, all registered organizations must first sign up/register with the NGO-PS Portal (NGO-DARPAN) to obtain a Unique ID and include 'Art and Culture' in their key working areas.",
+      "evidence_quote": "Note 02: All registered organizations that want to apply under the Scheme are required to first sign up/register with NGO-PS Portal(NGO-DARPAN): https://ngodarpan.gov.in/ mandatorily to obtain a system generated Unique ID and must include ‘Art and Culture’ in their key working areas.",
+      "closest_faq": "Who is eligible to apply under the scheme?",
+      "faq_similarity": 0.273,
+      "ministry_code": "MOCUL",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/fapgsprg",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-022",
+      "scheme_slug": "niti-i",
+      "scheme_name": "NITI Internship Scheme",
+      "aspect": "eligibility",
+      "question": "What is the maximum time gap allowed between the declaration of my final exam results and the start of the internship under the NITI Internship Scheme?",
+      "reference_answer": "The maximum time gap allowed is six months.",
+      "evidence_quote": "The period between the month of declaration of result of final exam and the desired month of internship should not exceed six months",
+      "closest_faq": "- What is the minimum and maximum duration of the internship?",
+      "faq_similarity": 0.424,
+      "ministry_code": "NITIA",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/niti-i",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-023",
+      "scheme_slug": "sipocagi",
+      "scheme_name": "Student Internship Programme",
+      "aspect": "documents_required",
+      "question": "What documents are required to be submitted by Student Interns under the Student Internship Programme?",
+      "reference_answer": "Student Interns are required to furnish a declaration of Secrecy before commencement of the internship, submit a Report/Paper on the assigned subject at the end of the internship, and provide feedback on their experience of the Program.",
+      "evidence_quote": "Interns are required to furnish a declaration of Secrecy before commencement of the internship.",
+      "closest_faq": "What Is The Requirement For Submission Of A Paper By Student Interns?",
+      "faq_similarity": 0.417,
+      "ministry_code": "CAGIN",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/sipocagi",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-024",
+      "scheme_slug": "sgfaarsaaowdfrs",
+      "scheme_name": "Scheme for Grant of Financial Assistance for Administering Road Safety Advocacy and Awards for the Outstanding Work Done in the Field of Road Safety",
+      "aspect": "application_process",
+      "question": "What is the URL to access the Morth NGO Grant Portal for applying under the Scheme for Grant of Financial Assistance for Administering Road Safety Advocacy and Awards for the Outstanding Work Done in the Field of Road Safety?",
+      "reference_answer": "The URL to access the Morth NGO Grant Portal is https://rsa.morth.gov.in/auth/users/login.cshtml.",
+      "evidence_quote": "Step 02: All Applicant Agency who wish to apply may visit Morth NGO Grant Portal. (https://rsa.morth.gov.in/auth/users/login.cshtml)",
+      "closest_faq": "What are the eligibility criteria to apply under the scheme?",
+      "faq_similarity": 0.48,
+      "ministry_code": "MORTH",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/sgfaarsaaowdfrs",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-025",
+      "scheme_slug": "fspip",
+      "scheme_name": "FutureSkills Prime Incentive Program",
+      "aspect": "benefits",
+      "question": "What is the maximum incentive amount for completing a DeepSkilling – Free Pathway course under the FutureSkills Prime Incentive Program?",
+      "reference_answer": "The maximum incentive for completing a DeepSkilling – Free Pathway course is ₹1,000, provided the Subscriber/beneficiary enrols for the next paid course with a cost greater or equal to ₹1,000.",
+      "evidence_quote": "Incentive Threshold: Post successful course completion and certification, the incentive is ₹1,000, provided the Subscriber/beneficiary enrols for the next paid course with a cost greater or equal to ₹1,000 (including applicable taxes).",
+      "closest_faq": "How is the incentive amount disbursed to learners? Is it a one-time payment?",
+      "faq_similarity": 0.345,
+      "ministry_code": "MEITY",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/fspip",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-026",
+      "scheme_slug": "icar-pms-scstc",
+      "scheme_name": "ICAR - Post Matric Scholarship For Scheduled Caste / Scheduled Tribes Candidates",
+      "aspect": "eligibility",
+      "question": "What undergraduate degree programs are eligible for the ICAR - Post Matric Scholarship For Scheduled Caste / Scheduled Tribes Candidates?",
+      "reference_answer": "The eligible undergraduate degree programs include B.Sc.(Agri.), B.V.Sc., B.Sc.(Agril. Engg.), B.Sc.(Home Science), B.F.Sc., and B.Sc.(Forestry).",
+      "evidence_quote": "The applicant must have been admitted to Agricultural Universities in any of the Agriculture & Allied Sciences undergraduate degree programs, viz. B.Sc.(Agri.), B.V.Sc., B.Sc.(Agril. Engg.), B.Sc.(Home Science), B.F.Sc., B.Sc.(Forestry) etc.",
+      "closest_faq": "What is the Eligibility Criteria for this scholarship?",
+      "faq_similarity": 0.375,
+      "ministry_code": "MOAFW",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/icar-pms-scstc",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-027",
+      "scheme_slug": "rmewf-penury",
+      "scheme_name": "RMEWF-Financial Assistance For Ex-Servicemen In Penury",
+      "aspect": "application_process",
+      "question": "What is the deadline for submitting a life certificate for subsequent grants under the RMEWF-Financial Assistance For Ex-Servicemen In Penury scheme?",
+      "reference_answer": "The life certificate must be submitted between 01 Dec and 31 Mar of the current financial year.",
+      "evidence_quote": "For subsequent years, after initial penury grant has been awarded, the beneficiary must submit a life certificate online, duly countersigned by respective ZSWO between 01 Dec and 31 Mar of current financial year.",
+      "closest_faq": "What is the amount of financial assistance provided under the scheme?",
+      "faq_similarity": 0.462,
+      "ministry_code": "MODEF",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/rmewf-penury",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-028",
+      "scheme_slug": "moefccis",
+      "scheme_name": "Forest And Climate Change Internship Scheme",
+      "aspect": "documents_required",
+      "question": "What documents are required for the Forest And Climate Change Internship Scheme application?",
+      "reference_answer": "The required documents are a passport size photograph with signature in JPG format (maximum 1MB), mark sheet/degree of graduation/post graduation, a letter from the supervisor/head of the department/principal indicating their status in the institution, and a no objection certificate (NOC) from the institution in PDF format (maximum 5MB).",
+      "evidence_quote": "Passport size photograph with Signature (in JPG format; maximum 1MB size); Mark Sheet / Degree of Graduation / Post Graduation; A Letter from the Supervisor / Head of the Department / Principal indicating their Status in the Institution; No Objection Certificate (NOC) from the Institution (in PDF format; maximum 5MB size)",
+      "closest_faq": "What Are The Rules Regarding Absenteeism?",
+      "faq_similarity": 0.462,
+      "ministry_code": "MOEFC",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/moefccis",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-029",
+      "scheme_slug": "nari-adalat",
+      "scheme_name": "Nari Adalat",
+      "aspect": "benefits",
+      "question": "How much financial support is provided to each Nyaya Sakhi per meeting under the Nari Adalat scheme?",
+      "reference_answer": "Each Nyaya Sakhi receives ₹200/- per meeting as an incentive.",
+      "evidence_quote": "₹200/- incentive to each Nyaya Sakhi per meeting.",
+      "closest_faq": "What is the objective of the \"Nari Adalat\" scheme?",
+      "faq_similarity": 0.273,
+      "ministry_code": "MOWCD",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/nari-adalat",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-030",
+      "scheme_slug": "epscpl",
+      "scheme_name": "National Livestock Mission: Genetic Improvement of Pig breeds - Establishment of Pig Semen Collection and Processing Lab",
+      "aspect": "application_process",
+      "question": "What is the process for verifying a mobile number when applying for the National Livestock Mission: Genetic Improvement of Pig breeds - Establishment of Pig Semen Collection and Processing Lab?",
+      "reference_answer": "The mobile number is verified via OTP on the next page after logging in.",
+      "evidence_quote": "Step 3: On the next page, verify your Mobile Number via OTP. You will be taken to the Online Application Form.",
+      "closest_faq": "What is the funding pattern for the scheme?",
+      "faq_similarity": 0.476,
+      "ministry_code": "MFAHD",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/epscpl",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-031",
+      "scheme_slug": "cts-msde",
+      "scheme_name": "Craftsmen Training Scheme",
+      "aspect": "eligibility",
+      "question": "What is the minimum age requirement for someone to apply for the Craftsmen Training Scheme?",
+      "reference_answer": "The applicant must be between 14 to 40 years old, depending on the specific trade.",
+      "evidence_quote": "The applicant must meet the age requirements as specified for different trades (generally between 14 to 40 years).",
+      "closest_faq": "What is the age range within which I must fall to be eligible for admission to the vocational training program?",
+      "faq_similarity": 0.438,
+      "ministry_code": "MOSDE",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/cts-msde",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-032",
+      "scheme_slug": "gstecs",
+      "scheme_name": "GST Exemption Certificate Scheme",
+      "aspect": "documents_required",
+      "question": "What documents are required to apply for the GST Exemption Certificate Scheme?",
+      "reference_answer": "The required documents include Aadhar Card, PAN Card, Unique Disability ID card or Disability certificate, Income Tax Return for the last three years, Self-Declaration in the prescribed format, and details of the vehicle model and dealer.",
+      "evidence_quote": "Aadhar Card; PAN Card; Unique Disability ID card (UDID) (issued by the Ministry of Social Justice and Empowerment, Govt. of India) or Disability certificate (issued by Central Govt./State Govt./District Govt. bearing the proper signature and seal of the issuing authority wherein their name and registration no. should be mentioned); Income Tax Return filed for the last three years.",
+      "closest_faq": "What happens if an applicant misses the three-month window for purchasing the vehicle?",
+      "faq_similarity": 0.273,
+      "ministry_code": "MOHIN",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/gstecs",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-033",
+      "scheme_slug": "smile-skill-and-training",
+      "scheme_name": "SMILE - Comprehensive Rehabilitation For Welfare Of Transgender Persons – Skill Development And Training",
+      "aspect": "eligibility",
+      "question": "What is the age range for transgender persons to be eligible for skill development training under the SMILE - Comprehensive Rehabilitation For Welfare Of Transgender Persons – Skill Development And Training scheme?",
+      "reference_answer": "Transgender persons between the ages of 18-45 years are eligible for undergoing skill development training programmes.",
+      "evidence_quote": "Transgender persons between the ages of 18-45 years are eligible for undergoing skill development training programmes.",
+      "closest_faq": "Is It Compulsory To Have Transgender Certificate Issued By National Portal For Transgender Persons?",
+      "faq_similarity": 0.25,
+      "ministry_code": "MOFIN",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/smile-skill-and-training",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-034",
+      "scheme_slug": "ttdf",
+      "scheme_name": "Telecom Technology Development Fund",
+      "aspect": "benefits",
+      "question": "What is the purpose of the Telecom Technology Development Fund scheme?",
+      "reference_answer": "The purpose of the Telecom Technology Development Fund scheme is to bridge the digital divide by developing and manufacturing state-of-the-art technologies for rural and remote areas.",
+      "evidence_quote": "The scheme is envisaged to bridge the digital divide by developing and manufacturing the state-of-the-art technologies for rural and remote areas.",
+      "closest_faq": "Is renting of workspaces an eligible activity for funding?",
+      "faq_similarity": 0.25,
+      "ministry_code": "MOCOM",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/ttdf",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-035",
+      "scheme_slug": "sga",
+      "scheme_name": "Shilp Guru Award",
+      "aspect": "documents_required",
+      "question": "What documents are required to apply for the Shilp Guru Award?",
+      "reference_answer": "The required documents include proof of identity and citizenship, certificates of National or State Awards (if applicable), an affidavit declaring the submitted item is created by the applicant, bio-data detailing experience, awards, and contributions, photographs or videography showing craftsmanship stages, proof of 20 years of experience in the craft sector, an affidavit of risk, evidence of contributions to the craft community, and any other documents as required.",
+      "evidence_quote": "Proof of identity and citizenship; Certificates of National or State Awards (if applicable); Affidavit (Declaring that the submitted item is created by the applicant); Bio-Data (Detailing experience, awards, and contributions); Photographs/Videography (Evidence of craftsmanship stages); Proof of 20 years of experience in the craft sector; Affidavit of Risk (Undertaking that the applicant assumes responsibility for any damages during transportation); Evidence of contributions to the craft community; Any other documents as required",
+      "closest_faq": "Are National Awardees automatically eligible for the Shilp Guru Award?",
+      "faq_similarity": 0.4,
+      "ministry_code": "MOTEX",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/sga",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-036",
+      "scheme_slug": "nwa",
+      "scheme_name": "National Water Awards",
+      "aspect": "application_process",
+      "question": "What details are required for an individual to register for the National Water Awards?",
+      "reference_answer": "An individual needs to provide their name as per Aadhaar or valid identity proof, date of birth, nominator/applicant type, mobile number, email ID, and Aadhaar number.",
+      "evidence_quote": "Under the Individual category provide the following details. - Name as per Aadhaar/Valid Identity Proof. - Date of Birth. - Nominator/Applicant Type. - Mobile No. - Email ID. - Aadhaar Number.",
+      "closest_faq": "What are the National Water Awards?",
+      "faq_similarity": 0.429,
+      "ministry_code": "MOJSH",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/nwa",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-037",
+      "scheme_slug": "bsrfssugc",
+      "scheme_name": "BSR Fellowship Scheme for Science Students - UGC",
+      "aspect": "benefits",
+      "question": "What is the monthly fellowship amount for GATE/NET qualified candidates under the BSR Fellowship Scheme for Science Students - UGC?",
+      "reference_answer": "The monthly fellowship amount for GATE/NET qualified candidates is ₹24,800/- for the first two years as JRF.",
+      "evidence_quote": "For GATE/NET Qualified candidates: - JRF @ ₹24,800/- per month for 2years",
+      "closest_faq": "What is the tenure of the fellowship?",
+      "faq_similarity": 0.4,
+      "ministry_code": "MOEDU",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/bsrfssugc",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-038",
+      "scheme_slug": "nreis",
+      "scheme_name": "National Renewable Energy Internship Scheme",
+      "aspect": "eligibility",
+      "question": "Can someone working in a Non-Governmental Organisation apply for the National Renewable Energy Internship Scheme?",
+      "reference_answer": "Yes, applicants working in the Renewable Energy area in Non-Governmental Institutes/organisations are eligible.",
+      "evidence_quote": "The applicant should be working in the Renewable Energy area in National, International, and Non-Governmental Institutes/organisations.",
+      "closest_faq": "Can School Students Also Apply For This Internship?",
+      "faq_similarity": 0.316,
+      "ministry_code": "MONRE",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/nreis",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-039",
+      "scheme_slug": "pmrdfs",
+      "scheme_name": "Prime Minister’s Rural Development Fellows Scheme",
+      "aspect": "documents_required",
+      "question": "What documents are required to prove physical fitness for the Prime Minister’s Rural Development Fellows Scheme?",
+      "reference_answer": "A Medical Certificate from a Government Medical Hospital is required to prove physical fitness for the arduous nature of the work.",
+      "evidence_quote": "Form of Medical Certificate (Physical fitness certified by a Government Medical Hospital for the arduous nature of work)",
+      "closest_faq": "What are the minimum academic qualifications required for applicants whose undergraduate degree program spanned a four-year duration at a recognized university?",
+      "faq_similarity": 0.25,
+      "ministry_code": "MORUD",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/pmrdfs",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-040",
+      "scheme_slug": "pmafy",
+      "scheme_name": "Prime Minister's Award for Yoga",
+      "aspect": "application_process",
+      "question": "What are the steps to apply for the Prime Minister's Award for Yoga after registration?",
+      "reference_answer": "After registration, log in to the portal using your registered credentials, select the scheme from the list of awards, click 'Nominate / Apply Now', fill in all mandatory fields in the online application form, and click Submit to complete your application.",
+      "evidence_quote": "Step 1: Log in to the portal using your registered credentials. | Step 2: Select the scheme from the list of awards and click 'Nominate / Apply Now'. | Step 3: Fill in all mandatory fields in the online application form. | Step 4: Click Submit to complete your application.",
+      "closest_faq": "Can organizations apply for the award?",
+      "faq_similarity": 0.375,
+      "ministry_code": "AYUSH",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/pmafy",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-041",
+      "scheme_slug": "rgsaip",
+      "scheme_name": "Rashtriya Gram Swaraj Abhiyan - Internship Program",
+      "aspect": "benefits",
+      "question": "How much stipend does the Rashtriya Gram Swaraj Abhiyan - Internship Program provide per month?",
+      "reference_answer": "The Rashtriya Gram Swaraj Abhiyan - Internship Program provides a flat rate of Rs.7,000 per month as stipend to the intern.",
+      "evidence_quote": "The Internship Program, MoPR shall provide a flat rate/amount of Rs.7,000/- per month as ‘stipend’ to the ‘Intern’, depending on the best applicants.",
+      "closest_faq": "What is the Period of Internship?",
+      "faq_similarity": 0.143,
+      "ministry_code": "MOPRJ",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/rgsaip",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-042",
+      "scheme_slug": "pmv",
+      "scheme_name": "PM Vishwakarma",
+      "aspect": "eligibility",
+      "question": "Can a family member who is not engaged in the concerned trade still register under the PM Vishwakarma scheme?",
+      "reference_answer": "No, the registration and benefits under the Scheme shall be restricted to one member of the family who is engaged in the concerned trade.",
+      "evidence_quote": "The registration and benefits under the Scheme shall be restricted to one member of the family.",
+      "closest_faq": "What is the amount of initial loan under the scheme?",
+      "faq_similarity": 0.37,
+      "ministry_code": "MSMEI",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/pmv",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-043",
+      "scheme_slug": "sarsjr",
+      "scheme_name": "Scheme for Action Research and Studies on Judicial Reforms",
+      "aspect": "documents_required",
+      "question": "What documents are required to be submitted along with the final project report for the Scheme for Action Research and Studies on Judicial Reforms?",
+      "reference_answer": "The Utilisation Certificate, as prescribed by the Department of Justice, for funds received is required to be submitted along with the final project report.",
+      "evidence_quote": "Utilisation Certificate (As prescribed by the Department of Justice, for funds received)",
+      "closest_faq": "Is an institution categorized as a Government aided Institute or Organisation potentially eligible to submit a project proposal for financial support?",
+      "faq_similarity": 0.222,
+      "ministry_code": "MOLAJ",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/sarsjr",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-044",
+      "scheme_slug": "jssk",
+      "scheme_name": "Janani Shishu Suraksha Karyakram",
+      "aspect": "benefits",
+      "question": "What is the duration of free transport provided for pregnant women under the Janani Shishu Suraksha Karyakram?",
+      "reference_answer": "Pregnant women are provided free transport from home to health institutions and free transport between facilities in case of referral.",
+      "evidence_quote": "Free transport from home to health institutions | Free transport between facilities in case of referral",
+      "closest_faq": "What medicines / consumables for a sick newborn provided under this scheme?",
+      "faq_similarity": 0.25,
+      "ministry_code": "MOHFW",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/jssk",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-045",
+      "scheme_slug": "rssgias",
+      "scheme_name": "Research Study/Seminar (Grant-in-Aid Scheme)",
+      "aspect": "application_process",
+      "question": "What is the email address for submitting a proposal for a research study under the Research Study/Seminar (Grant-in-Aid Scheme)?",
+      "reference_answer": "The proposal should be submitted via email to training-mospi@nic.in for studies.",
+      "evidence_quote": "The applications can be sent via email to training-mospi@nic.in (for studies) or training-mospi@gov.in (for Travel Grants Assistance).",
+      "closest_faq": "What is the minimum operational history required for a professional or research institution working in the field of official statistics to be considered eligible for grant assistance?",
+      "faq_similarity": 0.333,
+      "ministry_code": "MOSPI",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/rssgias",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-046",
+      "scheme_slug": "mdas",
+      "scheme_name": "Marketing Development Assistance Scheme",
+      "aspect": "eligibility",
+      "question": "What is the minimum fee required for a tourism service provider to be eligible for the Marketing Development Assistance Scheme in the preceding two years?",
+      "reference_answer": "The approved tourism service providers should show a minimum fee of ₹1.00 crore – ₹2.00 crore in any of the preceding two years.",
+      "evidence_quote": "The approved tourism service providers should show a minimum fee of ₹1.00 crore – ₹2.00 crore in any of the preceding two years i.e. 2018-19 or 2019-20, the number of tours may be limited to a maximum of two in one financial year.",
+      "closest_faq": "What is the financial support available for TSPs?",
+      "faq_similarity": 0.276,
+      "ministry_code": "MOTOU",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/mdas",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-047",
+      "scheme_slug": "pmuy",
+      "scheme_name": "Pradhan Mantri Ujjwala Yojana",
+      "aspect": "application_process",
+      "question": "What documents are required to apply for the Pradhan Mantri Ujjwala Yojana?",
+      "reference_answer": "The required documents include Aadhar Card, Ration card, Address Proof, Passport size photograph, and Bank Details.",
+      "evidence_quote": "Following are the prerequisites for the enrollment process: | - Aadhar Card | - Ration card | - Address Proof | - Passport size photograph | - Bank Details",
+      "closest_faq": "If I am a migrant family, can I apply for the scheme?",
+      "faq_similarity": 0.3,
+      "ministry_code": "MOPNG",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/pmuy",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-048",
+      "scheme_slug": "asyadcf",
+      "scheme_name": "Award Of Scholarships To Young Artists In Different Cultural Fields",
+      "aspect": "documents_required",
+      "question": "What documents are required for applicants in the field of Painting, Sculpture, and Applied Arts under the Award Of Scholarships To Young Artists In Different Cultural Fields scheme?",
+      "reference_answer": "Applicants in the field of Painting, Sculpture, and Applied Arts must submit self-attested copies of photographs of the Original works.",
+      "evidence_quote": "In the case of candidates applying for scholarships in the field of Painting, Sculpture, and Applied Arts, they are required to come with self-attested copies of photographs of the Original works.",
+      "closest_faq": "What are the benefits of the scheme?",
+      "faq_similarity": 0.48,
+      "ministry_code": "MOCUL",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/asyadcf",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-049",
+      "scheme_slug": "iceasd-iced",
+      "scheme_name": "International Centre for Environment Audit and Sustainable Development (iCED)",
+      "aspect": "benefits",
+      "question": "What is the token remuneration provided to interns under the International Centre for Environment Audit and Sustainable Development (iCED) scheme?",
+      "reference_answer": "The token remuneration provided to interns is ₹10,000 per month, which covers conveyance and daily needs.",
+      "evidence_quote": "Token Remuneration: | Interns will receive a token remuneration of ₹10,000/- per month to cover conveyance and daily needs.",
+      "closest_faq": "What is the duration of the internship?",
+      "faq_similarity": 0.444,
+      "ministry_code": "CAGIN",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/iceasd-iced",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-050",
+      "scheme_slug": "pm-sym",
+      "scheme_name": "Pradhan Mantri Shram Yogi Maan-dhan",
+      "aspect": "eligibility",
+      "question": "What is the maximum monthly income allowed for someone to be eligible for the Pradhan Mantri Shram Yogi Maan-dhan scheme?",
+      "reference_answer": "The applicant's monthly income should not exceed ₹15,000.",
+      "evidence_quote": "The applicant's monthly income should not exceed ₹15,000.",
+      "closest_faq": "Is the scheme voluntary?",
+      "faq_similarity": 0.316,
+      "ministry_code": "MOLAE",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/pm-sym",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-051",
+      "scheme_slug": "sdesdm",
+      "scheme_name": "Scheme for ‘Skill Development in ESDM for Digital India’",
+      "aspect": "documents_required",
+      "question": "What are the documents required for applying to the Scheme for ‘Skill Development in ESDM for Digital India’?",
+      "reference_answer": "The required documents include Aadhaar Card or Aadhaar Enrolment ID, Identity Proof (any one such as Voter ID Card, PAN Card, Passport, Driving License, or NPR Card), two identity proofs for candidates from Assam and Meghalaya, EWS Certificate if applicable, Educational Qualification Certificates, Undertaking for Non-Availing Benefit Under Similar Government Scheme, Undertaking for Willingness for Employment or Self-Employment, Bank Account Details, and Passport Size Photograph.",
+      "evidence_quote": "Aadhaar Card / Aadhaar Enrolment ID; Identity Proof (Any One): Voter ID Card / PAN Card / Passport / Driving License / NPR Card; Two Identity Proofs (Only For Candidates From Assam And Meghalaya); EWS Certificate (If Applicable); Educational Qualification Certificates (As Per Eligibility Criteria); Undertaking For Non-Availing Benefit Under Similar Government Scheme; Undertaking For Willingness For Employment / Self-Employment; Bank Account Details; Passport Size Photograph",
+      "closest_faq": "What is the minimum age required to apply?",
+      "faq_similarity": 0.471,
+      "ministry_code": "MEITY",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/sdesdm",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-052",
+      "scheme_slug": "pmfby",
+      "scheme_name": "Pradhan Mantri Fasal Bima Yojna (PMFBY)",
+      "aspect": "application_process",
+      "question": "What documents need to be uploaded when applying for PMFBY crop insurance online?",
+      "reference_answer": "The applicant needs to upload all the mandatory documents in the specified format and size.",
+      "evidence_quote": "Step 6: Fill in all the mandatory fields of the Application Form and upload all the mandatory documents in the specified format and size.",
+      "closest_faq": "I farm in Himachal Pradesh. Do I need to pay any premium for my apple crop under PMFBY?",
+      "faq_similarity": 0.276,
+      "ministry_code": "MOAFW",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/pmfby",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-053",
+      "scheme_slug": "idex",
+      "scheme_name": "Innovations for Defence Excellence",
+      "aspect": "benefits",
+      "question": "What is the maximum SPARK Grant amount available under the Innovations for Defence Excellence scheme?",
+      "reference_answer": "The maximum SPARK Grant amount is Rs. 1.50 Cr, with an option for up to Rs. 10 Cr in the case of iDEX Prime.",
+      "evidence_quote": "iDEX provides grants up to Rs. 1.50 Cr (up to Rs. 10 Cr in case of iDEX Prime) to the start-ups/MSMEs to fund the projects in many technological areas under Defence India Start-up Challenges (DISC) and Open Challenge through the Support for Prototype and Research Kick start (SPARK Framework)",
+      "closest_faq": "What is the procedure to apply for grant in aid under iDEX initiative?",
+      "faq_similarity": 0.435,
+      "ministry_code": "MODEF",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/idex",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-054",
+      "scheme_slug": "ip-mea",
+      "scheme_name": "Internship Programme By The Ministry Of External Affairs",
+      "aspect": "eligibility",
+      "question": "What is the maximum age allowed for someone applying to the Internship Programme By The Ministry Of External Affairs?",
+      "reference_answer": "The age of the candidate should not exceed 25 years as on 31 December of the year of internship.",
+      "evidence_quote": "The age of the candidate should not exceed 25 years as on 31 December of the year of internship.",
+      "closest_faq": "Is there an age limit In Order To Be Eligible To Apply To The Internship?",
+      "faq_similarity": 0.385,
+      "ministry_code": "MOEAF",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/ip-mea",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-055",
+      "scheme_slug": "ipwccb",
+      "scheme_name": "Internship Programme Of The Wildlife Crime Control Bureau (MoEFCC)",
+      "aspect": "documents_required",
+      "question": "What documents are required for the Internship Programme Of The Wildlife Crime Control Bureau (MoEFCC)?",
+      "reference_answer": "The required documents include a self-attested copy of two proofs of identity, one being an Aadhar Card, a Curriculum Vitae, a recommendation letter from the Head of Institution on official letterhead, and self-attested certificates of educational qualifications.",
+      "evidence_quote": "Copy of self-attested two proofs of identity one being Aadhar Card.; Curriculum Vitae.; Recommendation letter of the Head of Institution in official letterhead from the academic institution where the candidate is pursuing his/her studies.; Self-attested certificates of educational qualifications etc. mentioned in the application form.",
+      "closest_faq": "What Activities Are Interns At The Wildlife Crime Control Bureau Expected To Undertake?",
+      "faq_similarity": 0.316,
+      "ministry_code": "MOEFC",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/ipwccb",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-056",
+      "scheme_slug": "naps",
+      "scheme_name": "National Apprenticeship Promotion Scheme-2",
+      "aspect": "application_process",
+      "question": "What is the process for a new candidate to register on the Apprenticeship Portal under the National Apprenticeship Promotion Scheme-2?",
+      "reference_answer": "A new candidate must enter their Aadhaar number and complete the e-KYC before registering on the portal. They then need to provide their mobile number and email ID to register and apply for the scheme.",
+      "evidence_quote": "For new candidate registration on the apprenticeship portal will only be completed once a candidate has entered his/her Aadhaar number and completed the e-KYC.",
+      "closest_faq": "What does On the job Training mean?",
+      "faq_similarity": 0.261,
+      "ministry_code": "MOSDE",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/naps",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-057",
+      "scheme_slug": "dot-pli-scheme",
+      "scheme_name": "Production Linked Incentive Scheme (PLI) For Promoting Telecom & Networking Products Manufacturing In India",
+      "aspect": "benefits",
+      "question": "What is the minimum eligible incremental net sales for a non-MSME company under the Production Linked Incentive Scheme (PLI) For Promoting Telecom & Networking Products Manufacturing In India?",
+      "reference_answer": "The minimum eligible incremental net sales for a non-MSME company is 20% of X.",
+      "evidence_quote": "Minimum Eligible Incremental Net Sales# of Manufactured Goods over the Base YearMaximum Eligible Incremental Net Sales of Manufactured Goods over the Base year16%Greater than or equal to 20% of X3(20% of X)20(20% of X)",
+      "closest_faq": "What Is The Eligibility Qualification Criteria For Global Revenue As Per The PLI Scheme For Telecom And Networking Products?",
+      "faq_similarity": 0.353,
+      "ministry_code": "MOCOM",
+      "source_section": "Benefits",
+      "source_url": "https://www.myscheme.gov.in/schemes/dot-pli-scheme",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-058",
+      "scheme_slug": "csmsu",
+      "scheme_name": "Coaching Schemes For Sc/st/obc (non-creamy Layer) & Minority Students For Universities",
+      "aspect": "eligibility",
+      "question": "What is the maximum percentage of OBC (non-creamy layer) and poor general candidates allowed under the Coaching Schemes For Sc/st/obc (non-creamy Layer) & Minority Students For Universities?",
+      "reference_answer": "The maximum percentage of OBC (non-creamy layer) and poor general candidates allowed is up to 40%.",
+      "evidence_quote": "The percentage of OBC (non-creamy layer) and poor general candidates may be increased up to 40% if a sufficient number of Scheduled Castes, Scheduled Tribes, and Minority Communities students are not available.",
+      "closest_faq": "Who is eligible for coaching schemes for SC/ST/OBC (non-creamy layer) and minority students?",
+      "faq_similarity": 0.364,
+      "ministry_code": "MOMAF",
+      "source_section": "Eligibility",
+      "source_url": "https://www.myscheme.gov.in/schemes/csmsu",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-059",
+      "scheme_slug": "pdfscstc",
+      "scheme_name": "Post Doctoral Fellowship to Scheduled Caste/Scheduled Tribe Candidates",
+      "aspect": "documents_required",
+      "question": "What documents are required for applying for the Post Doctoral Fellowship to Scheduled Caste/Scheduled Tribe Candidates scheme?",
+      "reference_answer": "The required documents include a copy of Aadhaar Card, Passport-size Photograph, Proof of age, Mark Sheets/Grade Cards & Degrees, Caste certificate, Disability certificate if applicable, Income Certificate if applicable, Bank account details, NOC/Undertaking, and any other document if required.",
+      "evidence_quote": "Copy of Aadhaar Card; Passport-size Photograph; Proof of age; Mark Sheets/Grade Cards & Degrees; Caste certificate; Disability certificate, if applicable; Income Certificate, if applicable; Bank account details; [NOC/Undertaking](https://pdfss.ugc.ac.in/Downloads/Noc_format.pdf); Any other document, if required.",
+      "closest_faq": "What are the eligibility conditions for availing of fellowship under the scheme?",
+      "faq_similarity": 0.476,
+      "ministry_code": "MOEDU",
+      "source_section": "Documents Required",
+      "source_url": "https://www.myscheme.gov.in/schemes/pdfscstc",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    },
+    {
+      "id": "GQA-060",
+      "scheme_slug": "ipsfiomca",
+      "scheme_name": "Internship Programme At Serious Fraud Investigation Office",
+      "aspect": "application_process",
+      "question": "What email address should be used to contact SFIO for clarifications about the Internship Programme At Serious Fraud Investigation Office?",
+      "reference_answer": "The email address to contact for clarifications is admn.hq@sfio.nic.in.",
+      "evidence_quote": "In case any clarifications, the institute/applicant can write an email to admn.hq@sfio.nic.in.",
+      "closest_faq": "What Should Be The Academic Records Of Applicants?",
+      "faq_similarity": 0.4,
+      "ministry_code": "MOCPA",
+      "source_section": "Application Process",
+      "source_url": "https://www.myscheme.gov.in/schemes/ipsfiomca",
+      "generator_model": "Qwen/Qwen3-8B",
+      "review": {
+        "status": "unreviewed",
+        "notes": ""
+      }
+    }
+  ],
+  "rejected": [
+    {
+      "scheme_slug": "atuf",
+      "scheme_name": "Amended Technology Upgradation Fund",
+      "aspect": "benefits",
+      "question": "What is the maximum capital investment subsidy cap for a composite unit under the Amended Technology Upgradation Fund Scheme?",
+      "reference_answer": "The maximum capital investment subsidy cap for a composite unit under the Amended Technology Upgradation Fund Scheme is ₹30 crore.",
+      "evidence_quote": "3(a)Composite units (Garmenting + Technical Textiles) > 50% investment in those segments15%₹30 crore",
+      "closest_faq": "What is the subsidy rate under the ATUFS scheme?",
+      "faq_similarity": 0.583,
+      "reasons": [
+        "quote_not_in_section",
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "nssfp",
+      "scheme_name": "National Solar Science Fellowship Programme",
+      "aspect": "documents_required",
+      "question": "What documents are required to apply for the National Solar Science Fellowship Programme?",
+      "reference_answer": "The required documents include identity proof, certificates of educational qualifications, caste certificate, experience certificate in R&D, the R&D proposal, details of any awards/recognition received in the subject area at the national/international level, details of films/audio-visuals produced, details of scientific/technical papers published in the relevant subject area, and any other document if applicable.",
+      "evidence_quote": "Identity proof; Certificates of Educational Qualifications; Caste Certificate; Experience certificate in R&D; The R&D proposal; Details of any awards/recognition received in the subject area at the national/international level; Details of films/audio-visuals produced; Details of Scientific/technical papers published in the relevant subject area; Any other document (If applicable)",
+      "closest_faq": "What is the minimum qualification required to apply under the scheme?",
+      "faq_similarity": 0.526,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "kgdp",
+      "scheme_name": "Kendriya Grihmantri Dakshata Padak",
+      "aspect": "documents_required",
+      "question": "What documents are required for the Kendriya Grihmantri Dakshata Padak award?",
+      "reference_answer": "The required documents include an Integrity Certificate, Detailed Citation (Maximum 500 Words), Service Record Details, Case Details/Operation Report, Supporting Documents And Evidence, Approval Letter From Head Of Organization, Route Approval From Home Department/Administrative Department, and Additional Details Of Joint Operation (If Applicable).",
+      "evidence_quote": "Documents Required: Integrity Certificate; Detailed Citation (Maximum 500 Words); Service Record Details; Case Details/Operation Report; Supporting Documents And Evidence; Approval Letter From Head Of Organization; Route Approval From Home Department/Administrative Department; Additional Details Of Joint Operation (If Applicable)",
+      "closest_faq": "What is included in the award?",
+      "faq_similarity": 0.462,
+      "reasons": [
+        "quote_not_in_section"
+      ]
+    },
+    {
+      "scheme_slug": "nca",
+      "scheme_name": "National CSR Awards",
+      "aspect": "documents_required",
+      "question": "What documents are required to apply for the National CSR Awards?",
+      "reference_answer": "The required documents include a completed nomination/application form, company registration certificate, CSR project details and expenditure report, impact assessment/report of CSR activities, and supporting documents or certificates related to CSR work.",
+      "evidence_quote": "Completed nomination/application form; Company registration certificate (Companies Act 1956/2013); CSR project details and expenditure report; Impact assessment/report of CSR activities; Supporting documents or certificates related to CSR work",
+      "closest_faq": "What are the National CSR Awards?",
+      "faq_similarity": 0.545,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "jcbs",
+      "scheme_name": "J.C. Bose Fellowship",
+      "aspect": "application_process",
+      "question": "What steps are required to submit an online application for the J.C. Bose Fellowship?",
+      "reference_answer": "The steps include registering on the online website, logging in, navigating to Proposal Submission under Menu, entering the nominee's details, and uploading the research contribution in a single PDF file not exceeding 10 MB.",
+      "evidence_quote": "Step 03: Some of the details of the Nominee like Name, email, contact details, area of specialization, educational qualifications, employment details & research experience, etc. have to be entered at the time of submission.",
+      "closest_faq": "What are the areas covered under J.C. Bose Fellowship?",
+      "faq_similarity": 0.353,
+      "reasons": [
+        "quote_not_in_section"
+      ]
+    },
+    {
+      "scheme_slug": "bsa",
+      "scheme_name": "Bharat Steel Awards",
+      "aspect": "benefits",
+      "question": "What is the cash prize amount for the Exceptional Contribution in Steel Sector Award (Individual Category)?",
+      "reference_answer": "The cash prize for the Exceptional Contribution in Steel Sector Award (Individual Category) is ₹3,00,000/- per award.",
+      "evidence_quote": "Exceptional Contribution in Steel Sector Award (Individual Category): ₹3,00,000/- per award.",
+      "closest_faq": "Who is eligible for the Exceptional Contribution in Steel Sector Award?",
+      "faq_similarity": 0.667,
+      "reasons": [
+        "question_missing_scheme_name",
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "pmsy",
+      "scheme_name": "SVAMITVA Yojana (Survey of Villages and Mapping with Improvised Technology in Village Areas)",
+      "aspect": "benefits",
+      "question": "What specific financial benefit does the SVAMITVA Yojana provide to village household owners?",
+      "reference_answer": "The SVAMITVA Yojana allows property to be considered as a financial asset for taking loans and other financial benefits.",
+      "evidence_quote": "Property as a Financial Asset for Taking Loans and Other Financial Benefits.",
+      "closest_faq": "What is the primary objective of SVAMITVA in terms of providing property ownership solutions?",
+      "faq_similarity": 0.296,
+      "reasons": [
+        "question_missing_scheme_name"
+      ]
+    },
+    {
+      "scheme_slug": "avowwobc",
+      "scheme_name": "Assistance to Voluntary Organizations Working for Welfare of OBCs",
+      "aspect": "benefits",
+      "question": "What percentage of the project cost can PSUs or other organizations get under the Assistance to Voluntary Organizations Working for Welfare of OBCs scheme?",
+      "reference_answer": "PSUs or other organizations can get up to 30% of the project cost for skill development programs.",
+      "evidence_quote": "PSUs or other organizations limited to 30% of project cost for skill development programs.",
+      "closest_faq": "What types of projects are covered under the scheme?",
+      "faq_similarity": 0.5,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "nga",
+      "scheme_name": "National Geoscience Awards",
+      "aspect": "documents_required",
+      "question": "What documents are required to apply for the National Geoscience Awards?",
+      "reference_answer": "The required documents include a filled application/nomination form, proof of Indian citizenship, educational and professional qualification certificates, details of work or achievements in the geoscience field, and supporting documents or a recommendation certificate if available.",
+      "evidence_quote": "Filled application/nomination form; Proof of Indian citizenship (ID proof); Educational and professional qualification certificates; Details of work/achievements in geoscience field; Supporting documents or recommendation certificate (if available)",
+      "closest_faq": "What are the National Geoscience Awards?",
+      "faq_similarity": 0.545,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "nikshay",
+      "scheme_name": "Nikshay Poshan Yojana",
+      "aspect": "documents_required",
+      "question": "What document is required if I don't have a bank account under the Nikshay Poshan Yojana?",
+      "reference_answer": "Aadhaar Document is optional but recommended. A signed declaration to forego benefits must be submitted.",
+      "evidence_quote": "A signed declaration to forego benefits must be submitted.",
+      "closest_faq": "Can I receive the benefit if I don’t have a bank account?",
+      "faq_similarity": 0.593,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "pmssrpf",
+      "scheme_name": "Prime Minister's Scholarship Scheme for Railway Protection Force",
+      "aspect": "documents_required",
+      "question": "What documents are required for a student in category IV to apply for the Prime Minister's Scholarship Scheme for Railway Protection Force?",
+      "reference_answer": "A service certificate issued by the respective offices of the serving personnel and a scanned copy of the previous class mark sheet or grade card are required.",
+      "evidence_quote": "Latest Service Certificate issued by respective offices of the serving personnel for category IV.",
+      "closest_faq": "What is the minimum qualification required for the student to apply under the scheme?",
+      "faq_similarity": 0.5,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "sgiavowwst",
+      "scheme_name": "Scheme of Grant-in-Aid to Voluntary Organisations Working for the Welfare of Scheduled Tribes",
+      "aspect": "application_process",
+      "question": "What is the deadline for submitting applications under the Scheme of Grant-in-Aid to Voluntary Organisations Working for the Welfare of Scheduled Tribes?",
+      "reference_answer": "Applications must be submitted within 90 days from 15th July to 30th September or as notified by the Ministry.",
+      "evidence_quote": "The Ministry's NGO Portal will be opened for 90 days from 15th July to 30th September or as notified by the Ministry to enable the NGO to submit its application for Grants in Aid.",
+      "closest_faq": "What is the objective of the scheme?",
+      "faq_similarity": 0.5,
+      "reasons": [
+        "quote_not_in_section",
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "yhs",
+      "scheme_name": "Youth Hostel Scheme",
+      "aspect": "application_process",
+      "question": "What steps are required to apply for the Youth Hostel Scheme?",
+      "reference_answer": "The applicant must visit the official website, click on 'Apply Now' under the Youth Hostel scheme, select the user type and scheme name, fill out the required details, upload a recent photograph, and give consent for Aadhaar to be used as biometric and KYC.",
+      "evidence_quote": "Applicant must visit the official website.1. Click on 'Apply Now' under the Youth Hostel scheme.1. Select the user type and scheme name. | - Now fill out the require details. | - Upload the recent photograph. | - Give the consent for the Aadhaar to use as biometric and KYC .",
+      "closest_faq": "What documents are required for YHAI membership?",
+      "faq_similarity": 0.533,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "eps",
+      "scheme_name": "Employees' Pension Scheme",
+      "aspect": "application_process",
+      "question": "What is the maximum file size allowed for document uploads during online application under the Employees' Pension Scheme?",
+      "reference_answer": "The maximum file size allowed for each document upload is 2MB.",
+      "evidence_quote": "Upload scanned copies (PDF/JPEG/PNG, max 2MB each).",
+      "closest_faq": "What is the maximum file size allowed for document uploads during online application?",
+      "faq_similarity": 0.929,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "tloiis",
+      "scheme_name": "The Lokpal of India Internship Scheme",
+      "aspect": "benefits",
+      "question": "What facilities does the Lokpal of India provide to the interns?",
+      "reference_answer": "The Lokpal of India provides working space, internet, and other appropriate facilities to the interns.",
+      "evidence_quote": "The Lokpal of India provides working space, internet, and other appropriate facilities to the interns.",
+      "closest_faq": "When was the Lokpal of India established?",
+      "faq_similarity": 0.444,
+      "reasons": [
+        "question_missing_scheme_name"
+      ]
+    },
+    {
+      "scheme_slug": "ipiwai",
+      "scheme_name": "The Inland Waterways Authority of India Internship Scheme",
+      "aspect": "benefits",
+      "question": "What is the remuneration for post graduate or research scholar interns under the Inland Waterways Authority of India Internship Scheme?",
+      "reference_answer": "Post graduate or research scholar interns receive a stipend of ₹ 20,000 per month.",
+      "evidence_quote": "Stipend @ ₹ 10,000/- for Undergraduates and ₹ 20,000/- for Post Graduate/ Research Scholars per month will be payable on satisfactory completion of their internships.",
+      "closest_faq": "How Much Shall The Remuneration Be To The Post Graduate/ Research Scholar Interns?",
+      "faq_similarity": 0.56,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "ipiccr",
+      "scheme_name": "Internship Policy Of Indian Council For Cultural Relations (ICCR)",
+      "aspect": "documents_required",
+      "question": "What documents are required to apply for the Internship Policy Of Indian Council For Cultural Relations (ICCR) internship program?",
+      "reference_answer": "The required documents are Curriculum Vitae (CV), a permission letter from the Supervisor/Head of Department, a detailed report on the work carried out, and a presentation on the work carried out if required.",
+      "evidence_quote": "Curriculum Vitae (CV); Permission letter from their Supervisor/ Head of Department (in case the applicant is interested to join an internship during their coursework).; A detailed report on the work carried out.; A presentation on the work carried out (if required).",
+      "closest_faq": "What Are The Responsibilities Of Interns During The Internship Program?",
+      "faq_similarity": 0.5,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "onorc",
+      "scheme_name": "One Nation One Ration Card",
+      "aspect": "application_process",
+      "question": "What is the process for a family member to get their ration lifted if their Aadhaar number is seeded on the ration card?",
+      "reference_answer": "A family member with their Aadhaar number seeded on the ration card can authenticate themselves using iris or fingerprints for Aadhaar authentication and then have their ration lifted.",
+      "evidence_quote": "Any family member who has seeded their Aadhaar number on their ration card is eligible for authentication and to have their ration lifted.",
+      "closest_faq": "I live in Mumbai but my family lives in Rajasthan, Can my family receive the ration at Rajasthan?",
+      "faq_similarity": 0.146,
+      "reasons": [
+        "question_missing_scheme_name"
+      ]
+    },
+    {
+      "scheme_slug": "pli-pharma",
+      "scheme_name": "Production Linked Incentive (PLI) Scheme for Pharmaceuticals",
+      "aspect": "benefits",
+      "question": "What is the maximum incentive amount that a Group C applicant can receive under the Production Linked Incentive (PLI) Scheme for Pharmaceuticals?",
+      "reference_answer": "The maximum incentive per applicant for Group C is ₹50,00,00,000/-.",
+      "evidence_quote": "The maximum incentive per applicant is capped at ₹10,00,00,00,000/- for Group A, ₹2,50,00,00,000/- for Group B, and ₹50,00,00,00,000/- for Group C.",
+      "closest_faq": "What is the mandatory sales growth percentage that applicants must strictly achieve in subsequent years to ensure they continue receiving the financial incentives?",
+      "faq_similarity": 0.368,
+      "reasons": [
+        "quote_not_in_section"
+      ]
+    },
+    {
+      "scheme_slug": "swsvy",
+      "scheme_name": "Shahari Waqf Sampatti Vikas Yojana",
+      "aspect": "benefits",
+      "question": "What is the maximum interest-free loan amount available under Shahari Waqf Sampatti Vikas Yojana?",
+      "reference_answer": "The maximum interest-free loan amount is ₹2.00 crore or 75% of the estimated cost of the project, whichever is less.",
+      "evidence_quote": "Maximum interest free loan payable will be ₹2.00 crore or 75% of the estimated cost of the project (excluding the value of the land), whichever is less.",
+      "closest_faq": "What is the maximum loan amount available under scheme?",
+      "faq_similarity": 0.842,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "pmsswcapfar",
+      "scheme_name": "Prime Minister’s Scholarship Scheme for the Wards of Central Armed Police Forces & Assam Rifles",
+      "aspect": "documents_required",
+      "question": "What documents are required for category B applicants under the Prime Minister’s Scholarship Scheme for the Wards of Central Armed Police Forces & Assam Rifles?",
+      "reference_answer": "Category B applicants must submit a Disability Certificate and a PPO/Discharge Certificate/Book.",
+      "evidence_quote": "Disability Certificate (Mandatory for category B & D)",
+      "closest_faq": "What academic qualifications are required for new applicants?",
+      "faq_similarity": 0.556,
+      "reasons": [
+        "quote_not_in_section",
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "pmis",
+      "scheme_name": "Prime Minister’s Internship Scheme",
+      "aspect": "application_process",
+      "question": "What is the process to complete e-KYC for the Prime Minister’s Internship Scheme?",
+      "reference_answer": "To complete e-KYC, you can either connect through DigiLocker using Aadhaar or fill personal information, contact information, education, bank details, skills and languages, and upload certificates.",
+      "evidence_quote": "You can complete e-KYC through: | - DigiLocker: Connect using Aadhaar; requires your Aadhaar-linked mobile number and DigiLocker security PIN. | - Fill personal information, contact information, education, bank details, skills & languages and upload certificates.",
+      "closest_faq": "What is the duration of the internship?",
+      "faq_similarity": 0.471,
+      "reasons": [
+        "quote_not_in_section"
+      ]
+    },
+    {
+      "scheme_slug": "cvcis",
+      "scheme_name": "Central Vigilance Commission (CVC) Internship Scheme",
+      "aspect": "documents_required",
+      "question": "What documents must interns submit at the end of the CVC Internship Scheme?",
+      "reference_answer": "Interns must submit an end-of-the-assignment report and make a presentation on the allotted subject. They also need to provide feedback on their experience of the programme to the Secretary CVC.",
+      "evidence_quote": "The interns will be required to submit an end-of-the-assignment report and make a presentation on the allotted subject at the end of the internship period. The interns will also provide feedback on their experience of the programme to the Secretary CVC.",
+      "closest_faq": "What Are The Requirements At The End Of The Internship?",
+      "faq_similarity": 0.609,
+      "reasons": [
+        "question_missing_scheme_name",
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "sitare-gyti",
+      "scheme_name": "SITARE-Gandhian Young Technological Innovation Award Grant",
+      "aspect": "application_process",
+      "question": "What is the process for submitting proposals for the SITARE-Gandhian Young Technological Innovation Award Grant?",
+      "reference_answer": "Proposals must be submitted online during an active Call for Proposals, which is open for 45-60 days. The process involves registering on the BIRAC website, logging in, and navigating to the SITARE-GYTI link to submit the proposal.",
+      "evidence_quote": "Application process: | • Proposals shall be submitted online only during an active Call for Proposals.",
+      "closest_faq": "What is the selection process?",
+      "faq_similarity": 0.571,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "dsctassgcsccm",
+      "scheme_name": "Development Support for Coffee in Traditional Areas: Support to Small Growers' Collectives/ SHGs/ Cooperatives for Coffee Marketing",
+      "aspect": "application_process",
+      "question": "How is the subsidy released to individual members of small growers' collectives/SHGs/Cooperatives under the Development Support for Coffee in Traditional Areas: Support to Small Growers' Collectives/ SHGs/ Cooperatives for Coffee Marketing scheme?",
+      "reference_answer": "The subsidy is released directly to individual members' bank accounts through NEFT after the application is complete and the sale of coffee is finalized.",
+      "evidence_quote": "The subsidy shall be released to the individual members (of the small growers' collectives/SHGs/Cooperatives mentioned in the sale note issued by the auctioneers/commodity exchange) directly to their bank account through National Electronic Funds Transfer (NEFT) in cases where the application is complete in all respects.",
+      "closest_faq": "When is the subsidy disbursed to the individual members of small growers' collectives/SHGs/Cooperatives?",
+      "faq_similarity": 0.75,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "pmay-u",
+      "scheme_name": "Pradhan Mantri Awas Yojana - Urban",
+      "aspect": "application_process",
+      "question": "What is the fee required to purchase the application form for PMAY-Urban through a Common Service Centre?",
+      "reference_answer": "The fee required to purchase the application form is ₹ 25 plus GST.",
+      "evidence_quote": "Purchase the application form by paying ₹ 25 (plus GST) at the counter.",
+      "closest_faq": "For how am I required to be residing in an urban area to become a beneficiary under this scheme?",
+      "faq_similarity": 0.216,
+      "reasons": [
+        "question_missing_scheme_name"
+      ]
+    },
+    {
+      "scheme_slug": "nassvsbpubsopwwsc",
+      "scheme_name": "National Award For Senior Citizens (Vayoshreshtha Samman): Best Public Sector Organisation In Promoting The Wellbeing And Welfare Of Senior Citizens",
+      "aspect": "documents_required",
+      "question": "What documents are required to apply for the National Award For Senior Citizens (Vayoshreshtha Samman): Best Public Sector Organisation In Promoting The Wellbeing And Welfare Of Senior Citizens?",
+      "reference_answer": "The required documents include a Certificate of Registration, Proof of Address, Proof of Area of specialization, Proof of Parent Organisation or Registered Body, Details of the Managing Committee and Qualification of their Members, Details of NGO working at Regional/State/National/International Level, Total staff strength of the NGO, Annual Reports for the last 3 years, Special or Outstanding Achievements during the last 5 years in the field of the Category of the Award, Details of Awards or Honours received, if any (attach citations), along with Justification for the Award, and Justification for the award.",
+      "evidence_quote": "Certificate of Registration; Proof of Address (for communication); Proof of Area of specialization (Memorandum and Articles of Association containing objects and bye-laws); Proof of Parent Organisation or Registered Body (Certified Copy of the Certificate of Registration); Details of the Managing Committee and Qualification of their Members",
+      "closest_faq": "",
+      "faq_similarity": 0.0,
+      "reasons": [
+        "answer_too_long"
+      ]
+    },
+    {
+      "scheme_slug": "pm-janman",
+      "scheme_name": "PM Janjati Adivasi Nyaya Maha Abhiyan (PM JANMAN)",
+      "aspect": "documents_required",
+      "question": "What specific documents are required to verify the tribal status of a household under the PM Janjati Adivasi Nyaya Maha Abhiyan?",
+      "reference_answer": "The required document to verify tribal status is the PVTG/Tribal Status Certificate.",
+      "evidence_quote": "PVTG/Tribal Status Certificate.",
+      "closest_faq": "What essential personal identification documents or entitlements are facilitated or required for identified beneficiaries under this mission?",
+      "faq_similarity": 0.263,
+      "reasons": [
+        "question_missing_scheme_name",
+        "quote_not_in_section"
+      ]
+    },
+    {
+      "scheme_slug": "sgs",
+      "scheme_name": "Good Samaritan Scheme",
+      "aspect": "application_process",
+      "question": "What is the amount awarded to each selected Good Samaritan under the Good Samaritan Scheme?",
+      "reference_answer": "Each selected Good Samaritan is awarded ₹ 1,00,000/- along with a Certificate and trophy.",
+      "evidence_quote": "They will be awarded ₹ 1,00,000/- each along with a Certificate and trophy during NRSM in Delhi.",
+      "closest_faq": "What is the Award For Each Good Samaritan?",
+      "faq_similarity": 0.7,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "pmmsy",
+      "scheme_name": "Pradhan Mantri Matsya Sampada Yojana",
+      "aspect": "application_process",
+      "question": "What is the address where proposals for the Central Sector Scheme Component of PMMSY should be submitted?",
+      "reference_answer": "Proposals for the Central Sector Scheme Component of PMMSY should be submitted to the Department of Fisheries, Government of India at Room No-221, Krishi Bhawan, New Delhi - 110 001.",
+      "evidence_quote": "The projects proposals in respect of the Central Sector Scheme Component of the PMMSY should be submitted to the Department of Fisheries, Government of India at the address mentioned below: | The Secretary | Department of Fisheries | Ministry of Fisheries, Animal Husbandry, and Dairying | Government of India | Room No-221, Krishi Bhawan | New Delhi - 110 001",
+      "closest_faq": "What Is The Funding Pattern For Central Sector Scheme?",
+      "faq_similarity": 0.56,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "pmjjby",
+      "scheme_name": "Pradhan Mantri Jeevan Jyoti Bima Yojana",
+      "aspect": "benefits",
+      "question": "What is the annual premium for the Pradhan Mantri Jeevan Jyoti Bima Yojana?",
+      "reference_answer": "The annual premium for PMJJBY is ₹ 436/- per subscriber.",
+      "evidence_quote": "Premium payable is ₹ 436/- per annum per subscriber, to be auto debited from the subscriber’s bank/post office account.",
+      "closest_faq": "What is the validity of the insurance cover in PMJJBY?",
+      "faq_similarity": 0.5,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "jrcpc",
+      "scheme_name": "Jute Resource-Cum-Production Centre",
+      "aspect": "eligibility",
+      "question": "What is the minimum office space required for the Jute Resource-Cum-Production Centre?",
+      "reference_answer": "The Jute Resource-Cum-Production Centre requires an office space of at least 250 sq.ft.",
+      "evidence_quote": "The CA/OA should have its own office of at-least 250 sq.ft. with telephone/ mobile connection, computer/ laptop with email facilities etc. for running the Jute Resource-Cum Production Production Center",
+      "closest_faq": "What documents are required for the application?",
+      "faq_similarity": 0.5,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "sbm-g-i",
+      "scheme_name": "Swachh Bharat Mission – Grameen PHASE I",
+      "aspect": "application_process",
+      "question": "What is the first step to register for the Swachh Bharat Mission – Grameen PHASE I?",
+      "reference_answer": "The first step is to register on the UMANG Portal by visiting its official website and clicking 'Register' in the top right corner.",
+      "evidence_quote": "Step 1:*** Register on the UMANG Portal | - Visit the official website of UMANG. In the top right corner of the landing page, click 'Register.' You will be taken to the Registration Page.",
+      "closest_faq": "What is the aim of the scheme?",
+      "faq_similarity": 0.5,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "pmbjp",
+      "scheme_name": "Pradhan Mantri Bhartiya Janaushadhi Pariyojana",
+      "aspect": "eligibility",
+      "question": "What qualifications are required to open a Pradhan Mantri Bhartiya Janaushadhi Pariyojana Kendra as an individual?",
+      "reference_answer": "An individual must have a D. Pharma or B. Pharma degree, or they must employ someone with a D. Pharma or B. Pharma degree and provide proof of this at the time of application or final approval.",
+      "evidence_quote": "Individual applicants must have a D. Pharma/B. Pharma degree, or he/she has to employ D. Pharma/B. Pharma degree holders and produce proof of the same at the time of submitting applications or at the time of final approval.",
+      "closest_faq": "What Are The Requirements For Opening A Pradhan Mantri Janaushadhi Kendra By An Organization / Individual Other Than A Government Nominated?",
+      "faq_similarity": 0.516,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    },
+    {
+      "scheme_slug": "kps",
+      "scheme_name": "Kabir Puraskar Scheme",
+      "aspect": "application_process",
+      "question": "What is the process for recommending candidates for the Kabir Puraskar Scheme?",
+      "reference_answer": "Recommendations for the Kabir Puraskar Scheme are made through State Governments or UT Administrations using the Nomination Form-Annexure-I. These recommendations are then reviewed by a Screening Committee before being approved by the Union Home Minister and the Prime Minister.",
+      "evidence_quote": "Step 01: All recommendations for the award shall be made through State Governments/UT Administrations. (Nomination Form-Annexure-I)",
+      "closest_faq": "What is the “Kabir Puraskar Scheme”?",
+      "faq_similarity": 0.5,
+      "reasons": [
+        "too_close_to_faq"
+      ]
+    }
+  ]
+}

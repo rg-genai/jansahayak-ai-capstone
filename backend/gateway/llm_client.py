@@ -28,6 +28,12 @@ _UNCLOSED_THINK_RE = re.compile(r"<think>[\s\S]*$", re.IGNORECASE)
 CONTEXT_WINDOW_LIMIT = 8192
 MAX_OUTPUT_HARD_CAP = 1024
 BACKOFF_SECONDS = (2.0, 4.0, 8.0)
+# Gemini's 429 body when a per-day/per-minute quota is used up: retrying cannot help and burns free-tier quota.
+_QUOTA_EXHAUSTED_MARKER = "exceeded your current quota"
+
+
+class QuotaExhaustedError(RuntimeError):
+    """The provider refused the call because the account's quota is used up (not a transient 429)."""
 
 
 def count_tokens(text: str) -> int:
@@ -83,19 +89,32 @@ class LLMResponse:
 class LLMGateway:
     """Application-level singleton gateway enforcing Track B VM constraints."""
 
-    def __init__(self):
+    def __init__(
+        self,
+        base_url: str | None = None,
+        model: str | None = None,
+        api_key: str | None = None,
+        max_rpm: int | None = None,
+        use_system_ca: bool = False,
+        extra_payload: dict[str, Any] | None = None,
+    ):
+        """Defaults: the hosted Qwen VM from settings. Another OpenAI-compatible provider (e.g. Gemini) passes
+        its own URL/model/key, `use_system_ca=True` (public CA, TLS still verified) and provider-specific fields."""
         self.settings = get_settings()
-        self.base_url = self.settings.llm_base_url.rstrip("/")
-        self.model = self.settings.llm_model
-        self.api_key = self.settings.llm_api_key.get_secret_value()
+        self.base_url = (base_url or self.settings.llm_base_url).rstrip("/")
+        self.model = model or self.settings.llm_model
+        self.api_key = api_key if api_key is not None else self.settings.llm_api_key.get_secret_value()
         self.ca_cert = self.settings.llm_ca_cert_abs
-        self.max_rpm = min(self.settings.llm_max_rpm, 60)
+        self.use_system_ca = use_system_ca
+        self.extra_payload = dict(extra_payload or {})
+        self.max_rpm = min(max_rpm or self.settings.llm_max_rpm, 60)
         self.max_output_cap = min(self.settings.llm_max_output_tokens, MAX_OUTPUT_HARD_CAP)
 
         self._semaphore = asyncio.Semaphore(self.settings.llm_max_concurrent_requests)
         self._rpm_lock = asyncio.Lock()
         self._request_timestamps: deque[float] = deque()
-        self._supports_thinking_kwarg: bool | None = True
+        # Qwen's chat_template_kwargs switch is vLLM-specific; other providers get their own fields instead.
+        self._supports_thinking_kwarg: bool | None = not use_system_ca
 
     def enforce_context_budget(
         self,
@@ -153,7 +172,7 @@ class LLMGateway:
         disable_thinking: bool = True,
         timeout: float = 90.0,
     ) -> LLMResponse:
-        if not self.ca_cert.exists():
+        if not self.use_system_ca and not self.ca_cert.exists():
             raise FileNotFoundError(f"LLM CA certificate not found: {self.ca_cert}")
 
         budgeted_msgs, clamped_max_tokens = self.enforce_context_budget(messages, max_tokens)
@@ -163,6 +182,7 @@ class LLMGateway:
             "messages": budgeted_msgs,
             "max_tokens": clamped_max_tokens,
             "temperature": temperature,
+            **self.extra_payload,
         }
         if disable_thinking and self._supports_thinking_kwarg:
             payload["chat_template_kwargs"] = {"enable_thinking": False}
@@ -176,7 +196,7 @@ class LLMGateway:
         retries = 0
         t0 = time.perf_counter()
 
-        ssl_ctx = ssl.create_default_context(cafile=str(self.ca_cert))
+        ssl_ctx = ssl.create_default_context() if self.use_system_ca else ssl.create_default_context(cafile=str(self.ca_cert))
         async with self._semaphore:
             await self._wait_for_rpm_slot()
             async with httpx.AsyncClient(verify=ssl_ctx, timeout=timeout) as client:
@@ -211,6 +231,9 @@ class LLMGateway:
                             payload.pop("chat_template_kwargs", None)
                             continue
 
+                        if resp.status_code == 429 and _QUOTA_EXHAUSTED_MARKER in resp.text.lower():
+                            raise QuotaExhaustedError(f"LLM API quota exhausted ({self.model}): {resp.text[:300]}")
+
                         if resp.status_code in (429, 500, 502, 503, 504) and attempt < len(BACKOFF_SECONDS):
                             wait = BACKOFF_SECONDS[attempt]
                             retries += 1
@@ -239,3 +262,26 @@ def get_llm_gateway() -> LLMGateway:
     if _SINGLETON_GATEWAY is None:
         _SINGLETON_GATEWAY = LLMGateway()
     return _SINGLETON_GATEWAY
+
+
+_GEMINI_GATEWAYS: dict[str, LLMGateway] = {}
+
+
+def get_gemini_gateway(model: str) -> LLMGateway:
+    """Gateway for a Gemini model via Google's OpenAI-compatible endpoint (evals only: second LLM and judge).
+
+    One gateway per model, so its RPM limiter covers every caller. Raises if GEMINI_API_KEY is not set."""
+    settings = get_settings()
+    api_key = settings.gemini_api_key.get_secret_value().strip()
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY is not set in .env")
+    if model not in _GEMINI_GATEWAYS:
+        _GEMINI_GATEWAYS[model] = LLMGateway(
+            base_url=settings.gemini_base_url,
+            model=model,
+            api_key=api_key,
+            max_rpm=settings.gemini_max_rpm,
+            use_system_ca=True,
+            extra_payload={"reasoning_effort": settings.gemini_reasoning_effort},
+        )
+    return _GEMINI_GATEWAYS[model]

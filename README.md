@@ -222,7 +222,7 @@ Log in on http://localhost:5173 using any of the pre-configured accounts below (
 ## Running Tests & Evaluations
 
 ```powershell
-# Run all 21 unit & API integration tests
+# Run all unit, agent and API tests (some use the hosted embedding API, so they need .env + certs)
 .\.venv\Scripts\python.exe -m pytest -v
 
 # Run all 4 Track B quantitative benchmark suites (outputs JSON + MD in eval/reports/)
@@ -231,6 +231,35 @@ Log in on http://localhost:5173 using any of the pre-configured accounts below (
 # Verify live Gmail SMTP email delivery (optional, if SMTP is configured in .env)
 .\.venv\Scripts\python.exe scripts\test_email.py
 ```
+
+### Gold Q&A evaluation (answer quality, retrievers, top-k, latency, second LLM)
+
+`eval/gold_qa.json` holds 60 questions with reference answers, written from scheme text (**not** from the FAQs) and checked by code: each supporting quote must appear in the source section, numbers must match, and questions too close to an FAQ were rejected. Every run excludes FAQ chunks from retrieval and disables the live web fallback, so results are comparable and reproducible.
+
+```powershell
+# 1. (Already done) build the gold set, then review it in Excel (verdict: ok / fix / drop)
+.\.venv\Scripts\python.exe eval\build_gold_qa.py --export-review    # writes eval/gold_qa_review.csv
+.\.venv\Scripts\python.exe eval\build_gold_qa.py --apply-review     # reads it back
+
+# 2. Generate answers (calls the hosted LLM; resumable). List configs with --list.
+.\.venv\Scripts\python.exe eval\run_gold_eval.py --config main
+.\.venv\Scripts\python.exe eval\run_gold_eval.py --config no_corpus
+.\.venv\Scripts\python.exe eval\run_gold_eval.py --config top1 --subset 30
+.\.venv\Scripts\python.exe eval\run_gold_eval.py --retrieval-only   # BM25 vs dense vs hybrid, no LLM
+
+# 3. Score (ROUGE-L, BLEU, BERTScore run locally with NO API key; the Gemini judge is optional and capped)
+.\.venv\Scripts\python.exe eval\score_gold_eval.py
+.\.venv\Scripts\python.exe eval\score_gold_eval.py --judge --judge-max-calls 60 --judge-configs main
+```
+
+The report goes to `eval/reports/gold_eval.md` and `eval/reports/gold_eval.json`.
+
+### Reviewing without API keys
+
+- **Read:** every saved answer, with its retrieved schemes, timings, tokens and scores, is in `eval/reports/gold_runs/*.json` and `eval/reports/gold_eval.json`. Judge verdicts are in `gold_runs/judge_scores.json`.
+- **Re-score offline:** `eval\score_gold_eval.py` recomputes ROUGE-L, BLEU and BERTScore from the saved answers with no key (BERTScore downloads `roberta-large` once).
+- **Needs keys:** chatting with the app, generating new answers (IIT VM key), and new judge scores (a free Gemini key from https://aistudio.google.com).
+- **Privacy and guardrails:** see `docs/06_Guardrail_and_Privacy_Analysis.md`.
 
 ---
 

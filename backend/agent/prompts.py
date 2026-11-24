@@ -225,6 +225,25 @@ Output ONLY one JSON object:
 }"""
 
 
+CLOSED_BOOK_SYSTEM_PROMPT = """You answer citizens' questions about Indian Central Government schemes from your own knowledge.
+No documents are provided. Answer in plain English in 1 to 4 sentences. If you do not know, say so."""
+
+
+ANSWER_JUDGE_SYSTEM_PROMPT = """You grade an AI assistant's answer to a citizen's question about an Indian Government scheme.
+Compare it with the REFERENCE answer, which was written from the scheme's official text and is correct.
+
+Score how correct and complete the assistant's answer is for this question:
+5 = states all key facts of the reference, nothing contradicts it
+4 = states the main fact(s); minor detail missing; nothing contradicts it
+3 = partly correct: some key facts missing, or vague
+2 = mostly missing or mostly wrong
+1 = wrong, contradicts the reference, off-topic, or does not answer (e.g. only asks a question back)
+Extra correct information, citations, links or formatting do not lower the score. Wrong amounts, limits or conditions do.
+
+Output ONLY one JSON object:
+{"score": 1 | 2 | 3 | 4 | 5, "reason": str}   // reason: one short sentence"""
+
+
 CRITIC_SYSTEM_PROMPT = """You are the Critic / Groundedness Auditor Node of JanSahayak AI.
 Audit the draft assistant answer against the provided evidence and policy rules.
 

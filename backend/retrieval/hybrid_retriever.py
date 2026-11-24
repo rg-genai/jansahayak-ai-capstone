@@ -18,6 +18,7 @@ import numpy as np
 from backend.config import get_settings
 from backend.db.database import get_connection
 from backend.gateway.embedding_client import EmbeddingClient, get_embedding_client
+from backend.retrieval.chunker import FAQ_SECTION
 
 logger = logging.getLogger(__name__)
 
@@ -96,6 +97,7 @@ class HybridRetriever:
         index_dir: Path | None = None,
         embedding_client: EmbeddingClient | None = None,
         load_reranker: bool = True,
+        exclude_faq_chunks: bool | None = None,
     ):
         self.settings = get_settings()
         self.db_path = db_path or self.settings.db_abs_path
@@ -103,8 +105,14 @@ class HybridRetriever:
         self._embedding_client = embedding_client
         self._load_reranker_enabled = load_reranker
         self._reranker = None
+        # FAQ chunks stay in the index but are never returned (evaluation: the gold set must not be answered by FAQs).
+        # BM25 term statistics still include FAQ text; only which chunks can come back changes.
+        self.exclude_faq_chunks = (
+            self.settings.retrieval_exclude_faq_chunks if exclude_faq_chunks is None else exclude_faq_chunks
+        )
 
         self.chunks: list[dict[str, Any]] = []
+        self._searchable_idx: np.ndarray = np.zeros(0, dtype=np.int32)
         self.embeddings: np.ndarray = np.zeros((0, 384), dtype=np.float32)
         self.bm25 = None
         self._loaded = False
@@ -163,8 +171,14 @@ class HybridRetriever:
             raise RuntimeError(
                 f"Index mismatch: {len(self.chunks)} chunks in SQLite vs {self.embeddings.shape[0]} rows in embeddings.npy"
             )
+        self._searchable_idx = np.asarray(
+            [i for i, ch in enumerate(self.chunks) if not (self.exclude_faq_chunks and ch["section"] == FAQ_SECTION)],
+            dtype=np.int32,
+        )
         self._loaded = True
-        logger.info("HybridRetriever loaded %d chunks and %s embeddings.", len(self.chunks), self.embeddings.shape)
+        logger.info("HybridRetriever loaded %d chunks (%d searchable, FAQ chunks %s) and %s embeddings.",
+                    len(self.chunks), len(self._searchable_idx),
+                    "excluded" if self.exclude_faq_chunks else "included", self.embeddings.shape)
 
     def _get_reranker(self):
         if not self._load_reranker_enabled:
@@ -178,8 +192,7 @@ class HybridRetriever:
 
     def _filter_indices(self, filters: dict[str, Any] | None) -> tuple[np.ndarray, bool, bool]:
         """Permissive metadata pre-filtering: null/empty fields on a scheme NEVER exclude a citizen."""
-        n = len(self.chunks)
-        all_idx = np.arange(n, dtype=np.int32)
+        all_idx = self._searchable_idx
         if not filters:
             return all_idx, False, False
 
@@ -195,7 +208,8 @@ class HybridRetriever:
             return all_idx, False, False
 
         matched: list[int] = []
-        for idx, ch in enumerate(self.chunks):
+        for idx in all_idx.tolist():
+            ch = self.chunks[idx]
             meta = ch["metadata"]
             if ministry and ministry not in ch["ministry"].lower() and ministry != (meta.get("ministry_code") or "").lower():
                 continue
