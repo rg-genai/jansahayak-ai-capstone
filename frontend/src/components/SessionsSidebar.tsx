@@ -77,35 +77,35 @@ export const SessionsSidebar: React.FC<Props> = ({
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className="w-full max-w-xs bg-white h-full shadow-2xl flex flex-col overflow-hidden">
-        <div className="px-5 py-4 bg-indiaNavy text-white flex items-center justify-between">
+      <div className="glass rounded-none w-full max-w-xs h-full flex flex-col overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-900/10 dark:border-white/10 text-indiaNavy dark:text-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <History className="w-5 h-5 text-indiaSaffron" />
             <h3 className="font-semibold text-base">Session History</h3>
           </div>
-          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-white/10" aria-label="Close session history">
+          <button onClick={onClose} className="p-1.5 rounded-full text-slate-500 hover:bg-slate-900/5 hover:text-indiaNavy dark:text-slate-400 dark:hover:bg-white/10 dark:hover:text-slate-100 transition" aria-label="Close session history">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-2.5">
           {busy && (
-            <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-lg p-2.5">
+            <p className="text-xs text-amber-800 bg-amber-50/90 border border-amber-200 rounded-xl p-2.5 dark:bg-amber-500/15 dark:border-amber-500/30 dark:text-amber-200">
               Wait for the current answer to finish before switching sessions.
             </p>
           )}
 
           {listLoading && (
-            <div className="flex items-center justify-center gap-2 py-6 text-xs text-slate-500">
+            <div className="flex items-center justify-center gap-2 py-6 text-xs text-slate-500 dark:text-slate-400">
               <Loader2 className="w-4 h-4 animate-spin" />
               Loading sessions...
             </div>
           )}
 
-          {listError && <p className="text-xs text-rose-700">{listError}</p>}
+          {listError && <p className="text-xs text-rose-700 dark:text-rose-300">{listError}</p>}
 
           {!listLoading && !listError && sessions.length === 0 && (
-            <p className="py-6 text-center text-xs text-slate-500">
+            <p className="py-6 text-center text-xs text-slate-500 dark:text-slate-400">
               No past conversations yet. Your chats will appear here after you send a message.
             </p>
           )}
@@ -118,17 +118,19 @@ export const SessionsSidebar: React.FC<Props> = ({
                 type="button"
                 disabled={busy}
                 onClick={() => handlePick(s.session_id)}
-                className={`w-full text-left rounded-lg border px-3 py-2.5 transition disabled:cursor-not-allowed disabled:opacity-50 ${
-                  isActive ? 'border-indiaNavy bg-slate-50 ring-1 ring-indiaNavy' : 'border-slate-200 hover:bg-slate-50'
+                className={`w-full text-left rounded-2xl border px-3.5 py-3 shadow-sm transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 ${
+                  isActive
+                    ? 'border-indiaNavy/40 bg-indiaNavy/5 ring-1 ring-indiaNavy/30 dark:border-indiaSaffron/50 dark:bg-indiaSaffron/10 dark:ring-indiaSaffron/30'
+                    : 'border-slate-900/10 bg-white/60 hover:bg-white/85 hover:shadow-md dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10'
                 }`}
               >
                 <div className="flex items-start gap-2">
-                  <MessageSquare className="w-4 h-4 mt-0.5 shrink-0 text-indiaNavy" />
-                  <p className="text-sm font-medium text-slate-800 line-clamp-2">
+                  <MessageSquare className="w-4 h-4 mt-0.5 shrink-0 text-indiaNavy dark:text-indiaSaffron" />
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-200 line-clamp-2">
                     {s.first_question || 'Untitled conversation'}
                   </p>
                 </div>
-                <div className="mt-1.5 pl-6 flex items-center justify-between text-[11px] text-slate-500">
+                <div className="mt-1.5 pl-6 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
                   <span>{s.message_count} messages</span>
                   <span>{formatWhen(s.last_message_at)}</span>
                 </div>

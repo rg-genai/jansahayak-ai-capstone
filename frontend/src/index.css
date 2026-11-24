@@ -5,8 +5,29 @@
 @layer base {
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans Devanagari', sans-serif;
-    background-color: #f7f6f2;
-    color: #1e293b;
+    @apply bg-[#8cbfe8] text-slate-800 dark:bg-[#0b1f36] dark:text-slate-100;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply rounded-3xl border border-white/60 bg-white/70 shadow-[0_20px_60px_-15px_rgba(15,41,66,0.28)] backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/60 dark:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)];
+  }
+
+  .glass-subtle {
+    @apply rounded-2xl border border-white/50 bg-white/50 backdrop-blur-md dark:border-white/10 dark:bg-slate-900/45;
+  }
+
+  .field {
+    @apply w-full rounded-2xl border border-slate-300/80 bg-white/80 px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 transition focus:border-indiaSaffron focus:outline-none focus:ring-2 focus:ring-indiaSaffron/25 dark:border-white/15 dark:bg-slate-950/50 dark:text-slate-100 dark:placeholder:text-slate-500;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-indiaNavy px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indiaNavy/20 transition hover:bg-indiaNavy/90 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 dark:bg-indiaSaffron dark:text-slate-950 dark:shadow-indiaSaffron/20 dark:hover:bg-orange-400;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-slate-300/80 bg-white/70 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50 dark:border-white/15 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10;
   }
 }
 
