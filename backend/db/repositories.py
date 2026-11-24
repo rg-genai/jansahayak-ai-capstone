@@ -24,18 +24,26 @@ class Repository:
 
     # ---- Schemes & Ministries ----
 
+    @staticmethod
+    def _scheme_from_row(row: sqlite3.Row) -> dict[str, Any]:
+        item = dict(row)
+        item["social_categories"] = json.loads(item.get("social_categories_json") or "[]")
+        item["beneficiary_groups"] = json.loads(item.get("beneficiary_groups_json") or "[]")
+        item["dbt_scheme"] = bool(item.get("dbt_scheme"))
+        return item
+
     def get_scheme(self, slug: str) -> dict[str, Any] | None:
         with get_connection(self.db_path) as conn:
             row = conn.execute(
                 "SELECT * FROM schemes_catalog WHERE slug = ?", (slug,)
             ).fetchone()
-            if not row:
-                return None
-            item = dict(row)
-            item["social_categories"] = json.loads(item.get("social_categories_json") or "[]")
-            item["beneficiary_groups"] = json.loads(item.get("beneficiary_groups_json") or "[]")
-            item["dbt_scheme"] = bool(item.get("dbt_scheme"))
-            return item
+            return self._scheme_from_row(row) if row else None
+
+    def list_all_schemes(self) -> list[dict[str, Any]]:
+        """Every scheme with all its columns, in one query (for offline scripts that scan the catalog)."""
+        with get_connection(self.db_path) as conn:
+            rows = conn.execute("SELECT * FROM schemes_catalog ORDER BY slug").fetchall()
+        return [self._scheme_from_row(r) for r in rows]
 
     def list_scheme_titles(self) -> list[dict[str, str]]:
         """Slug, full name and short title of every scheme (for name matching)."""

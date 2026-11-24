@@ -204,6 +204,27 @@ Output ONLY one JSON object:
 }"""
 
 
+GOLD_QA_GENERATION_SYSTEM_PROMPT = """You write ONE evaluation question and its reference answer about an Indian Government scheme.
+Use ONLY the given section of the scheme's official text.
+
+The question:
+- sounds like a real citizen asking, in plain English, and contains the scheme's full name exactly as given
+- can be answered from the section alone
+- asks about something specific (an amount, a condition, a document, a step), not a generic "What are the benefits?"
+- is NOT one of the scheme's existing FAQ questions and does not rephrase one: ask about a different detail or combine details
+
+The reference answer:
+- 1 to 3 sentences, plain English, only facts stated in the section
+- no advice, no citations, nothing the section does not say
+
+Output ONLY one JSON object:
+{
+  "question": str,
+  "answer": str,
+  "evidence_quote": str   // one sentence from the section, copied word for word, that supports the answer
+}"""
+
+
 CRITIC_SYSTEM_PROMPT = """You are the Critic / Groundedness Auditor Node of JanSahayak AI.
 Audit the draft assistant answer against the provided evidence and policy rules.
 

@@ -25,6 +25,11 @@ ddgs==9.0.0
 edge-tts==7.0.2
 gTTS==2.5.4
 
+# Answer-quality metrics for the gold Q&A evaluation (ROUGE-L, BLEU, BERTScore)
+rouge-score==0.1.2
+sacrebleu==2.6.0
+bert-score==0.3.13
+
 # Testing
 pytest==8.3.4
 pytest-asyncio==0.25.2
