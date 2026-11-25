@@ -843,5 +843,807 @@
     "reason": "The evidence states the minimum eligible incremental net sales for non-MSMEs is 20% of X for Year 1, not 40%.",
     "judge_model": "gemini-3.5-flash-lite",
     "judged_at": "2026-11-25T11:02:40+05:30"
+  },
+  "task:loop_v2:FAQ-01:d43f571d818d": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately explains the Startup India Seed Fund Scheme based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:22:31+05:30"
+  },
+  "task:loop_v2:FAQ-02:6047ace3669c": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant accurately and comprehensively answers the user's question using the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:22:33+05:30"
+  },
+  "task:loop_v2:FAQ-03:b92c88ab1e45": {
+    "answers_request": false,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant provides general scheme information and benefits instead of answering the specific question about what AICTE expects from the institution.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:22:36+05:30"
+  },
+  "task:loop_v2:FAQ-04:ace2f8a2d225": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the BIG scheme, its features, and application process based entirely on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:22:37+05:30"
+  },
+  "task:loop_v2:FAQ-05:a658fa43b5d0": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant directly answers the user's question using the provided FAQs.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:22:40+05:30"
+  },
+  "task:loop_v2:FAQ-06:9b8e32169fd8": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "Business plan and project proposal.",
+      "Proof of incorporation (for companies).",
+      "Detailed budget and timeline."
+    ],
+    "declines": false,
+    "reason": "The assistant answered the request about the purpose of iDEX and DIO, but included some unsupported document requirements not found in the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:23:32+05:30"
+  },
+  "task:loop_v2:FAQ-07:6b2d59ce3064": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately and completely addresses the request using the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:23:34+05:30"
+  },
+  "task:loop_v2:FAQ-08:8239870c2432": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately states the maximum project costs and provides relevant details directly supported by the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:23:36+05:30"
+  },
+  "task:loop_v2:FAQ-09:9620bb4105a0": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the five modes of RPL under PMKVY 3.0 and eligibility based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:23:38+05:30"
+  },
+  "task:loop_v2:FAQ-10:000c544ee56c": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "Group 2 (other courses)"
+    ],
+    "declines": false,
+    "reason": "The answer successfully states the objective of the scheme while including a minor unsupported mention of Group 2.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:23:42+05:30"
+  },
+  "task:loop_v2:ML-01:4916579ad021": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately states the amount given under PM-KISAN scheme and is fully supported by the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:24:31+05:30"
+  },
+  "task:loop_v2:ML-02:7d59727771d1": {
+    "answers_request": false,
+    "unsupported_claims": [
+      "मैंने प्रधान मंत्री किसान सम्मान निधि के लिए एक औपचारिक CPGRAMS शिकायत की रूपरेखा तैयार कर ली है"
+    ],
+    "declines": false,
+    "reason": "The assistant did not answer the user's question about eligibility and documents, but instead claimed to draft a grievance without evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:24:34+05:30"
+  },
+  "task:loop_v2:ML-03:b0cd85d6ef0a": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "राशन कार्ड या अन्य पहचान के प्रमाण।",
+      "पता के प्रमाण।",
+      "आय के विवरण।"
+    ],
+    "declines": false,
+    "reason": "The answer successfully addresses the request with supported facts, though the exact document list is slightly generalized/inferred from the portal steps.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:24:37+05:30"
+  },
+  "task:loop_v2:ML-04:7e2881bbf026": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the toolkit and loan benefits for carpenters and artisans based on the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:24:38+05:30"
+  },
+  "task:loop_v2:ML-05:2d406fce3e3b": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "पहिलं आणि पत्ता दर्शविणारा दस्तऐवज",
+      "व्यापार योजना आणि प्रस्ताव",
+      "बँक खाते विवरण"
+    ],
+    "declines": false,
+    "reason": "The answer provides the correct loan amount and benefits from the PMMY scheme, but lists required documents which are actually from the PMEGP scheme evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:24:40+05:30"
+  },
+  "task:loop_v2:ML-06:db6b1506db51": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "वयाचा प्रमाणपत्र",
+      "आयकर भरत असल्यास आय चाचणीचे प्रमाणपत्र",
+      "बँक खात्याचे विवरण"
+    ],
+    "declines": false,
+    "reason": "The answer addresses the request correctly, but lists documents that are not mentioned in the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:25:32+05:30"
+  },
+  "task:loop_v2:ML-07:3cbc33c4b8bd": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant accurately explains the benefits and eligibility for Pradhan Mantri Awas Yojana (Urban and Gramin) based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:25:34+05:30"
+  },
+  "task:loop_v2:ML-08:8acf7fb35470": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "SSY প্রতি বছর 7.6% এর উপর জমা দেওয়া মুনাফা দেয়",
+      "0-10 বছর বয়সী মেয়েদের পিতা বা আইনগত পরিচর্যাকারী জন্য উপলব্ধ"
+    ],
+    "declines": false,
+    "reason": "The assistant provides details about Sukanya Samriddhi Yojana from general knowledge, but the provided evidence contains no information about it.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:25:39+05:30"
+  },
+  "task:loop_v2:ML-09:c46d4d3d66ea": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately states the life insurance cover amount of Rs. 2.00 Lakh as per the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:25:41+05:30"
+  },
+  "task:loop_v2:ML-10:7f8e78edadd5": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant correctly answers the request regarding PMFBY benefits based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:25:43+05:30"
+  },
+  "task:loop_v2:QA-01:efde2765101c": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately addresses the request with fully supported facts from the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:26:32+05:30"
+  },
+  "task:loop_v2:QA-02:5d01a0798975": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the health insurance coverage amount and details based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:26:35+05:30"
+  },
+  "task:loop_v2:QA-03:5d80c474df7d": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "All categories under PMMY are collateral-free"
+    ],
+    "declines": false,
+    "reason": "The answer provides the correct categories and limits, but includes a claim about collateral-free loans not supported by the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:26:39+05:30"
+  },
+  "task:loop_v2:QA-04:9659b6af6731": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant accurately provides the requested toolkit incentive, training stipend, and collateral-free loan benefits based directly on the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:26:42+05:30"
+  },
+  "task:loop_v2:QA-05:e9dd7c0dd7bf": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "Income proof (e.g., salary slips, bank statements)."
+    ],
+    "declines": false,
+    "reason": "The assistant explains housing benefits and eligibility under PMAY well, but lists specific documents (salary slips, bank statements) not mentioned in the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:26:43+05:30"
+  },
+  "task:loop_v2:QA-06:32be55517fb6": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the pension slabs and age limits as supported by the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:27:31+05:30"
+  },
+  "task:loop_v2:QA-07:efcad3efa396": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the life insurance cover amount and annual premium for PMJJBY based on the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:27:34+05:30"
+  },
+  "task:loop_v2:QA-08:7d5084144887": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately explains the accidental death and disability coverage of PMSBY based on the evidence provided.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:27:38+05:30"
+  },
+  "task:loop_v2:QA-09:a9c3b30d023e": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the maternity cash incentives under PMMVY based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:27:46+05:30"
+  },
+  "task:loop_v2:QA-10:90f07bf65998": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant fully answers the request with accurate details supported by the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:27:47+05:30"
+  },
+  "task:loop_v2:QA-11:d1c57f5ba802": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately states the monthly pension and details based directly on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:28:41+05:30"
+  },
+  "task:loop_v2:QA-12:5b71178accc9": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the working capital micro-loan benefits, eligibility, and application steps for PM SVANidhi based entirely on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:28:43+05:30"
+  },
+  "task:loop_v2:QA-13:e402c82ffefa": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "Identity proof and address proof for STT [5]"
+    ],
+    "declines": false,
+    "reason": "The answer mentions identity and address proofs for STT which are not present in the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:28:45+05:30"
+  },
+  "task:loop_v2:QA-14:1ea10da05c27": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the loan range and details for the Stand-Up India scheme supported by the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:28:47+05:30"
+  },
+  "task:loop_v2:QA-15:ed76b490e288": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately states the annual scholarship amount and details from the evidence with proper citations.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:28:48+05:30"
+  },
+  "task:loop_v2:QA-16:d0516c268291": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the banking, RuPay card, and overdraft benefits of PMJDY based directly on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:29:31+05:30"
+  },
+  "task:loop_v2:QA-17:42d855b1c849": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "Proof of identity (Aadhaar, PAN, etc.)",
+      "Land records or cultivation proof",
+      "Bank account details"
+    ],
+    "declines": false,
+    "reason": "The assistant answers the request using evidence, but lists specific documents not provided in the text.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:29:44+05:30"
+  },
+  "task:loop_v2:QA-18:15966b42f555": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the financial assistance, eligibility, documents, and application steps for toilet construction under Swachh Bharat Mission based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:29:46+05:30"
+  },
+  "task:loop_v2:QA-19:7fbd4cdb5f9c": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the objectives and benefits of the requested scheme based on the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:29:48+05:30"
+  },
+  "task:loop_v2:QA-20:8044a1fea263": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the benefits and required documents for the scheme based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:29:50+05:30"
+  },
+  "task:loop_v2:QA-21:958711c74fc1": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the benefits and application documents from the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:30:31+05:30"
+  },
+  "task:loop_v2:QA-22:69497c128dc4": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the benefits, documents, and application steps based directly on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:30:43+05:30"
+  },
+  "task:loop_v2:QA-23:842419e0dd71": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the benefits and application documents for the Innovations for Defence Excellence scheme based on the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:30:46+05:30"
+  },
+  "task:loop_v2:QA-24:e89763bb2cf0": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant accurately details the benefits and documents required for the PM-YASASVI Post-Matric Scholarship based directly on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:30:49+05:30"
+  },
+  "task:loop_v2:QA-25:643af6eb809d": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer fully addresses the user's request with accurate information directly supported by the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:30:52+05:30"
+  },
+  "task:loop_v2:REF-03:4e2e18eef71a": {
+    "answers_request": false,
+    "unsupported_claims": [],
+    "declines": true,
+    "reason": "The assistant correctly declined a request for a non-existent scheme.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:31:32+05:30"
+  },
+  "task:single_pass_v2:FAQ-01:071f99bf3586": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant accurately explains what the Startup India Seed Fund Scheme is using details from the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:31:43+05:30"
+  },
+  "task:single_pass_v2:FAQ-02:a34f1656eff4": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately addresses the user's request using the provided evidence without any unsupported claims.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:31:47+05:30"
+  },
+  "task:single_pass_v2:FAQ-03:ac0b88c4c02e": {
+    "answers_request": false,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer provides general information about the scheme instead of answering the specific question about what AICTE expects from the institution.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:31:49+05:30"
+  },
+  "task:single_pass_v2:FAQ-04:f89343d9f439": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "Detailed project proposal",
+      "Technical and commercial viability plan",
+      "Team profile and expertise"
+    ],
+    "declines": false,
+    "reason": "The answer accurately explains the BIG scheme and its salient features based on the evidence, though it lists a few generic application documents not explicitly itemized as a specific checklist in the text.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:31:52+05:30"
+  },
+  "task:single_pass_v2:FAQ-05:bd4d5a21393e": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately addresses the user's request using the provided evidence without introducing unsupported claims.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:32:58+05:30"
+  },
+  "task:single_pass_v2:FAQ-06:d0cb5350ed61": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "Business plan and project proposal.",
+      "Proof of incorporation (for companies).",
+      "Detailed budget and timeline."
+    ],
+    "declines": false,
+    "reason": "The answer explains the purpose correctly, but lists documents that are not mentioned in the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:33:00+05:30"
+  },
+  "task:single_pass_v2:FAQ-07:6b2d59ce3064": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant fully answers the request with accurate facts directly supported by the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:33:02+05:30"
+  },
+  "task:single_pass_v2:FAQ-08:358ddccced88": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately addresses the user's request using the provided evidence and contains no unsupported claims.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:33:03+05:30"
+  },
+  "task:single_pass_v2:FAQ-09:e7d32ab9254f": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes how RPL programs were conducted in five modes and answers the request using the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:33:05+05:30"
+  },
+  "task:single_pass_v2:FAQ-10:000c544ee56c": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "Group 2 (other courses)"
+    ],
+    "declines": false,
+    "reason": "The answer successfully addresses the request and provides the scheme's objective, though it includes Group 2 which is not explicitly detailed in the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:33:33+05:30"
+  },
+  "task:single_pass_v2:ML-01:62fc5e6e299d": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately states the amount provided under the PM-KISAN scheme and is fully supported by the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:34:00+05:30"
+  },
+  "task:single_pass_v2:ML-02:4fad6c8a706d": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant appropriately offered a grievance draft for the PM-KISAN non-receipt issue as per standard workflow.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:34:02+05:30"
+  },
+  "task:single_pass_v2:ML-03:67ffb0bcaa28": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "पता के प्रमाण",
+      "आय के विवरण"
+    ],
+    "declines": false,
+    "reason": "The answer provides the correct health insurance amount and scheme details as requested, with minor unsupported document claims.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:34:06+05:30"
+  },
+  "task:single_pass_v2:ML-04:caa0f81c5ced": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant accurately answers the request regarding toolkit and loan benefits for carpenters and artisans under the PM Vishwakarma scheme based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:34:07+05:30"
+  },
+  "task:single_pass_v2:ML-05:64948aaa2f4c": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "- पहिले आणि पत्ता दर्शविणारा दस्तऐवज.",
+      "- व्यापार योजना आणि प्रस्ताव.",
+      "- बँक खाते विवरण."
+    ],
+    "declines": false,
+    "reason": "The assistant answers the loan amount question correctly based on the evidence, but lists documents that belong to a different scheme (PMEGP) rather than PMMY.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:34:37+05:30"
+  },
+  "task:single_pass_v2:ML-06:7ec03a2cc2ce": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "आधार कार्ड",
+      "बंक खात्याचे विवरण",
+      "उत्पन्नाचे प्रमाणपत्र"
+    ],
+    "declines": false,
+    "reason": "The answer provides correct details regarding age limit and pension amounts based on evidence, but lists documents not mentioned in the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:35:00+05:30"
+  },
+  "task:single_pass_v2:ML-07:332e01e550e4": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "প্রয়োজনীয় দলিলগুলি: আয় প্রমাণ, জমি রেকর্ড এবং পরিচয় প্রমাণ"
+    ],
+    "declines": false,
+    "reason": "The answer provides the benefits and eligibility based on the evidence, but lists documents not mentioned in the text.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:35:04+05:30"
+  },
+  "task:single_pass_v2:ML-08:66af6be2b301": {
+    "answers_request": false,
+    "unsupported_claims": [],
+    "declines": true,
+    "reason": "The assistant states it could not find the scheme in the provided evidence and declines to answer authoritatively.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:35:06+05:30"
+  },
+  "task:single_pass_v2:ML-09:a105997b0963": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately states the life insurance amount (2.00 Lakhs) as per the evidence and addresses the request fully.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:35:18+05:30"
+  },
+  "task:single_pass_v2:ML-10:299c8bfc3f9c": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the benefits of PMFBY based on the provided evidence without introducing unsupported claims.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:35:32+05:30"
+  },
+  "task:single_pass_v2:QA-01:efde2765101c": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately addresses the financial benefit and disbursement method of PM-KISAN using the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:36:01+05:30"
+  },
+  "task:single_pass_v2:QA-02:5d01a0798975": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the health insurance coverage amount and details based on the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:36:02+05:30"
+  },
+  "task:single_pass_v2:QA-03:db60f2201c3a": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately addresses the request based on the provided evidence regarding Mudra loan categories and limits.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:36:05+05:30"
+  },
+  "task:single_pass_v2:QA-04:9100c67c34fc": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately addresses all parts of the request using the provided evidence without any unsupported claims.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:36:08+05:30"
+  },
+  "task:single_pass_v2:QA-05:33d2c0343763": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "Income proof (e.g., salary slips, bank statements)."
+    ],
+    "declines": false,
+    "reason": "The assistant provides accurate housing benefits and eligibility details based on the evidence, with a minor unsupported specific example for income proof.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:36:32+05:30"
+  },
+  "task:single_pass_v2:QA-06:75fd2ac601f4": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the pension slabs and age limits based directly on the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:37:00+05:30"
+  },
+  "task:single_pass_v2:QA-07:45cefbab699b": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant correctly answers the request with the life insurance cover amount and annual premium supported by the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:37:03+05:30"
+  },
+  "task:single_pass_v2:QA-08:22eacffd38df": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately addresses the request based on the provided evidence, though it contains a minor typo in Hindi translation ('अपराधी' instead of 'दुर्घटना'), the meaning aligns with accidental death/disability coverage.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:37:06+05:30"
+  },
+  "task:single_pass_v2:QA-09:db682b29b394": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the cash incentives, eligibility, and documents for PMMVY based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:37:08+05:30"
+  },
+  "task:single_pass_v2:QA-10:74a2dbd7ca2e": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the LPG connection benefits, eligibility, documents, and steps based on the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:37:32+05:30"
+  },
+  "task:single_pass_v2:QA-11:52affc23be95": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately states the monthly pension provided under the scheme based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:38:00+05:30"
+  },
+  "task:single_pass_v2:QA-12:897b5be761a5": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "Loan is interest-free at 7%"
+    ],
+    "declines": false,
+    "reason": "The assistant accurately summarizes PM SVANidhi working capital benefits, but incorrectly calls the loan \"interest-free at 7%\" (it carries a 7% interest subsidy/rate, not interest-free).",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:38:02+05:30"
+  },
+  "task:single_pass_v2:QA-13:1f86a76cc960": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "Identity proof and address proof for STT/SP [5]"
+    ],
+    "declines": false,
+    "reason": "The evidence does not mention specific identity and address proof documents required for STT or Special Projects.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:38:07+05:30"
+  },
+  "task:single_pass_v2:QA-14:649dfe3cba3c": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the loan range and details for SC/ST and women entrepreneurs under the Stand-Up India scheme based on the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:38:20+05:30"
+  },
+  "task:single_pass_v2:QA-15:69dfba2361f9": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the scholarship amount and related details supported by the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:38:32+05:30"
+  },
+  "task:single_pass_v2:QA-16:9f596e7c308b": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the banking, RuPay card, and overdraft benefits of PMJDY based directly on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:39:00+05:30"
+  },
+  "task:single_pass_v2:QA-17:42d855b1c849": {
+    "answers_request": true,
+    "unsupported_claims": [
+      "Proof of identity (Aadhaar, PAN, etc.)",
+      "Land records or cultivation proof",
+      "Bank account details"
+    ],
+    "declines": false,
+    "reason": "The assistant provides correct information based on evidence but includes a list of required documents not found in the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:39:03+05:30"
+  },
+  "task:single_pass_v2:QA-18:506053e23e7e": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the household toilet construction assistance details, financial support amount, eligibility criteria, documents, and steps based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:39:07+05:30"
+  },
+  "task:single_pass_v2:QA-19:7fbd4cdb5f9c": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the objectives and benefits based on the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:39:08+05:30"
+  },
+  "task:single_pass_v2:QA-20:8044a1fea263": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant accurately provides the benefits and documents required for the scheme based directly on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:39:33+05:30"
+  },
+  "task:single_pass_v2:QA-21:958711c74fc1": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately provides the benefits and required documents for the Biotechnology Ignition Grant Scheme based on the evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:40:01+05:30"
+  },
+  "task:single_pass_v2:QA-22:69497c128dc4": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately reflects the benefits, documents, and details from the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:40:03+05:30"
+  },
+  "task:single_pass_v2:QA-23:842419e0dd71": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant accurately provides the benefits, eligibility, and application documents for iDEX based on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:40:06+05:30"
+  },
+  "task:single_pass_v2:QA-24:fe0c896ebfc7": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The answer accurately summarizes the benefits, documents, and steps from the provided evidence without introducing unsupported claims.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:40:10+05:30"
+  },
+  "task:single_pass_v2:QA-25:240b69162578": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant fully answers the request based accurately on the provided evidence.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:40:32+05:30"
+  },
+  "task:single_pass_v2:REF-03:4e2e18eef71a": {
+    "answers_request": true,
+    "unsupported_claims": [],
+    "declines": false,
+    "reason": "The assistant correctly identified that the requested scheme does not exist in the official corpus.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T15:41:01+05:30"
   }
 }

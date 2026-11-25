@@ -13,8 +13,10 @@ Each failure gets ONE root cause: the first pipeline stage that went wrong, chec
 | `gold/main` | 7 | 1 | 2 | 1 | 3 | 0 |
 | `gold/single_pass` | 4 | 1 | 2 | 1 | 0 | 0 |
 | `task/loop` | 24 | 2 | 9 | 13 | 0 | 0 |
+| `task/loop_v2` | 15 | 2 | 2 | 9 | 2 | 0 |
 | `task/single_pass` | 23 | 2 | 9 | 8 | 4 | 0 |
 | `task/single_pass_after_elig_fix` | 3 | 0 | 0 | 0 | 3 | 0 |
+| `task/single_pass_v2` | 21 | 2 | 2 | 11 | 6 | 0 |
 
 ## Subtypes and examples
 
@@ -58,6 +60,24 @@ Each failure gets ONE root cause: the first pipeline stage that went wrong, chec
 - **tool_call_error/required_tool_not_called** (1)
   - ML-02: needed search_schemes; called ['draft_grievance']
 
+### `task/loop_v2`
+
+- **hallucination/unsupported_claims** (9)
+  - FAQ-06: Business plan and project proposal.; Proof of incorporation (for companies).; Detailed budget and timeline.
+  - FAQ-10: Group 2 (other courses)
+  - ML-03: राशन कार्ड या अन्य पहचान के प्रमाण।; पता के प्रमाण।; आय के विवरण।
+- **retrieval_miss/gold_scheme_not_retrieved** (2)
+  - ML-08: evidence schemes ['pmjdy', 'nikshay', 'cbssc-msy']
+  - ML-10: evidence schemes ['pmfby', 'pkvy', 'pm-kisan']
+- **reasoning_error/did_not_answer** (1)
+  - FAQ-03: The assistant provides general scheme information and benefits instead of answering the specific question about what AICTE expects from the institution.
+- **tool_call_error/wrong_tool_arguments** (1)
+  - GRV-03: draft addressed to MOSDE, expected MSMEI
+- **tool_call_error/required_tool_not_called** (1)
+  - ML-02: needed search_schemes; called ['draft_grievance']
+- **reasoning_error/answered_from_wrong_scheme** (1)
+  - QA-18: cited ['sbm-g-ii'], gold sbm-g-i
+
 ### `task/single_pass`
 
 - **retrieval_miss/gold_scheme_not_retrieved** (9)
@@ -87,6 +107,30 @@ Each failure gets ONE root cause: the first pipeline stage that went wrong, chec
   - ELIG-15: checked ['pm-yasasvitcceobcebcdnts']
   - ELIG-16: checked ['ncscscst']
 
+### `task/single_pass_v2`
+
+- **hallucination/unsupported_claims** (11)
+  - FAQ-04: Detailed project proposal; Technical and commercial viability plan; Team profile and expertise
+  - FAQ-06: Business plan and project proposal.; Proof of incorporation (for companies).; Detailed budget and timeline.
+  - FAQ-10: Group 2 (other courses)
+- **reasoning_error/checked_wrong_scheme** (3)
+  - ELIG-10: checked ['wos-a']
+  - ELIG-15: checked ['pm-yasasvitcceobcebcdnts']
+  - ELIG-16: checked ['ncscscst']
+- **retrieval_miss/gold_scheme_not_retrieved** (2)
+  - ML-08: evidence schemes ['pmjdy', 'nikshay', 'cbssc-msy']
+  - ML-10: evidence schemes ['pmfby', 'pkvy', 'pm-kisan']
+- **reasoning_error/did_not_answer** (1)
+  - FAQ-03: The answer provides general information about the scheme instead of answering the specific question about what AICTE expects from the institution.
+- **tool_call_error/wrong_tool_arguments** (1)
+  - GRV-03: draft addressed to MOSDE, expected MSMEI
+- **tool_call_error/required_tool_not_called** (1)
+  - ML-02: needed search_schemes; called ['draft_grievance']
+- **reasoning_error/answered_from_wrong_scheme** (1)
+  - QA-18: cited ['sbm-g-ii'], gold sbm-g-i
+- **reasoning_error/did_not_refuse** (1)
+  - REF-03: The assistant correctly identified that the requested scheme does not exist in the official corpus.
+
 ## Human audit of the classifier
 
-- 20 failures sampled into `eval/failure_audit.csv`; not labelled yet.
+- 17 of 20 sampled failures labelled by a person: agreement 94%, Cohen's kappa 0.9179.

@@ -59,6 +59,8 @@ GROUNDING_CACHE_PATH = REPORT_DIR / "grounding_judge.json"
 CORRECTIONS_PATH = PROJECT_ROOT / "eval" / "golden_dataset_corrections.json"
 TASK_SUITE = "task"
 BASELINE_CONFIG = "loop"
+# The with/without-loop pair on the current code (all 80 tasks): the headline comparison of the report.
+CURRENT_PAIR = ("loop_v2", "single_pass_v2")
 LATENCY_PERCENTILES = (50, 95)
 TOKENS_PER_MILLION = 1_000_000
 
@@ -341,10 +343,12 @@ def build_report(runs: dict[str, dict[str, Any]], graded: dict[str, dict[str, di
                for name, rows in graded.items()}
     comparisons = {name: compare_configs(graded[BASELINE_CONFIG], rows) for name, rows in graded.items()
                    if name != BASELINE_CONFIG and BASELINE_CONFIG in graded}
+    current = (compare_configs(graded[CURRENT_PAIR[0]], graded[CURRENT_PAIR[1]])
+               if all(name in graded for name in CURRENT_PAIR) else None)
     return {"created_at": now_ist_iso(), "judge_model": settings.gemini_judge_model,
             "max_tool_calls": settings.agent_max_tool_calls,
             "price_usd_per_mtok": {"input": price_in, "output": price_out}, "corrected_task_ids": corrected_ids,
-            "configs": configs, "compared_with_loop": comparisons}
+            "configs": configs, "compared_with_loop": comparisons, "current_loop_vs_single_pass": current}
 
 
 def _pct(value: float | None) -> str:
@@ -383,6 +387,13 @@ def render_markdown(report: dict[str, Any]) -> str:
         "(each with the scheme's own text). The original key is unchanged; completion is shown under both.",
         "- `*_after_elig_fix` runs re-ran only the 20 eligibility tasks after the ELIG-01 fix (named-scheme searches no "
         "longer filtered by the citizen profile); `loop` and `single_pass` are the before-fix runs.",
+        "- `*_v2` runs re-ran all 80 tasks on the current code: the ELIG-01 fix plus a Reflector guard that stops "
+        "eligibility checks on plain info questions (QA-21 / ML-07). Their answers are judged with the eligibility tool "
+        "output the answer writer saw (before, the judge saw only the verdicts).",
+        "- **Not a held-out result.** The ELIG-01 fix, the Reflector guard and the answer-key corrections were all found "
+        "by studying failures in this same 80-task suite, so the `*_after_elig_fix` and `*_v2` scores are likely "
+        "optimistic. They show the fixes work on the cases that motivated them, not how the agent does on unseen "
+        "questions; a fresh held-out task set is needed for that.",
         "",
         "## Task completion",
         "",
@@ -414,25 +425,35 @@ def render_markdown(report: dict[str, Any]) -> str:
     for kind in kinds:
         lines.append(f"| {kind} | " + " | ".join(_num(c["tool_calls_avg_by_kind"].get(kind)) for c in configs.values())
                      + " |")
+    current = report.get("current_loop_vs_single_pass")
+    if current:
+        a, b = CURRENT_PAIR
+        lines += _comparison_lines(f"Current code: loop vs single pass (`{a}` vs `{b}`)", a, b, current)
     for name, cmp in report["compared_with_loop"].items():
-        t = cmp["completion"]
-        acted = cmp["completion_where_loop_acted"]
-        lines += ["", f"## With the loop vs `{name}` (same tasks)", "",
-                  f"- Completion: tasks only `loop` completed = {t['only_a']}, only `{name}` completed = {t['only_b']} "
-                  f"(n={t['n']}); exact McNemar p = {t['p_value']} "
-                  f"({'significant' if t['significant'] else 'not significant'} at 0.05).",
-                  f"- On the {acted['n']} tasks where the loop acted: `loop` completed {acted['a_completed']}, "
-                  f"`{name}` completed {acted['b_completed']}."]
-        for label, key, fmt in (("Tool calls per task", "tool_calls_diff", lambda v: f"{v:+.2f}"),
-                                ("Latency per task", "latency_ms_diff", lambda v: f"{v / 1000:+.1f}s"),
-                                ("Tokens per task", "tokens_diff", lambda v: f"{v:+.0f}")):
-            d = cmp[key]
-            lines.append(f"- {label} (`loop` minus `{name}`): {fmt(d['mean_diff'])} "
-                         f"(95% bootstrap CI {fmt(d['ci_low'])} to {fmt(d['ci_high'])}).")
-        if cmp["changed_tasks"]:
-            lines.append("- Tasks whose outcome changed: " + ", ".join(
-                f"`{c['id']}` ({'loop' if c['a'] else name} only)" for c in cmp["changed_tasks"]))
+        lines += _comparison_lines(f"With the loop vs `{name}` (same tasks)", BASELINE_CONFIG, name, cmp)
     return "\n".join(lines) + "\n"
+
+
+def _comparison_lines(heading: str, a: str, b: str, cmp: dict[str, Any]) -> list[str]:
+    """One paired comparison of configs `a` and `b` (as built by `compare_configs`) in Markdown."""
+    t = cmp["completion"]
+    acted = cmp["completion_where_loop_acted"]
+    lines = ["", f"## {heading}", "",
+             f"- Completion: tasks only `{a}` completed = {t['only_a']}, only `{b}` completed = {t['only_b']} "
+             f"(n={t['n']}); exact McNemar p = {t['p_value']} "
+             f"({'significant' if t['significant'] else 'not significant'} at 0.05).",
+             f"- On the {acted['n']} tasks where the loop acted in `{a}`: `{a}` completed {acted['a_completed']}, "
+             f"`{b}` completed {acted['b_completed']}."]
+    for label, key, fmt in (("Tool calls per task", "tool_calls_diff", lambda v: f"{v:+.2f}"),
+                            ("Latency per task", "latency_ms_diff", lambda v: f"{v / 1000:+.1f}s"),
+                            ("Tokens per task", "tokens_diff", lambda v: f"{v:+.0f}")):
+        d = cmp[key]
+        lines.append(f"- {label} (`{a}` minus `{b}`): {fmt(d['mean_diff'])} "
+                     f"(95% bootstrap CI {fmt(d['ci_low'])} to {fmt(d['ci_high'])}).")
+    if cmp["changed_tasks"]:
+        lines.append("- Tasks whose outcome changed: " + ", ".join(
+            f"`{c['id']}` ({a if c['a'] else b} only)" for c in cmp["changed_tasks"]))
+    return lines
 
 
 def main() -> None:

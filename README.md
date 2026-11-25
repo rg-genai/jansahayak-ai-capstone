@@ -262,9 +262,10 @@ The report goes to `eval/reports/gold_eval.md` and `eval/reports/gold_eval.json`
 - **Chunking experiments**: five chunking strategies, each in a temporary in-memory index (the production index is never touched). Embedding API only.
 
 ```powershell
-# Generate (hosted Qwen, resumable): with and without the Reflector loop
-.\.venv\Scripts\python.exe eval\run_task_eval.py --config loop
-.\.venv\Scripts\python.exe eval\run_task_eval.py --config single_pass
+# Generate (hosted Qwen, resumable): with and without the Reflector loop, on the current code.
+# `loop` / `single_pass` (first runs) and `*_after_elig_fix` (eligibility-only re-runs) are kept as "before" results.
+.\.venv\Scripts\python.exe eval\run_task_eval.py --config loop_v2
+.\.venv\Scripts\python.exe eval\run_task_eval.py --config single_pass_v2
 
 # Grade (no key needed with cached verdicts; the Gemini grounding judge is optional and capped)
 .\.venv\Scripts\python.exe eval\score_task_eval.py
@@ -274,6 +275,8 @@ The report goes to `eval/reports/gold_eval.md` and `eval/reports/gold_eval.json`
 # Chunking experiments (embedding API only; new vectors cached in data/eval_cache/)
 .\.venv\Scripts\python.exe eval\run_chunking_eval.py
 ```
+
+**Latest result (current code, 80 tasks):** with the loop **81.2%** (65/80; 95% CI 71.3%–88.3%) vs without **73.8%** (59/80; 63.2%–82.1%). The loop won 7 tasks and lost 1 (McNemar p = 0.07, not significant), at +545 tokens and +1.4s per task. This is not a held-out result: the fixes behind it were found on this same suite. Details and the before/after story: `docs/05_MODEL_CARD_AND_RESPONSIBLE_AI.md` §2.5.
 
 Reports: `eval/reports/task_eval.md`, `failure_taxonomy.md`, `chunking_eval.md` (each with a `.json`). Grounding-judge verdicts are cached in `eval/reports/grounding_judge.json`. Every saved run records the git revision and agent settings it was made with.
 

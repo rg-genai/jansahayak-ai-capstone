@@ -74,6 +74,32 @@ After hardening `backend/guardrails/injection.py` and `backend/agent/prompts.py`
 - **Indian PII Masking Rate (Aadhaar, PAN, Mobile, IFSC, Bank Account)**: **100.0% (3/3, zero leakage)**
 - **Fabricated Scheme Honest Refusal (`RT-20`)**: **PASS (1/1)**
 
+### 2.5 Task Completion and the Reflector Loop (80 Tasks, With vs Without the Loop)
+Source: `eval/reports/task_eval.md` (runs `loop_v2` and `single_pass_v2`, current code, all 80 tasks of `eval/golden_dataset.json`). A task is done only if it passes the fixed rule for its kind and stays within the 10-tool-call cap; information answers are checked by a grounding judge (`gemini-3.5-flash-lite`) against the evidence the answer writer saw. Ranges are 95% Wilson intervals.
+
+| Metric | With the loop (`loop_v2`) | Without the loop (`single_pass_v2`) |
+| :--- | :---: | :---: |
+| **Task completion** | **81.2%** (65/80; 71.3%–88.3%) | 73.8% (59/80; 63.2%–82.1%) |
+| Eligibility checks | 100.0% (20/20; 83.9%–100.0%) | 85.0% (17/20; 64.0%–94.8%) |
+| Information questions | 68.9% (31/45; 54.3%–80.5%) | 64.4% (29/45; 49.8%–76.8%) |
+| Refusals | 100.0% (7/7; 64.6%–100.0%) | 85.7% (6/7; 48.7%–97.4%) |
+| Grievance drafting / tracking | 85.7% (6/7) / 100.0% (1/1) | 85.7% (6/7) / 100.0% (1/1) |
+| Avg tool calls / tokens / latency per task | 1.34 / 7,092 / 15.0s | 1.19 / 6,547 / 13.7s |
+| Step-cap (10 tool calls) hits | 0 | 0 |
+
+**Paired comparison:** the loop completed 7 tasks that single pass failed and lost 1 (exact McNemar p = 0.07, so not significant at 0.05). On the 7 tasks where the loop actually acted, it completed 7 against single pass's 3. Cost: +0.15 tool calls, +545 tokens and +1.4s per task.
+
+**How we got here (diagnose → fix → re-measure).** The first full run had the loop slightly *behind* single pass (70.0%, 56/80 vs 71.2%, 57/80). Reading the saved runs showed two causes:
+1. **The Reflector checked eligibility on 38 of 45 plain information questions** ("what does PM Vishwakarma give?"). This added tokens and, when several schemes were checked, pushed the answer into the "which schemes am I eligible for" layout. Fix: a deterministic guard in `_validate_reflection` (`info_question_not_about_citizen`, regression tests QA-21 / ML-07), in line with our "guard over prompt" approach for the 8B model.
+2. **The grounding judge could not see the eligibility tool output** the answer writer used, so documents copied correctly from official scheme data were scored as hallucinations (e.g. FAQ-05). Fix: the judge now receives the same eligibility details.
+
+Failure root causes (`eval/reports/failure_taxonomy.md`) fell from 24 failures (13 hallucination, 9 retrieval miss) for the first loop run to 15 (9 hallucination, 2 retrieval miss, 2 tool-call error, 2 reasoning error) for `loop_v2`; `single_pass_v2` has 21 (11 hallucination, 6 reasoning error).
+
+**Limitations, stated plainly:**
+- **Not a held-out result.** The guard, the ELIG-01 search fix and six answer-key corrections were all found by studying failures in this same 80-task suite, so these scores are likely optimistic for unseen questions.
+- **Run-to-run noise is a few tasks.** Re-running single pass with unchanged code for the non-eligibility tasks still flipped 6 of them (5 newly failed, 1 newly passed: LLM and judge sampling), so a gap of 6 tasks on 80 is suggestive, not proof.
+- Under the original (uncorrected) answer key, completion is 73.8% (loop) vs 68.8% (single pass); `eval/golden_dataset_corrections.json` documents each correction with the scheme's own text.
+
 ---
 
 ## 3. Categorized Failure Taxonomy (`F1`–`F6`)
