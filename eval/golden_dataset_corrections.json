@@ -1,0 +1,61 @@
+{
+  "description": "Documented corrections to answer-key verdicts in eval/golden_dataset.json. The original file is never edited; eval/score_task_eval.py reports task completion under BOTH the original key and this corrected key.",
+  "created_at": "2026-11-25",
+  "rule": "A verdict of ELIGIBLE needs every scheme condition to be established. Where the task's citizen profile gives only age or income and the scheme's official eligibility text requires other conditions the profile does not state, eligibility can neither be confirmed nor ruled out, so the acceptable verdicts are those that express that uncertainty. The corrected verdicts follow from the scheme text, not from the agent's output.",
+  "corrections": [
+    {
+      "id": "ELIG-06",
+      "field": "gold_verdict",
+      "original": "ELIGIBLE",
+      "accepted": ["PARTIALLY_ELIGIBLE", "NEEDS_MORE_INFO"],
+      "profile": {"age": 25},
+      "reason": "Age 25 meets the 15-35 age band, but the scheme is for poor rural youth from specific households, which the profile does not state.",
+      "scheme_text": "The target group for DDU-GKY is poor rural youth in the age group 15-35. ... Youth from MGNREGA worker households with at least 15 days of work in the previous financial year ..."
+    },
+    {
+      "id": "ELIG-10",
+      "field": "gold_verdict",
+      "original": "ELIGIBLE",
+      "accepted": ["PARTIALLY_ELIGIBLE", "NEEDS_MORE_INFO"],
+      "profile": {"age": 42},
+      "reason": "Age 42 is within 27-57, but the applicant must be female and hold at least a postgraduate degree; the profile states neither.",
+      "scheme_text": "The applicant must be a FEMALE. ... The age of the applicant must be between 27 and 57 years ... The applicant must hold either of the following Minimum essential qualification - a) Minimum Post Graduate degree ..."
+    },
+    {
+      "id": "ELIG-16",
+      "field": "gold_verdict",
+      "original": "ELIGIBLE",
+      "accepted": ["PARTIALLY_ELIGIBLE", "NEEDS_MORE_INFO"],
+      "profile": {"annual_income_inr": 400000, "social_category": "SC"},
+      "reason": "SC category and income fit, but the applicant must hold an admission offer for a master's/PhD abroad with at least 60% marks; the profile does not state this.",
+      "scheme_text": "The applicant must have been admitted to or received an unconditional offer of admission for pursuing a master's / Ph.D. from an institute/university located abroad. ... must have secured at least 60% marks ..."
+    },
+    {
+      "id": "ELIG-17",
+      "field": "gold_verdict",
+      "original": "ELIGIBLE",
+      "accepted": ["PARTIALLY_ELIGIBLE", "NEEDS_MORE_INFO"],
+      "profile": {"annual_income_inr": 400000},
+      "reason": "Income is under the Rs 8,00,000 cap, but the applicant must be a girl student in the first year (or lateral-entry second year) of a diploma course; the profile does not state this.",
+      "scheme_text": "The applicant must be a Girl Student. The applicant must be pursuing either the First year of the Diploma course OR the Second year of the Diploma course through lateral entry. The annual income of the family ... must not be more than Rs 8,00,000 per annum ..."
+    },
+    {
+      "id": "ELIG-19",
+      "field": "gold_verdict",
+      "original": "ELIGIBLE",
+      "accepted": ["PARTIALLY_ELIGIBLE", "NEEDS_MORE_INFO"],
+      "profile": {"annual_income_inr": 400000},
+      "reason": "Income is under the Rs 8,00,000 cap, but the applicant must be a girl student in the first year (or lateral-entry second year) of a degree course; the profile does not state this.",
+      "scheme_text": "The applicant must be a Girl Student. The applicant must be pursuing either the First year of the degree course OR the Second year of the Degree course through lateral entry. The annual income of the family ... must not be more than Rs 8,00,000/- per annum ..."
+    },
+    {
+      "id": "ELIG-20",
+      "field": "gold_verdict",
+      "original": "ELIGIBLE",
+      "accepted": ["PARTIALLY_ELIGIBLE", "NEEDS_MORE_INFO"],
+      "profile": {"annual_income_inr": 125000, "social_category": "OBC"},
+      "reason": "Income is under the Rs 2,50,000 cap, but the student must be in a recognised pre-matric course with at least 60% attendance; the profile does not state this.",
+      "scheme_text": "The scholarship award will be sanctioned in the case of students whose parents/guardians' income from all sources does not exceed Rs 2,50,000/- per annum. The scholarship will be tenable only in such institutions and for such pre-matriculation courses, which have been duly recognized ... Regular attendance records of not less than 60% in the previous year should be a pre-requisite ..."
+    }
+  ]
+}

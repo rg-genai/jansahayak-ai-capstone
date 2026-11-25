@@ -1402,5 +1402,563 @@
     "reason": "The assistant correctly states the exact email address provided in the reference answer.",
     "judge_model": "gemini-3.5-flash-lite",
     "judged_at": "2026-11-25T08:51:34+05:30"
+  },
+  "main:GQA-001:c7889157a94e": {
+    "score": 5,
+    "reason": "The assistant correctly states that the financial assistance is provided once the Community Radio is made operational.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:33:42+05:30"
+  },
+  "main:GQA-002:040c86d12dab": {
+    "score": 5,
+    "reason": "The assistant's answer includes all the required documents mentioned in the reference, along with additional correct application details.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:33:43+05:30"
+  },
+  "main:GQA-003:dc8c318b7cd0": {
+    "score": 5,
+    "reason": "The assistant correctly stated the minimum percentage required for post-graduation as 60%.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:33:44+05:30"
+  },
+  "main:GQA-004:44bf295cc194": {
+    "score": 5,
+    "reason": "The assistant accurately details the application process via the National Scholarship Portal, matching the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:33:45+05:30"
+  },
+  "main:GQA-005:9c729705744e": {
+    "score": 5,
+    "reason": "The assistant correctly states that the monthly stipend is ₹6,000 as per the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:33:46+05:30"
+  },
+  "main:GQA-006:d40918b12bea": {
+    "score": 5,
+    "reason": "The assistant correctly states the condition that the minority population must be more than 25% within a 15 km radius.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:34:41+05:30"
+  },
+  "main:GQA-009:dd01c43274d1": {
+    "score": 4,
+    "reason": "The assistant states the main registration steps via the website and Aadhaar, but misses some specific details from the reference like uploading the consent form and searching for the beneficiary.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:34:45+05:30"
+  },
+  "main:GQA-012:840c3e0068e7": {
+    "score": 4,
+    "reason": "The assistant states the main registration steps correctly, though with slightly more detail than the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:34:47+05:30"
+  },
+  "main:GQA-013:f9fcce061eb7": {
+    "score": 5,
+    "reason": "The assistant includes all key facts from the reference along with additional correct eligibility details.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:34:48+05:30"
+  },
+  "main:GQA-014:225db1920a89": {
+    "score": 5,
+    "reason": "The assistant correctly states that the National Centre for Earth Science Studies Internship Scheme does not provide financial aid or stipend.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:35:42+05:30"
+  },
+  "main:GQA-016:d7e170acfb95": {
+    "score": 5,
+    "reason": "The assistant correctly identifies that interns must submit a research paper/report on a selected topic along with notes to the concerned officer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:35:44+05:30"
+  },
+  "main:GQA-020:3154f5f8cbe6": {
+    "score": 1,
+    "reason": "The assistant's answer is completely off-topic and discusses Mudra Yojana instead of Ujjwala Yojana 2.0.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:35:47+05:30"
+  },
+  "main:GQA-023:7a0e8f5d765e": {
+    "score": 4,
+    "reason": "The assistant correctly states the required documents/submissions, but includes extra information not asked for in the question.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:35:48+05:30"
+  },
+  "main:GQA-026:4df3f0643498": {
+    "score": 5,
+    "reason": "The assistant states all eligible undergraduate degree programs matching the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:36:42+05:30"
+  },
+  "main:GQA-027:ced99bc1ad66": {
+    "score": 5,
+    "reason": "The assistant's answer correctly states the deadline for submitting the life certificate and includes helpful additional details.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:36:44+05:30"
+  },
+  "main:GQA-031:604d90f9f612": {
+    "score": 5,
+    "reason": "The assistant correctly states the minimum age requirement of 14 years and mentions the age range up to 40 years.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:36:46+05:30"
+  },
+  "main:GQA-032:df4e1265e8a3": {
+    "score": 5,
+    "reason": "The assistant includes all required documents mentioned in the reference answer and adds minor helpful details without contradicting it.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:36:47+05:30"
+  },
+  "main:GQA-033:bfff8085c15a": {
+    "score": 1,
+    "reason": "The assistant incorrectly claims the scheme does not specify an age range and gives wrong eligibility details.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:36:48+05:30"
+  },
+  "main:GQA-034:970a026c099f": {
+    "score": 5,
+    "reason": "The assistant's answer accurately captures the core purpose stated in the reference and provides relevant details about the scheme.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:37:43+05:30"
+  },
+  "main:GQA-039:fd639108d136": {
+    "score": 5,
+    "reason": "The assistant correctly states that a medical certificate from a government hospital is required to prove physical fitness.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:37:45+05:30"
+  },
+  "main:GQA-041:ce67b20aa3e0": {
+    "score": 5,
+    "reason": "The assistant correctly states the stipend amount of Rs. 7,000 per month for the Rashtriya Gram Swaraj Abhiyan - Internship Program as per the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:37:47+05:30"
+  },
+  "main:GQA-044:b3d17a869f44": {
+    "score": 5,
+    "reason": "The assistant correctly states the free transport provisions and includes accurate supplementary details about the scheme.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:37:48+05:30"
+  },
+  "main:GQA-046:70acdc6197af": {
+    "score": 5,
+    "reason": "The assistant's answer correctly states the minimum fee required as per the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:38:43+05:30"
+  },
+  "main:GQA-047:0fc0f51e88fc": {
+    "score": 3,
+    "reason": "The assistant mentions general categories of documents rather than the specific ones listed in the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:38:44+05:30"
+  },
+  "main:GQA-048:1d6247a2c755": {
+    "score": 5,
+    "reason": "The assistant correctly includes the specific requirement for Painting, Sculpture, and Applied Arts along with the general required documents.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:38:45+05:30"
+  },
+  "main:GQA-050:45ed01dcff53": {
+    "score": 5,
+    "reason": "The assistant correctly states the maximum monthly income limit of ₹15,000 as per the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:38:47+05:30"
+  },
+  "main:GQA-056:8aa477ebd8c3": {
+    "score": 5,
+    "reason": "The assistant accurately details the candidate registration process on the Apprenticeship Portal as outlined in the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:38:48+05:30"
+  },
+  "main:GQA-057:53a5ddba6059": {
+    "score": 4,
+    "reason": "States the correct minimum eligible incremental net sales as 20% of X, though adds extra conditional details not explicitly required.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:39:42+05:30"
+  },
+  "main:GQA-059:cfd32494b424": {
+    "score": 5,
+    "reason": "The assistant's answer lists all the required documents matching the reference text.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:39:44+05:30"
+  },
+  "main:GQA-060:d38b6d1b3aa0": {
+    "score": 5,
+    "reason": "The assistant correctly states the exact email address required to contact SFIO for clarifications.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:39:46+05:30"
+  },
+  "single_pass:GQA-001:529622a59e44": {
+    "score": 5,
+    "reason": "The assistant correctly states that financial assistance is provided once the CRS is made operational, matching the reference while providing helpful additional context.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:39:47+05:30"
+  },
+  "single_pass:GQA-002:19516642febc": {
+    "score": 5,
+    "reason": "The assistant includes all the required documents from the reference answer, along with additional relevant application documents.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:39:48+05:30"
+  },
+  "single_pass:GQA-003:46b9bd3abb8b": {
+    "score": 5,
+    "reason": "The assistant correctly states the minimum percentage required for post-graduation as 60%.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:40:42+05:30"
+  },
+  "single_pass:GQA-004:4847cab81cb2": {
+    "score": 5,
+    "reason": "The assistant accurately details the application process matching the reference, along with additional relevant scheme details.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:40:44+05:30"
+  },
+  "single_pass:GQA-005:9a79e190647a": {
+    "score": 5,
+    "reason": "The assistant correctly states the monthly stipend of ₹6,000 as mentioned in the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:40:45+05:30"
+  },
+  "single_pass:GQA-006:1472515624f9": {
+    "score": 5,
+    "reason": "The assistant correctly states the condition that the minority population must be more than 25% within a 15 km radius.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:40:47+05:30"
+  },
+  "single_pass:GQA-007:ca9488503328": {
+    "score": 5,
+    "reason": "The assistant's answer accurately covers all the eligibility requirements stated in the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:40:49+05:30"
+  },
+  "single_pass:GQA-008:e4aa2e3a38fb": {
+    "score": 5,
+    "reason": "The assistant's answer states all the required documents accurately and includes helpful extra information.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:41:43+05:30"
+  },
+  "single_pass:GQA-009:1c165abc8a0b": {
+    "score": 5,
+    "reason": "The assistant accurately covers the registration process as outlined in the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:41:44+05:30"
+  },
+  "single_pass:GQA-010:ad9f07b51c45": {
+    "score": 5,
+    "reason": "The assistant correctly states the maximum subsidy amount of ₹2,50,000 per beneficiary.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:41:46+05:30"
+  },
+  "single_pass:GQA-011:5b07c3e5a518": {
+    "score": 1,
+    "reason": "The assistant's answer is completely wrong and fails to provide the correct tracking method.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:41:47+05:30"
+  },
+  "single_pass:GQA-012:36e2a22655a9": {
+    "score": 5,
+    "reason": "The assistant's answer correctly outlines the steps to register for the National Energy Conservation Award, matching the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:41:49+05:30"
+  },
+  "single_pass:GQA-013:503a7c19c611": {
+    "score": 5,
+    "reason": "The assistant includes the correct documents mentioned in the reference along with additional relevant eligibility documents.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:42:43+05:30"
+  },
+  "single_pass:GQA-014:cfab9ff94642": {
+    "score": 5,
+    "reason": "The assistant correctly states that no financial aid or stipend is provided, matching the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:42:44+05:30"
+  },
+  "single_pass:GQA-015:11ab7064762a": {
+    "score": 5,
+    "reason": "The assistant correctly states that micro or small scale industries are eligible, aligning with the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:42:46+05:30"
+  },
+  "single_pass:GQA-016:67909434d02a": {
+    "score": 5,
+    "reason": "The assistant correctly identifies that a research paper/report must be submitted at the end of the internship.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:42:48+05:30"
+  },
+  "single_pass:GQA-017:7af103e37d75": {
+    "score": 4,
+    "reason": "States that lease workshed costs can be included, but misses the specific condition that the lease rental should be for a maximum of 3 years.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:42:49+05:30"
+  },
+  "single_pass:GQA-018:5517cec93060": {
+    "score": 5,
+    "reason": "The assistant correctly states the total token stipend amount and its installment breakdown as per the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:43:43+05:30"
+  },
+  "single_pass:GQA-019:346ce6ed8a0b": {
+    "score": 5,
+    "reason": "The assistant's answer correctly lists the specific amenities for tourists as stated in the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:43:45+05:30"
+  },
+  "single_pass:GQA-020:51217a87047c": {
+    "score": 4,
+    "reason": "The assistant correctly mentions the mandatory Self-Declaration for migrants, though it also includes standard KYC documents generally required for all applicants.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:43:47+05:30"
+  },
+  "single_pass:GQA-021:0b442c5646c6": {
+    "score": 5,
+    "reason": "The assistant correctly states that registration with the NGO-PS Portal is mandatory.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:43:47+05:30"
+  },
+  "single_pass:GQA-022:cf33976b273f": {
+    "score": 5,
+    "reason": "The assistant correctly states the maximum time gap is six months and includes helpful context.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:43:49+05:30"
+  },
+  "single_pass:GQA-023:bf884a5fd0d9": {
+    "score": 5,
+    "reason": "The assistant's answer correctly lists all the required documents and submissions mentioned in the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:44:43+05:30"
+  },
+  "single_pass:GQA-024:4ef682dc8ce4": {
+    "score": 5,
+    "reason": "The assistant correctly provided the exact URL mentioned in the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:44:45+05:30"
+  },
+  "single_pass:GQA-025:86189042e683": {
+    "score": 5,
+    "reason": "The assistant's answer states the correct maximum incentive amount and conditions, matching the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:44:46+05:30"
+  },
+  "single_pass:GQA-026:3d78cbf4a819": {
+    "score": 5,
+    "reason": "The assistant correctly lists all the eligible undergraduate degree programs mentioned in the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:44:48+05:30"
+  },
+  "single_pass:GQA-027:55c18fecc074": {
+    "score": 5,
+    "reason": "The assistant's answer correctly states the deadline and includes accurate additional details from the scheme.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:44:49+05:30"
+  },
+  "single_pass:GQA-028:5e12349accd5": {
+    "score": 5,
+    "reason": "The assistant accurately lists all the required documents and formats specified in the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:45:43+05:30"
+  },
+  "single_pass:GQA-029:8e16edef4e41": {
+    "score": 5,
+    "reason": "The assistant correctly stated that each Nyaya Sakhi receives ₹200/- per meeting as an incentive, matching the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:45:45+05:30"
+  },
+  "single_pass:GQA-030:0c71d2b3b06f": {
+    "score": 5,
+    "reason": "The assistant accurately states that the mobile number is verified via OTP after logging in.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:45:46+05:30"
+  },
+  "single_pass:GQA-031:8e3870407a8d": {
+    "score": 5,
+    "reason": "The assistant accurately states the minimum age requirement of 14 years and mentions the upper age limit of 40 years as in the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:45:48+05:30"
+  },
+  "single_pass:GQA-032:da737c1a51a2": {
+    "score": 5,
+    "reason": "The assistant's answer states all the required documents accurately and completely according to the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:45:49+05:30"
+  },
+  "single_pass:GQA-033:399c3cc61f51": {
+    "score": 2,
+    "reason": "The assistant gives an incorrect age range and eligibility criteria, confusing the skill development training with the scholarship component of the scheme.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:46:43+05:30"
+  },
+  "single_pass:GQA-034:30bb5ee0c518": {
+    "score": 5,
+    "reason": "The assistant's answer correctly states the core purpose and provides accurate additional details consistent with the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:46:45+05:30"
+  },
+  "single_pass:GQA-035:1478167b8792": {
+    "score": 5,
+    "reason": "The assistant's answer includes all the required documents and matches the reference completely.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:46:47+05:30"
+  },
+  "single_pass:GQA-036:faf000431cfd": {
+    "score": 4,
+    "reason": "States most registration details correctly, missing only the nominator/applicant type.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:46:48+05:30"
+  },
+  "single_pass:GQA-037:681bc02396ac": {
+    "score": 5,
+    "reason": "The assistant correctly states the monthly fellowship amount for GATE/NET qualified candidates as ₹24,800/- for JRF and provides matching details.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:46:49+05:30"
+  },
+  "single_pass:GQA-038:87cd6f968d69": {
+    "score": 5,
+    "reason": "The assistant correctly states that someone working in an NGO in the renewable energy area is eligible to apply.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:47:43+05:30"
+  },
+  "single_pass:GQA-039:5925fe1c1e1a": {
+    "score": 5,
+    "reason": "The assistant's answer correctly states the exact document required based on the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:47:45+05:30"
+  },
+  "single_pass:GQA-040:f4be4b801b1c": {
+    "score": 5,
+    "reason": "The assistant's answer accurately states all the steps to apply after registration as outlined in the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:47:46+05:30"
+  },
+  "single_pass:GQA-041:3161bd0aaee4": {
+    "score": 5,
+    "reason": "The assistant correctly states the stipend amount of Rs. 7,000 per month along with additional accurate details from the scheme.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:47:48+05:30"
+  },
+  "single_pass:GQA-042:32f8cce301d2": {
+    "score": 5,
+    "reason": "The assistant correctly states that family members not engaged in the trade are not eligible to register.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:47:49+05:30"
+  },
+  "single_pass:GQA-043:6c64b9fb58b9": {
+    "score": 5,
+    "reason": "The assistant correctly identifies the Utilisation Certificate and the final project report as the required documents.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:48:43+05:30"
+  },
+  "single_pass:GQA-044:0cbaa3a74698": {
+    "score": 5,
+    "reason": "The assistant accurately answers the question regarding free transport and provides additional correct details from the scheme.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:48:45+05:30"
+  },
+  "single_pass:GQA-045:b6b6b4f4f951": {
+    "score": 5,
+    "reason": "The assistant correctly states the email address for submitting proposals for research studies as training-mospi@nic.in.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:48:47+05:30"
+  },
+  "single_pass:GQA-046:c5023327455e": {
+    "score": 5,
+    "reason": "The assistant correctly states the minimum fee requirement matching the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:48:48+05:30"
+  },
+  "single_pass:GQA-047:21dbea3ddcb8": {
+    "score": 1,
+    "reason": "The assistant failed to answer the question about the Pradhan Mantri Ujjwala Yojana and instead provided details for a completely different scheme.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:48:49+05:30"
+  },
+  "single_pass:GQA-048:a85d032d2b36": {
+    "score": 5,
+    "reason": "The assistant correctly includes the required document for Painting, Sculpture, and Applied Arts along with other standard documents.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:49:43+05:30"
+  },
+  "single_pass:GQA-049:7097b030e13c": {
+    "score": 5,
+    "reason": "The assistant correctly states the token remuneration as ₹10,000 per month and includes accurate additional context from the scheme.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:49:45+05:30"
+  },
+  "single_pass:GQA-050:960362495d1c": {
+    "score": 5,
+    "reason": "The assistant correctly states the maximum monthly income limit of ₹15,000 and provides accurate additional details.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:49:47+05:30"
+  },
+  "single_pass:GQA-051:59b8abdf1b7d": {
+    "score": 5,
+    "reason": "The assistant's answer accurately lists all the required documents as stated in the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:49:48+05:30"
+  },
+  "single_pass:GQA-052:57374adb0962": {
+    "score": 5,
+    "reason": "The assistant provides a comprehensive and accurate list of documents required for the PMFBY online application along with relevant steps.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:49:50+05:30"
+  },
+  "single_pass:GQA-053:118fdbc3ca68": {
+    "score": 5,
+    "reason": "The assistant correctly states the maximum SPARK Grant amount and includes additional relevant details without contradicting the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:50:44+05:30"
+  },
+  "single_pass:GQA-054:01ef75dd3dc3": {
+    "score": 5,
+    "reason": "The assistant correctly states the maximum age limit matching the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:50:45+05:30"
+  },
+  "single_pass:GQA-055:b7c394f220a2": {
+    "score": 5,
+    "reason": "The assistant's answer accurately lists all the required documents as stated in the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:50:47+05:30"
+  },
+  "single_pass:GQA-056:b4040450f1c6": {
+    "score": 5,
+    "reason": "The assistant correctly outlines the registration process involving Aadhaar, e-KYC, mobile number, and email ID.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:50:48+05:30"
+  },
+  "single_pass:GQA-057:69e78309c694": {
+    "score": 2,
+    "reason": "The assistant states the minimum eligible incremental net sales is 40% of X, whereas the reference states it is 20% of X.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:50:50+05:30"
+  },
+  "single_pass:GQA-058:9d9f6a616eee": {
+    "score": 5,
+    "reason": "The assistant correctly states the maximum percentage of OBC (non-creamy layer) and poor general candidates is up to 40%.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:51:44+05:30"
+  },
+  "single_pass:GQA-059:b9e7e56feaec": {
+    "score": 5,
+    "reason": "The assistant's answer includes all the required documents stated in the reference.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:51:45+05:30"
+  },
+  "single_pass:GQA-060:46975f9a3409": {
+    "score": 5,
+    "reason": "The assistant correctly provided the exact email address mentioned in the reference answer.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T10:51:47+05:30"
+  },
+  "main:GQA-007:5ba53df6fc5d": {
+    "score": 2,
+    "reason": "The assistant failed to provide the specific eligibility requirements and instead asked a clarifying question.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T11:02:19+05:30"
+  },
+  "main:GQA-017:4a0688aeee06": {
+    "score": 3,
+    "reason": "The assistant correctly states that the workshed cost can be included, but misses the 3-year lease limit and includes incorrect eligibility turnover criteria.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T11:02:21+05:30"
+  },
+  "main:GQA-038:312a3334b957": {
+    "score": 5,
+    "reason": "The assistant correctly states that individuals working in the renewable energy sector in NGOs are eligible.",
+    "judge_model": "gemini-3.5-flash-lite",
+    "judged_at": "2026-11-25T11:02:22+05:30"
   }
 }

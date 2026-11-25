@@ -1,0 +1,1725 @@
+{
+  "meta": {
+    "name": "loop_after_elig_fix",
+    "description": "Full agent with the loop, after the ELIG-01 named-scheme search fix",
+    "kind": "agent",
+    "llm": "qwen",
+    "retrieval_mode": "hybrid_rerank",
+    "top_k": null,
+    "reflection": true,
+    "exclude_faq_chunks": false,
+    "model": "Qwen/Qwen3-8B",
+    "faq_chunks_excluded": false,
+    "web_fallback": "disabled",
+    "started_at": "2026-11-25T11:17:20+05:30",
+    "git_revision": "e77169e-dirty",
+    "settings": {
+      "llm_model": "Qwen/Qwen3-8B",
+      "agent_reflection_enabled": true,
+      "agent_max_tool_calls": 10,
+      "agent_max_reflection_rounds": 2,
+      "agent_token_budget": 24000,
+      "retrieval_top_k_override": null,
+      "retrieval_exclude_faq_chunks": false,
+      "web_fallback_threshold": 0.25
+    },
+    "suite": "task",
+    "updated_at": "2026-11-25T11:22:58+05:30"
+  },
+  "results": {
+    "ELIG-01": {
+      "query": "I am 60 years old. Am I eligible for Pradhan Mantri Kaushal Vikas Yojana - Recognition Of Prior Learning?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nPradhan Mantri Kaushal Vikas Yojana - Recognition Of Prior Learning [1]  \n\n**Key Benefits & Eligibility**  \nThis scheme helps Indian youth with prior skills or experience get industry-relevant certifications. However, **you are not eligible** as the age limit is 18–45 years [1].  \n\n**Documents Needed**  \n- Aadhaar card  \n- Aadhaar-linked bank account [1]  \n\n**Next Steps**  \nSince your age exceeds the limit, consider other skill development schemes suitable for senior citizens. For more options, visit [myscheme.gov.in](https://www.myscheme.gov.in).",
+      "status": "ok",
+      "retrieved_schemes": [
+        "pmkvy-rpl",
+        "pmkvy-stt"
+      ],
+      "chunks_given": 7,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 22667.8,
+      "answer_ms": 8067.4,
+      "planning_ms": 3492.8,
+      "total_ms": 34314.9,
+      "prompt_tokens": 6200,
+      "completion_tokens": 474,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "I am 60 years old. Am I eligible for Pradhan Mantri Kaushal Vikas Yojana - Recognition Of Prior Learning?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "pmkvy-rpl"
+          },
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": null
+        }
+      ],
+      "evidence_chunk_ids": [
+        "pmkvy-rpl__eligibility_exclusions__0",
+        "pmkvy-rpl__faq_group__2",
+        "pmkvy-rpl__process_documents__0",
+        "pmkvy-rpl__faq_group__12",
+        "pmkvy-rpl__faq_group__9",
+        "pmkvy-rpl__overview_benefits__0",
+        "pmkvy-stt__eligibility_exclusions__0"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "pmkvy-rpl",
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "pmkvy-rpl"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-02": {
+      "query": "I am 70 years old. Am I eligible for SERB - POWER Fellowship?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nSERB - POWER Fellowship is designed for outstanding women researchers and innovators in science and engineering.  \n\n**Key Benefits & Eligibility**  \n- **Benefits**: ₹15,000/month fellowship + ₹10 Lakhs annual research grant [4].  \n- **Eligibility**: Must be an Indian citizen between 35-55 years of age, holding a Ph.D., and in regular service [2].  \n\n**Documents Needed**  \n- Identity proof  \n- Passport size photo  \n- Proof of age  \n- Educational certificates  \n- Professional awards/fellowship details  \n- Bank details [5].  \n\n**Next Steps**  \nYou are **Not Eligible** as your age (70) exceeds the maximum limit of 55 years [1]. Consider other schemes tailored for senior citizens. Review the exclusion warnings and clarify your profile with the scheme’s criteria.",
+      "status": "ok",
+      "retrieved_schemes": [
+        "serbpowerf",
+        "sire",
+        "serbrss"
+      ],
+      "chunks_given": 8,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 1610.7,
+      "answer_ms": 28686.8,
+      "planning_ms": 3103.7,
+      "total_ms": 33451.4,
+      "prompt_tokens": 7373,
+      "completion_tokens": 339,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "I am 70 years old. Am I eligible for SERB - POWER Fellowship?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "serbpowerf"
+          },
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": null
+        }
+      ],
+      "evidence_chunk_ids": [
+        "serbpowerf__faq_group__0",
+        "serbpowerf__eligibility_exclusions__0",
+        "serbpowerf__faq_group__6",
+        "serbpowerf__overview_benefits__0",
+        "serbpowerf__process_documents__0",
+        "sire__faq_group__2",
+        "serbrss__faq_group__1",
+        "serbrss__eligibility_exclusions__0"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "serbpowerf",
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "serbpowerf"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-03": {
+      "query": "I am 73 years old. Am I eligible for Employees' Pension Scheme?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nThe Employees' Pension Scheme (EPS) is designed for employees in organised sectors.  \n\n**Key Benefits & Eligibility**  \n- **Likely Eligible**: You are 73 years old, which meets the age requirement of 58 years or above [1].  \n- **Unmet Criteria**: EPS requires at least 10 years of eligible service and membership in the Employees' Provident Fund Scheme, 1952 [1].  \n- **Exclusions**: EPS does not apply to individuals not covered under the EPF Act or those with income exceeding ₹15,000/month [1].  \n\n**Documents Needed**  \n- Identity Proof (Aadhaar/Passport/Voter ID)  \n- Bank Account Details (Cancelled cheque/passbook copy)  \n- Proof of Date of Birth (Birth certificate/School leaving certificate)  \n- Service Proof (EPF passbook/employment records)  \n\n**Next Steps**  \nContact your employer or EPFO office to confirm your EPF membership and service record. If eligible, apply online via the EPFO portal or visit a regional office. [1]",
+      "status": "ok",
+      "retrieved_schemes": [
+        "eps",
+        "apy"
+      ],
+      "chunks_given": 7,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 1970.3,
+      "answer_ms": 11541.2,
+      "planning_ms": 3355.4,
+      "total_ms": 16917.3,
+      "prompt_tokens": 7342,
+      "completion_tokens": 632,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "I am 73 years old. Am I eligible for Employees' Pension Scheme?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "eps"
+          },
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": "no_valid_unchecked_slugs"
+        }
+      ],
+      "evidence_chunk_ids": [
+        "eps__eligibility_exclusions__0",
+        "eps__faq_group__1",
+        "eps__faq_group__0",
+        "eps__faq_group__2",
+        "eps__overview_benefits__0",
+        "eps__overview_benefits__1",
+        "apy__faq_group__0"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "eps",
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "eps"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-04": {
+      "query": "I am 30 years old. Am I eligible for INSPIRE Awards – MANAK (Million Minds Augmenting National Aspirations and Knowledge)?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nThe INSPIRE Awards – MANAK (Million Minds Augmenting National Aspirations and Knowledge) is a scheme aimed at encouraging creativity and innovation among students.  \n\n**Key Benefits & Eligibility**  \n- **Eligibility**: The scheme is open to students aged 10–15 years studying in Classes 6 to 10 [1].  \n- **Status**: You are **Not Eligible** as your age (30 years) exceeds the maximum age limit of 15 years [1].  \n\n**Documents Needed**  \n- 11-digit School U-DISE Code / School Code  \n- Student Scanned Photograph  \n- Idea/Innovation Synopsis Document  \n- Brief Writeup on the Idea/Innovation (max 300 words)  \n- Aadhaar-linked Bank Account details of the nominated student  \n- Optional: Idea/Innovation Photo, Video/Audio, and Objective Criteria Description  \n\n**Next Steps**  \nThis scheme is specifically for students. If you are a teacher or school representative, you may assist eligible students. For more details, visit [https://www.myscheme.gov.in/schemes/iamanak](https://www.myscheme.gov.in/schemes/iamanak).",
+      "status": "ok",
+      "retrieved_schemes": [
+        "iamanak"
+      ],
+      "chunks_given": 6,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 3012.6,
+      "answer_ms": 7232.3,
+      "planning_ms": 3783.6,
+      "total_ms": 14074.6,
+      "prompt_tokens": 7758,
+      "completion_tokens": 447,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "I am 30 years old. Am I eligible for INSPIRE Awards – MANAK (Million Minds Augmenting National Aspirations and Knowledge)?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "iamanak"
+          },
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": null
+        }
+      ],
+      "evidence_chunk_ids": [
+        "iamanak__eligibility_exclusions__0",
+        "iamanak__faq_group__2",
+        "iamanak__overview_benefits__0",
+        "iamanak__faq_group__1",
+        "iamanak__process_documents__1",
+        "iamanak__faq_group__0"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "iamanak",
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "iamanak"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-05": {
+      "query": "I am 55 years old. Am I eligible for Right To Information Fellowship?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nThe Right To Information Fellowship is a scheme aimed at professionals in journalism, civil society, and RTI training.  \n\n**Key Benefits & Eligibility**  \n- **Stipend**: ₹50,000/month for 3 months [4].  \n- **Additional Grant**: ₹50,000 for research expenses [4].  \n- **Eligibility**: Applicants must be between 25 and 40 years of age [1].  \n- **Your Age (55)**: **Not Eligible** due to exceeding the maximum age limit of 40 years [1].  \n\n**Documents Needed**  \n- Comprehensive research proposal (6–8 A4 pages) [5].  \n- Curriculum vitae (3 A4 pages) with photo [5].  \n- Statement of work in RTI [5].  \n- Two professional references [5].  \n- No-objection certificate from employer [5].  \n- Passport-sized photograph [5].  \n\n**Next Steps**  \nSince you are **not eligible** for this scheme, consider other opportunities like the SERB-POWER Fellowship (if applicable) or consult your state government for local schemes. [6]",
+      "status": "ok",
+      "retrieved_schemes": [
+        "rtif",
+        "serbpowerf",
+        "wise-phd",
+        "senior-fellowship"
+      ],
+      "chunks_given": 8,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 1950.0,
+      "answer_ms": 15001.1,
+      "planning_ms": 3423.7,
+      "total_ms": 20429.6,
+      "prompt_tokens": 9983,
+      "completion_tokens": 777,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "I am 55 years old. Am I eligible for Right To Information Fellowship?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "rtif"
+          },
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": null
+        }
+      ],
+      "evidence_chunk_ids": [
+        "rtif__eligibility_exclusions__0",
+        "rtif__faq_group__1",
+        "rtif__faq_group__4",
+        "rtif__overview_benefits__0",
+        "rtif__process_documents__0",
+        "serbpowerf__faq_group__0",
+        "wise-phd__faq_group__1",
+        "senior-fellowship__eligibility_exclusions__0"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "rtif",
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "rtif",
+        "serbpowerf"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-06": {
+      "query": "I am 25 years old. Can I qualify for Deen Dayal Upadhyay Grameen Kaushalya Yojana and what documents are needed?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nDeen Dayal Upadhyay Grameen Kaushalya Yojana (DDUGKY) is designed for poor rural youth aged 15–35. Since you are 25 years old, **you are likely eligible** [1].  \n\n**Key Benefits & Eligibility**  \nDDUGKY offers skill training, placement assistance, and career progression support. You meet the age criteria, but your social category (e.g., SC, ST, PwD) is needed to determine full eligibility [1].  \n\n**Documents Needed**  \n- Proof of Identity  \n- Proof of Age  \n- BPL Card (if applicable)  \n- MGNREGA Card (if applicable)  \n- RSBY Card (if applicable)  \n- AAY Card (if applicable)  \n- SHG Identification (if applicable)  \n- Disability Certificate (if applicable)  \n- ST/SC Certificate (if applicable)  \n- Self-Certification for Minority Community (if applicable)  \n\n**Next Steps**  \n1. Provide your social category to finalize eligibility.  \n2. Visit [Kaushal Panjee](https://kaushalpanjee.nic.in/ddugky/downloadUserManual.html) for online registration.  \n3. Upload required documents and complete the registration process.  \n\nYou are on the right path—apply now to access skill training and employment opportunities!",
+      "status": "ok",
+      "retrieved_schemes": [
+        "ddugku",
+        "naps"
+      ],
+      "chunks_given": 7,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 2722.4,
+      "answer_ms": 7888.6,
+      "planning_ms": 4465.4,
+      "total_ms": 15118.3,
+      "prompt_tokens": 7833,
+      "completion_tokens": 509,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "I am 25 years old. Can I qualify for Deen Dayal Upadhyay Grameen Kaushalya Yojana and what documents are needed?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "ddugku"
+          },
+          "verdict": "PARTIALLY_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": "no_valid_unchecked_slugs"
+        }
+      ],
+      "evidence_chunk_ids": [
+        "ddugku__eligibility_exclusions__0",
+        "ddugku__faq_group__1",
+        "ddugku__process_documents__0",
+        "ddugku__overview_benefits__0",
+        "ddugku__faq_group__3",
+        "ddugku__overview_benefits__1",
+        "naps__eligibility_exclusions__0"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "ddugku",
+          "verdict": "PARTIALLY_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "ddugku"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-07": {
+      "query": "I am 31 years old. Can I qualify for ICRO Amrit Internship Programme and what documents are needed?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nICRO Amrit Internship Programme [1] is likely suitable for you.  \n\n**Key Benefits & Eligibility**  \n- **Eligible**: You are 31 years old, which fits the age criteria of 18–45 years [1].  \n- **Target Group**: Youth [1].  \n- **Benefits**: ₹6,000/month stipend, internship certificate, and skill development [5].  \n\n**Documents Needed**  \n- Aadhaar Card [2]  \n- Passport size photo (JPG/JPEG, <2 MB) [2]  \n- Letter of recommendation (PDF, <2 MB) [2]  \n- Mark sheet or qualification certificate (PDF, <2 MB) [2]  \n\n**Next Steps**  \n1. Register online at [icroamrit.npcindia.gov.in](https://www.icroamrit.npcindia.gov.in).  \n2. Upload required documents and submit the application.  \n3. Await selection based on committee evaluation [3].  \n\nReview the application process and ensure all documents are ready before submission.",
+      "status": "ok",
+      "retrieved_schemes": [
+        "icroaip"
+      ],
+      "chunks_given": 6,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 2333.9,
+      "answer_ms": 6399.2,
+      "planning_ms": 3953.5,
+      "total_ms": 12733.5,
+      "prompt_tokens": 6617,
+      "completion_tokens": 425,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "I am 31 years old. Can I qualify for ICRO Amrit Internship Programme and what documents are needed?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "icroaip"
+          },
+          "verdict": "ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": "no_valid_unchecked_slugs"
+        }
+      ],
+      "evidence_chunk_ids": [
+        "icroaip__eligibility_exclusions__0",
+        "icroaip__process_documents__1",
+        "icroaip__process_documents__0",
+        "icroaip__faq_group__2",
+        "icroaip__overview_benefits__0",
+        "icroaip__faq_group__1"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "icroaip",
+          "verdict": "ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "icroaip"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-08": {
+      "query": "I am 29 years old. Can I qualify for Pradhan Mantri Shram Yogi Maan-dhan and what documents are needed?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Schemes That May Suit You**  \n- **Pradhan Mantri Shram Yogi Maan-dhan** [1] **Needs More Info** – Offers ₹3,000 monthly pension after 60 years. You need to confirm if you are an unorganized worker and your income [1].  \n- **Pradhan Mantri Jeevan Jyoti Bima Yojana** [6] **Eligible** – Provides life insurance coverage up to ₹3 lakh.  \n\n**Documents Needed**  \n- Aadhaar Card [2]  \n- Savings Bank Account Passbook / Jan-Dhan Account Passbook [2]  \n- Mobile Number [2]  \n- Self-Certification [2]  \n\n**Next Steps**  \nVisit the nearest CSC to complete biometric verification and apply online.  \n\nWould you like to know more about the pension benefits or life insurance options?",
+      "status": "ok",
+      "retrieved_schemes": [
+        "pm-sym",
+        "pmkmdy",
+        "pmjjby"
+      ],
+      "chunks_given": 6,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 2306.9,
+      "answer_ms": 5549.5,
+      "planning_ms": 5585.7,
+      "total_ms": 13523.3,
+      "prompt_tokens": 7845,
+      "completion_tokens": 450,
+      "tool_calls": 4,
+      "search_calls": 1,
+      "reflection_rounds": 2,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "I am 29 years old. Can I qualify for Pradhan Mantri Shram Yogi Maan-dhan and what documents are needed?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "pm-sym"
+          },
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "pmkmdy"
+          },
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "pmjjby"
+          },
+          "verdict": "ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "check_eligibility",
+          "guard": null
+        },
+        {
+          "decision": "answer",
+          "guard": "no_valid_unchecked_slugs"
+        }
+      ],
+      "evidence_chunk_ids": [
+        "pm-sym__eligibility_exclusions__0",
+        "pm-sym__process_documents__0",
+        "pm-sym__overview_benefits__0",
+        "pm-sym__faq_group__0",
+        "pmkmdy__eligibility_exclusions__0",
+        "pmjjby__eligibility_exclusions__0"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "pmjjby",
+          "verdict": "ELIGIBLE"
+        },
+        {
+          "scheme_slug": "pm-sym",
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "scheme_slug": "pmkmdy",
+          "verdict": "NEEDS_MORE_INFO"
+        }
+      ],
+      "cited_schemes": [
+        "pm-sym",
+        "pmjjby"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-09": {
+      "query": "I am 36 years old. Can I qualify for Pension Scheme for the Tappers in Small Rubber Plantations and what documents are needed?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nYou may qualify for the **Pension Scheme for the Tappers in Small Rubber Plantations** [1].  \n\n**Key Benefits & Eligibility**  \n- **Likely Eligible**: You are 36 years old, which falls within the age range of 18–55 years required for enrollment [1].  \n- **Work Experience**: You must have at least 90 days of tapping experience in the last 12 months [4].  \n- **Employment**: You must be engaged in tapping jobs in small rubber plantations (up to 1 hectare) or through self-tapping [4].  \n- **Training**: You should be certified under PMKVY RPL or have undergone training by the Rubber Board [1].  \n\n**Documents Needed**  \n- Aadhaar card [6]  \n- Training Certificate Issued by the Board [6]  \n- Proof of age  \n- Two Passport-size photos [6]  \n- Any other required documents  \n\n**Next Steps**  \nSubmit the application form, countersigned by your employer or RPS President, along with the documents to the Labour Welfare Division, Kottayam [6]. For more details, visit [1].",
+      "status": "ok",
+      "retrieved_schemes": [
+        "pstsrp"
+      ],
+      "chunks_given": 6,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 2284.7,
+      "answer_ms": 6899.0,
+      "planning_ms": 3558.6,
+      "total_ms": 12797.0,
+      "prompt_tokens": 6579,
+      "completion_tokens": 429,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "I am 36 years old. Can I qualify for Pension Scheme for the Tappers in Small Rubber Plantations and what documents are needed?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "pstsrp"
+          },
+          "verdict": "ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": "no_valid_unchecked_slugs"
+        }
+      ],
+      "evidence_chunk_ids": [
+        "pstsrp__eligibility_exclusions__0",
+        "pstsrp__faq_group__1",
+        "pstsrp__faq_group__3",
+        "pstsrp__faq_group__2",
+        "pstsrp__overview_benefits__0",
+        "pstsrp__process_documents__0"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "pstsrp",
+          "verdict": "ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "pstsrp"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-10": {
+      "query": "I am 42 years old. Can I qualify for Women Scientist Scheme-B and what documents are needed?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Schemes That May Suit You**  \n- **Women Scientist Scheme-C** [**PARTIALLY_ELIGIBLE**] – Designed for women with a career break, offering research grants in science and technology [7].  \n- **Women Scientist Scheme-B** [**NEEDS_MORE_INFO**] – Provides research grants for women in specific scientific disciplines, with age criteria up to 57 years [6].  \n- **Women Scientist Scheme-A** [**NEEDS_MORE_INFO**] – Offers research grants for women with a career break, focusing on frontier science and engineering [4].  \n\n**Documents Needed**  \n- No specific documents are listed for these schemes, but you may need to upload your educational qualifications in PDF format (max 2MB) [1].  \n\n**Next Steps**  \nPlease clarify if you are a researcher and your social category (SC, ST, OBC, or General) to proceed with the application. Would you like to apply for a research grant or seek other support?",
+      "status": "ok",
+      "retrieved_schemes": [
+        "wos-a",
+        "wos-b",
+        "wos-c"
+      ],
+      "chunks_given": 8,
+      "gold_scheme_rank": 2,
+      "retrieval_ms": 1892.0,
+      "answer_ms": 9704.0,
+      "planning_ms": 5165.9,
+      "total_ms": 16860.8,
+      "prompt_tokens": 7052,
+      "completion_tokens": 623,
+      "tool_calls": 4,
+      "search_calls": 1,
+      "reflection_rounds": 3,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "I am 42 years old. Can I qualify for Women Scientist Scheme-B and what documents are needed?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "wos-a"
+          },
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "wos-b"
+          },
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "wos-c"
+          },
+          "verdict": "PARTIALLY_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "check_eligibility",
+          "guard": null
+        },
+        {
+          "decision": "check_eligibility",
+          "guard": null
+        },
+        {
+          "decision": "answer",
+          "guard": "max_reflection_rounds_reached"
+        }
+      ],
+      "evidence_chunk_ids": [
+        "wos-a__faq_group__3",
+        "wos-a__eligibility_exclusions__0",
+        "wos-a__process_documents__0",
+        "wos-a__overview_benefits__0",
+        "wos-b__faq_group__2",
+        "wos-b__eligibility_exclusions__0",
+        "wos-c__eligibility_exclusions__0",
+        "wos-c__faq_group__1"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "wos-c",
+          "verdict": "PARTIALLY_ELIGIBLE"
+        },
+        {
+          "scheme_slug": "wos-a",
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "scheme_slug": "wos-b",
+          "verdict": "NEEDS_MORE_INFO"
+        }
+      ],
+      "cited_schemes": [
+        "wos-c",
+        "wos-b",
+        "wos-a"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-11": {
+      "query": "My annual family income is Rs 5,400,000. Am I eligible for Credit Linked Subsidy Scheme for Middle Income Group?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nThe Credit Linked Subsidy Scheme for Middle Income Group (CLSSMIG) is designed for middle-income families. [1]  \n\n**Key Benefits & Eligibility**  \n- **Income Limit**: MIG-I (₹6 lakh–₹12 lakh) and MIG-II (₹12 lakh–₹18 lakh).  \n- **Your Income**: ₹5,400,000 exceeds the MIG-II ceiling of ₹18 lakh.  \n- **Status**: **Not Eligible** due to income exceeding the scheme's limit. [1]  \n\n**Documents Needed**  \n- Aadhaar Card  \n- PAN Card  \n- Income proof  \n- Property documents  \n- Bank account details  \n\n**Next Steps**  \nReview the scheme details [1] and consider other schemes matching your profile. If you need help, let me know!",
+      "status": "ok",
+      "retrieved_schemes": [
+        "clssmig"
+      ],
+      "chunks_given": 6,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 2618.0,
+      "answer_ms": 5383.0,
+      "planning_ms": 3762.3,
+      "total_ms": 11809.3,
+      "prompt_tokens": 7385,
+      "completion_tokens": 368,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "My annual family income is Rs 5,400,000. Am I eligible for Credit Linked Subsidy Scheme for Middle Income Group?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "clssmig"
+          },
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": null
+        }
+      ],
+      "evidence_chunk_ids": [
+        "clssmig__eligibility_exclusions__0",
+        "clssmig__faq_group__0",
+        "clssmig__faq_group__8",
+        "clssmig__faq_group__7",
+        "clssmig__overview_benefits__0",
+        "clssmig__overview_benefits__1"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "clssmig",
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "clssmig"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-12": {
+      "query": "My annual family income is Rs 2,400,000. Am I eligible for Prime Minister’s Internship Scheme?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nThe Prime Minister’s Internship Scheme (PMIS) offers internship opportunities to youth in top companies.  \n\n**Key Benefits & Eligibility**  \n- Monthly assistance of ₹4,500 from the government and ₹500 from the industry.  \n- One-time grant of ₹6,000 for incidentals.  \n- Insurance coverage under Pradhan Mantri Jeevan Jyoti Bima Yojana and Pradhan Mantri Suraksha Bima Yojana.  \n- **Eligibility**: Annual family income must not exceed ₹8,00,000 [1].  \n\n**Documents Needed**  \n- Aadhaar Card  \n- Educational Certificates  \n- Proof of age  \n- Bank account details  \n- Any other documents as required [5].  \n\n**Next Steps**  \nYour annual family income of ₹2,400,000 exceeds the scheme’s income limit of ₹8,00,000 [1], making you **Not Eligible**. Consider other schemes like Pradhan Mantri Vidyalaxmi for education support [7]. For more options, visit [myscheme.gov.in](https://www.myscheme.gov.in).",
+      "status": "ok",
+      "retrieved_schemes": [
+        "pmis",
+        "pmvs",
+        "ncscscst"
+      ],
+      "chunks_given": 8,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 2287.4,
+      "answer_ms": 7209.9,
+      "planning_ms": 3803.5,
+      "total_ms": 13353.0,
+      "prompt_tokens": 8717,
+      "completion_tokens": 445,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "My annual family income is Rs 2,400,000. Am I eligible for Prime Minister’s Internship Scheme?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "pmis"
+          },
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": null
+        }
+      ],
+      "evidence_chunk_ids": [
+        "pmis__eligibility_exclusions__0",
+        "pmis__overview_benefits__1",
+        "pmis__faq_group__0",
+        "pmis__overview_benefits__0",
+        "pmis__process_documents__1",
+        "pmis__process_documents__0",
+        "pmvs__faq_group__1",
+        "ncscscst__faq_group__1"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "pmis",
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "pmis",
+        "pmvs"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-13": {
+      "query": "My annual family income is Rs 2,400,000. Am I eligible for Pradhan Mantri Uchchatar Shiksha Protsahan Yojana - Special Scholarship Scheme for Jammu & Kashmir and Ladakh?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nPradhan Mantri Uchchatar Shiksha Protsahan Yojana - Special Scholarship Scheme for Jammu & Kashmir and Ladakh [1]  \n\n**Key Benefits & Eligibility**  \n- Provides academic fees and maintenance allowances up to ₹1,00,000 per annum [4].  \n- **Not eligible** due to annual family income of ₹2,400,000 exceeding the ₹8,00,000 ceiling [2].  \n\n**Documents Needed**  \n- Certificate of domicile of J&K or Ladakh.  \n- Class 12th/10th examination certificate.  \n- Income certificate.  \n- Aadhaar card.  \n\n**Next Steps**  \n- This scheme is **not applicable** for your income level. Consider other education support options.  \n- For more details, visit [https://www.myscheme.gov.in/schemes/pm-usp-sssjkl](https://www.myscheme.gov.in/schemes/pm-usp-sssjkl).",
+      "status": "ok",
+      "retrieved_schemes": [
+        "pm-usp-sssjkl",
+        "pm-uspycsiss",
+        "pmvky"
+      ],
+      "chunks_given": 8,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 2819.2,
+      "answer_ms": 6614.6,
+      "planning_ms": 4325.0,
+      "total_ms": 13797.7,
+      "prompt_tokens": 9844,
+      "completion_tokens": 431,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "My annual family income is Rs 2,400,000. Am I eligible for Pradhan Mantri Uchchatar Shiksha Protsahan Yojana - Special Scholarship Scheme for Jammu & Kashmir and Ladakh?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "pm-usp-sssjkl"
+          },
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": null
+        }
+      ],
+      "evidence_chunk_ids": [
+        "pm-usp-sssjkl__eligibility_exclusions__1",
+        "pm-usp-sssjkl__eligibility_exclusions__0",
+        "pm-usp-sssjkl__overview_benefits__3",
+        "pm-usp-sssjkl__overview_benefits__2",
+        "pm-usp-sssjkl__overview_benefits__1",
+        "pm-usp-sssjkl__overview_benefits__0",
+        "pm-uspycsiss__faq_group__1",
+        "pmvky__faq_group__0"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "pm-usp-sssjkl",
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "pm-usp-sssjkl"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-14": {
+      "query": "My annual family income is Rs 2,400,000. Am I eligible for Pradhan Mantri Vidyalaxmi (PM-Vidyalaxmi) Scheme?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nPradhan Mantri Vidyalaxmi (PM-Vidyalaxmi) Scheme [1]  \n\n**Key Benefits & Eligibility**  \n- Provides up to ₹10,00,000 collateral-free education loan [4].  \n- 3% interest subvention for families with annual income up to ₹8,00,000 [1].  \n- Full credit guarantee for loans up to ₹7,50,000 [4].  \n\n**Documents Needed**  \n- Aadhaar Card  \n- PAN Card  \n- Address Proof  \n- Previous Qualifying Marksheets  \n- Entrance Exam Result  \n- Offer Letter from Institution  \n- Income Certificate [5]  \n\n**Next Steps**  \nYour annual family income of ₹2,400,000 exceeds the ₹8,00,000 limit for 3% interest subvention [1]. You are **Not Eligible** for this scheme. Consider other education loan options or schemes with higher income limits. For further assistance, contact Canara Bank at 1800 1031 [5].",
+      "status": "ok",
+      "retrieved_schemes": [
+        "pmvs",
+        "pm-uspycsiss",
+        "pmvky"
+      ],
+      "chunks_given": 8,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 2336.7,
+      "answer_ms": 7151.1,
+      "planning_ms": 4280.4,
+      "total_ms": 13810.7,
+      "prompt_tokens": 9184,
+      "completion_tokens": 441,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "My annual family income is Rs 2,400,000. Am I eligible for Pradhan Mantri Vidyalaxmi (PM-Vidyalaxmi) Scheme?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "pmvs"
+          },
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": null
+        }
+      ],
+      "evidence_chunk_ids": [
+        "pmvs__faq_group__1",
+        "pmvs__overview_benefits__1",
+        "pmvs__eligibility_exclusions__0",
+        "pmvs__overview_benefits__0",
+        "pmvs__process_documents__2",
+        "pmvs__process_documents__0",
+        "pm-uspycsiss__faq_group__1",
+        "pmvky__eligibility_exclusions__0"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "pmvs",
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "pmvs"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-15": {
+      "query": "My annual family income is Rs 750,000. Am I eligible for PM-YASASVI: Pre-Matric Scholarship for OBC, EBC and DNT Students?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Schemes That May Suit You**  \n- **PM-YASASVI: Top Class College Education for OBC, EBC and DNT Students** [NEEDS_MORE_INFO] – Provides full tuition, living expenses, and a laptop for students beyond Class XII. [1]  \n- **PM-YASASVI: Top Class College Education for OBC, EBC and DNT Students** [NEEDS_MORE_INFO] – Covers up to ₹2.50 lakhs annual family income for OBC/EBC/DNT students. [2]  \n\nYour income of ₹750,000 exceeds the ₹2.50 lakh limit for this scheme. Please clarify your social category (OBC / General) and confirm if you are a student pursuing studies beyond Class XII.  \n\n**Next Steps**  \n- Provide your social category and confirm your student status.  \n- Submit required documents like Aadhaar, income certificate, and educational certificates.  \n\nWould you like to apply for a scholarship or other educational support?",
+      "status": "ok",
+      "retrieved_schemes": [
+        "pm-yasasvitcceobcebcdnts"
+      ],
+      "chunks_given": 6,
+      "gold_scheme_rank": null,
+      "retrieval_ms": 2416.7,
+      "answer_ms": 9977.4,
+      "planning_ms": 5727.1,
+      "total_ms": 18186.4,
+      "prompt_tokens": 8534,
+      "completion_tokens": 646,
+      "tool_calls": 3,
+      "search_calls": 1,
+      "reflection_rounds": 2,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "My annual family income is Rs 750,000. Am I eligible for PM-YASASVI: Pre-Matric Scholarship for OBC, EBC and DNT Students?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "pm-yasasvitcceobcebcdnts"
+          },
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "pmyasasvipmsobcebcdnts"
+          },
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "check_eligibility",
+          "guard": null
+        },
+        {
+          "decision": "answer",
+          "guard": null
+        }
+      ],
+      "evidence_chunk_ids": [
+        "pm-yasasvitcceobcebcdnts__eligibility_exclusions__0",
+        "pm-yasasvitcceobcebcdnts__faq_group__3",
+        "pm-yasasvitcceobcebcdnts__overview_benefits__1",
+        "pm-yasasvitcceobcebcdnts__process_documents__1",
+        "pm-yasasvitcceobcebcdnts__overview_benefits__0",
+        "pm-yasasvitcceobcebcdnts__eligibility_exclusions__1"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "pm-yasasvitcceobcebcdnts",
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "scheme_slug": "pmyasasvipmsobcebcdnts",
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "pm-yasasvitcceobcebcdnts"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-16": {
+      "query": "My annual family income is Rs 400,000 and I belong to SC category. Am I eligible for National Overseas Scholarship For Scheduled Caste Etc. Candidates?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Schemes That May Suit You**  \n- **National Overseas Scholarship For Scheduled Caste Etc. Candidates** [2] **Partially Eligible**: You belong to the SC category, which matches the target group. However, the scheme requires clarification on your occupation (Farmer, Student, Artisan, Worker, Researcher) [2].  \n\n**Next Steps**  \nPlease confirm if you fall under the specified occupation categories for this scholarship. If yes, proceed to apply as per the guidelines on the official portal.  \n\n**Follow-up Question**  \nAre you a student, farmer, artisan, worker, or researcher? This will help narrow down the best scheme for you.",
+      "status": "ok",
+      "retrieved_schemes": [
+        "pmvky",
+        "nos-sc"
+      ],
+      "chunks_given": 2,
+      "gold_scheme_rank": 2,
+      "retrieval_ms": 2104.7,
+      "answer_ms": 9592.3,
+      "planning_ms": 5715.3,
+      "total_ms": 17490.1,
+      "prompt_tokens": 6863,
+      "completion_tokens": 652,
+      "tool_calls": 4,
+      "search_calls": 1,
+      "reflection_rounds": 2,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "My annual family income is Rs 400,000 and I belong to SC category. Am I eligible for National Overseas Scholarship For Scheduled Caste Etc. Candidates?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "ncscscst"
+          },
+          "verdict": "NOT_ELIGIBLE"
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "css-nos-st"
+          },
+          "verdict": "NOT_ELIGIBLE"
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "nos-sc"
+          },
+          "verdict": "PARTIALLY_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "check_eligibility",
+          "guard": null
+        },
+        {
+          "decision": "answer",
+          "guard": "no_valid_unchecked_slugs"
+        }
+      ],
+      "evidence_chunk_ids": [
+        "pmvky__faq_group__0",
+        "nos-sc__eligibility_exclusions__1"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "nos-sc",
+          "verdict": "PARTIALLY_ELIGIBLE"
+        },
+        {
+          "scheme_slug": "ncscscst",
+          "verdict": "NOT_ELIGIBLE"
+        },
+        {
+          "scheme_slug": "css-nos-st",
+          "verdict": "NOT_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "nos-sc"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-17": {
+      "query": "My annual family income is Rs 400,000. Am I eligible for Pragati Scholarship Scheme For Girl Students (Technical Diploma)?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nPragati Scholarship Scheme For Girl Students (Technical Diploma) [1]  \n\n**Key Benefits & Eligibility**  \n- **Annual family income** must not exceed ₹8,00,000 per annum [1].  \n- Your income of ₹4,00,000 is within the limit [1].  \n- You must be a **girl student** pursuing the **first year of a diploma course** or **second year through lateral entry** [1].  \n- The scheme is available for students from 13 Union Territories and North Eastern States [1].  \n\n**Documents Needed**  \n- Copy of SSC/10th certificate [5].  \n- Annual Family Income Certificate [5].  \n- Aadhaar Card, Bank Passbook, and Passport-Size Photo [5].  \n\n**Next Steps**  \n- Apply **online** via [https://scholarships.gov.in/](https://scholarships.gov.in/) [9].  \n- Ensure you meet all eligibility criteria and submit required documents.  \n\n**Note**: If you are a girl student in the eligible category, you may be **Likely Eligible**. Verify your state and course details before applying.",
+      "status": "ok",
+      "retrieved_schemes": [
+        "psgs-dip",
+        "psgs-deg"
+      ],
+      "chunks_given": 8,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 1985.0,
+      "answer_ms": 12742.2,
+      "planning_ms": 3802.7,
+      "total_ms": 18577.1,
+      "prompt_tokens": 9141,
+      "completion_tokens": 687,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "My annual family income is Rs 400,000. Am I eligible for Pragati Scholarship Scheme For Girl Students (Technical Diploma)?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "psgs-dip"
+          },
+          "verdict": "PARTIALLY_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": "no_valid_unchecked_slugs"
+        }
+      ],
+      "evidence_chunk_ids": [
+        "psgs-dip__eligibility_exclusions__0",
+        "psgs-dip__faq_group__5",
+        "psgs-dip__faq_group__2",
+        "psgs-dip__overview_benefits__0",
+        "psgs-dip__process_documents__1",
+        "psgs-dip__process_documents__0",
+        "psgs-deg__eligibility_exclusions__0",
+        "psgs-deg__faq_group__5"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "psgs-dip",
+          "verdict": "PARTIALLY_ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "psgs-dip"
+      ],
+      "critic_passed": false,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-18": {
+      "query": "My annual family income is Rs 50,000 and I belong to OBC category. Am I eligible for Assistance to Voluntary Organizations Working for Welfare of OBCs?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Recommended Scheme**  \nAssistance to Voluntary Organizations Working for Welfare of OBCs [1]  \n\n**Key Benefits & Eligibility**  \n- **Likely Eligible**: Your annual family income of ₹50,000 is within the ₹1 lakh ceiling [2].  \n- **Social Category**: You belong to the OBC category, which matches the target group [2].  \n\n**Documents Needed**  \n- NGO Pan Card  \n- Utilization Certificate  \n- Audited/Unaudited Accounts of the Previous Year  \n- Budget Estimates for the Current Financial Year  \n- Performance Report with Statistical Data for the Previous Year  \n\n**Next Steps**  \nPrepare the required documents and submit an application through the official portal. For further assistance, visit [https://www.myscheme.gov.in/schemes/avowwobc](https://www.myscheme.gov.in/schemes/avowwobc).",
+      "status": "ok",
+      "retrieved_schemes": [
+        "avowwobc"
+      ],
+      "chunks_given": 6,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 2118.7,
+      "answer_ms": 5413.7,
+      "planning_ms": 4227.3,
+      "total_ms": 11796.0,
+      "prompt_tokens": 6220,
+      "completion_tokens": 396,
+      "tool_calls": 2,
+      "search_calls": 1,
+      "reflection_rounds": 1,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "My annual family income is Rs 50,000 and I belong to OBC category. Am I eligible for Assistance to Voluntary Organizations Working for Welfare of OBCs?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "avowwobc"
+          },
+          "verdict": "ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "answer",
+          "guard": null
+        }
+      ],
+      "evidence_chunk_ids": [
+        "avowwobc__faq_group__0",
+        "avowwobc__eligibility_exclusions__0",
+        "avowwobc__overview_benefits__0",
+        "avowwobc__faq_group__5",
+        "avowwobc__process_documents__1",
+        "avowwobc__overview_benefits__1"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "avowwobc",
+          "verdict": "ELIGIBLE"
+        }
+      ],
+      "cited_schemes": [
+        "avowwobc"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-19": {
+      "query": "My annual family income is Rs 400,000. Am I eligible for Pragati Scholarship Scheme For Girl Students (Technical Degree)?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Schemes That May Suit You**  \n- **Pragati Scholarship Scheme For Girl Students (Technical Diploma)** [1] **Partially Eligible**: You meet the income criteria (₹400,000 < ₹800,000), but we need to confirm if you are a diploma student. Benefits include ₹50,000 annually for up to 3 years [6].  \n- **Pragati Scholarship Scheme For Girl Students (Technical Degree)** [1] **Needs More Info**: Your income is within the limit, but we need to know if you are a degree student and your current course year. Benefits include ₹50,000 annually for up to 4 years [4].  \n\nAre you currently studying a **technical diploma** or **technical degree**? This will help us finalize your eligibility.",
+      "status": "ok",
+      "retrieved_schemes": [
+        "psgs-deg",
+        "psgs-dip"
+      ],
+      "chunks_given": 8,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 2042.1,
+      "answer_ms": 5488.8,
+      "planning_ms": 5363.9,
+      "total_ms": 12960.7,
+      "prompt_tokens": 9044,
+      "completion_tokens": 411,
+      "tool_calls": 3,
+      "search_calls": 1,
+      "reflection_rounds": 2,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "My annual family income is Rs 400,000. Am I eligible for Pragati Scholarship Scheme For Girl Students (Technical Degree)?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "psgs-deg"
+          },
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "psgs-dip"
+          },
+          "verdict": "PARTIALLY_ELIGIBLE"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "check_eligibility",
+          "guard": null
+        },
+        {
+          "decision": "answer",
+          "guard": "no_valid_unchecked_slugs"
+        }
+      ],
+      "evidence_chunk_ids": [
+        "psgs-deg__eligibility_exclusions__0",
+        "psgs-deg__faq_group__5",
+        "psgs-deg__process_documents__1",
+        "psgs-deg__overview_benefits__0",
+        "psgs-deg__process_documents__0",
+        "psgs-dip__eligibility_exclusions__0",
+        "psgs-dip__faq_group__5",
+        "psgs-dip__faq_group__2"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "psgs-dip",
+          "verdict": "PARTIALLY_ELIGIBLE"
+        },
+        {
+          "scheme_slug": "psgs-deg",
+          "verdict": "NEEDS_MORE_INFO"
+        }
+      ],
+      "cited_schemes": [
+        "psgs-deg",
+        "psgs-dip"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    },
+    "ELIG-20": {
+      "query": "My annual family income is Rs 125,000 and I belong to OBC category. Am I eligible for Centrally Sponsored Scheme of Pre-matric Scholarship to Other Backward Classes (OBC) for Studies in India?",
+      "category": "eligibility",
+      "language": "en",
+      "answer": "**Schemes That May Suit You**  \n- **Centrally Sponsored Scheme of Pre-matric Scholarship to Other Backward Classes (OBC) for Studies in India** [1] – **Needs More Info**: You meet the income criterion (₹125,000 < ₹250,000) and belong to OBC, but we need to confirm if you are a student studying up to Class 10.  \n- **PM-YASASVI: Pre-Matric Scholarship for OBC, EBC and DNT Students** – **Needs More Info**: Your income is within the ₹250,000 limit, and you are OBC, but we need to confirm if you are a student studying up to Class 10.  \n\nAre you currently studying in a government school and in Class IX or X? This will help us determine the best scheme for you.",
+      "status": "ok",
+      "retrieved_schemes": [
+        "csspremsobcsi",
+        "csspostmsossi",
+        "pmyasasvipmsobcebcdnts"
+      ],
+      "chunks_given": 8,
+      "gold_scheme_rank": 1,
+      "retrieval_ms": 2352.7,
+      "answer_ms": 5868.9,
+      "planning_ms": 6650.0,
+      "total_ms": 14940.5,
+      "prompt_tokens": 9763,
+      "completion_tokens": 497,
+      "tool_calls": 4,
+      "search_calls": 1,
+      "reflection_rounds": 2,
+      "web_fallback_skipped": false,
+      "intent": "ELIGIBILITY_CHECK",
+      "planner_status": "ok",
+      "tool_log": [
+        {
+          "tool": "search_schemes",
+          "status": "ok",
+          "args": {
+            "query": "My annual family income is Rs 125,000 and I belong to OBC category. Am I eligible for Centrally Sponsored Scheme of Pre-matric Scholarship to Other Backward Classes (OBC) for Studies in India?",
+            "category": null,
+            "ministry": null,
+            "dbt_only": null,
+            "beneficiary_group": null,
+            "top_k": 6
+          }
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "csspremsobcsi"
+          },
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "csspostmsossi"
+          },
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "tool": "check_eligibility",
+          "status": "ok",
+          "args": {
+            "scheme_slug": "pmyasasvipmsobcebcdnts"
+          },
+          "verdict": "NEEDS_MORE_INFO"
+        }
+      ],
+      "reflection_decisions": [
+        {
+          "decision": "check_eligibility",
+          "guard": null
+        },
+        {
+          "decision": "answer",
+          "guard": "no_valid_unchecked_slugs"
+        }
+      ],
+      "evidence_chunk_ids": [
+        "csspremsobcsi__eligibility_exclusions__0",
+        "csspremsobcsi__faq_group__0",
+        "csspremsobcsi__overview_benefits__0",
+        "csspremsobcsi__faq_group__1",
+        "csspremsobcsi__process_documents__1",
+        "csspremsobcsi__overview_benefits__1",
+        "csspostmsossi__eligibility_exclusions__0",
+        "pmyasasvipmsobcebcdnts__faq_group__2"
+      ],
+      "eligibility_verdicts": [
+        {
+          "scheme_slug": "csspremsobcsi",
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "scheme_slug": "csspostmsossi",
+          "verdict": "NEEDS_MORE_INFO"
+        },
+        {
+          "scheme_slug": "pmyasasvipmsobcebcdnts",
+          "verdict": "NEEDS_MORE_INFO"
+        }
+      ],
+      "cited_schemes": [
+        "csspremsobcsi"
+      ],
+      "critic_passed": true,
+      "guardrail_blocked": false,
+      "guardrail_category": null,
+      "hitl_paused": false,
+      "grievance_draft": null,
+      "grievance_receipt": null
+    }
+  }
+}

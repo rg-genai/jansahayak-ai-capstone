@@ -1,0 +1,1033 @@
+{
+  "created_at": "2026-11-25T11:53:08+05:30",
+  "judge_model": "gemini-3.5-flash-lite",
+  "gold_unjudged": 0,
+  "summary": {
+    "gold/main": {
+      "failures": 7,
+      "pending_judge": 0,
+      "by_category": {
+        "tool_call_error": 1,
+        "retrieval_miss": 2,
+        "hallucination": 1,
+        "reasoning_error": 3
+      },
+      "by_subtype": {
+        "reasoning_error/incomplete_or_wrong_answer": 2,
+        "retrieval_miss/gold_scheme_not_retrieved": 2,
+        "tool_call_error/required_tool_not_called": 1,
+        "hallucination/unsupported_claims": 1,
+        "reasoning_error/answered_from_wrong_scheme": 1
+      },
+      "examples": {
+        "reasoning_error/incomplete_or_wrong_answer": [
+          "GQA-007: The assistant provides the eligibility requirements and relevant scheme details based on the evidence.",
+          "GQA-015: The answer accurately states the eligible industry types based on the provided evidence."
+        ],
+        "tool_call_error/required_tool_not_called": [
+          "GQA-011: needed search_schemes; called ['submit_or_track_grievance']"
+        ],
+        "hallucination/unsupported_claims": [
+          "GQA-017: Proof of ownership or lease agreement for the workshed."
+        ],
+        "reasoning_error/answered_from_wrong_scheme": [
+          "GQA-020: cited ['pmmy', 'pmvky'], gold pmuy2"
+        ],
+        "retrieval_miss/gold_scheme_not_retrieved": [
+          "GQA-033: evidence schemes ['smile-scholarship']",
+          "GQA-047: evidence schemes ['pmmy', 'ab-pmjay', 'csss-cus', 'pmvky', 'pmuy2', 'pmksypdmc']"
+        ]
+      }
+    },
+    "gold/single_pass": {
+      "failures": 4,
+      "pending_judge": 0,
+      "by_category": {
+        "tool_call_error": 1,
+        "retrieval_miss": 2,
+        "hallucination": 1,
+        "reasoning_error": 0
+      },
+      "by_subtype": {
+        "retrieval_miss/gold_scheme_not_retrieved": 2,
+        "tool_call_error/required_tool_not_called": 1,
+        "hallucination/unsupported_claims": 1
+      },
+      "examples": {
+        "tool_call_error/required_tool_not_called": [
+          "GQA-011: needed search_schemes; called ['submit_or_track_grievance']"
+        ],
+        "retrieval_miss/gold_scheme_not_retrieved": [
+          "GQA-033: evidence schemes ['smile-scholarship', 'nap-sdp']",
+          "GQA-047: evidence schemes ['pmmy', 'ab-pmjay', 'pmvky']"
+        ],
+        "hallucination/unsupported_claims": [
+          "GQA-057: the minimum eligible incremental net sales is 40% of X for the first year"
+        ]
+      }
+    },
+    "task/loop": {
+      "failures": 24,
+      "pending_judge": 0,
+      "by_category": {
+        "tool_call_error": 2,
+        "retrieval_miss": 9,
+        "hallucination": 13,
+        "reasoning_error": 0
+      },
+      "by_subtype": {
+        "hallucination/unsupported_claims": 13,
+        "retrieval_miss/gold_scheme_not_retrieved": 9,
+        "tool_call_error/wrong_tool_arguments": 1,
+        "tool_call_error/required_tool_not_called": 1
+      },
+      "examples": {
+        "retrieval_miss/gold_scheme_not_retrieved": [
+          "ELIG-01: evidence schemes ['pmsby', 'pmvky', 'pmkvy-sp', 'pm-vikas', 'pmuy']",
+          "ELIG-02: evidence schemes ['sire', 'serbrss']",
+          "ELIG-03: evidence schemes ['apy', 'nsap-ignoaps']"
+        ],
+        "hallucination/unsupported_claims": [
+          "FAQ-03: Institutions must commit a minimum ₹1,00,000 contribution to the club; having a minimum of 5 years of existence and a full-time faculty coordinator with at least 10 years of experience",
+          "FAQ-05: PAN; Authority Letter for Nodal Officer; Certificate of Incorporation",
+          "FAQ-06: Proof of incorporation (for companies).; Business plan and innovation proposal."
+        ],
+        "tool_call_error/wrong_tool_arguments": [
+          "GRV-03: draft addressed to MOSDE, expected MSMEI"
+        ],
+        "tool_call_error/required_tool_not_called": [
+          "ML-02: needed search_schemes; called ['draft_grievance']"
+        ]
+      }
+    },
+    "task/single_pass": {
+      "failures": 23,
+      "pending_judge": 0,
+      "by_category": {
+        "tool_call_error": 2,
+        "retrieval_miss": 9,
+        "hallucination": 8,
+        "reasoning_error": 4
+      },
+      "by_subtype": {
+        "retrieval_miss/gold_scheme_not_retrieved": 9,
+        "hallucination/unsupported_claims": 8,
+        "reasoning_error/checked_wrong_scheme": 2,
+        "tool_call_error/wrong_tool_arguments": 1,
+        "tool_call_error/required_tool_not_called": 1,
+        "reasoning_error/answered_from_wrong_scheme": 1,
+        "reasoning_error/did_not_refuse": 1
+      },
+      "examples": {
+        "retrieval_miss/gold_scheme_not_retrieved": [
+          "ELIG-01: evidence schemes ['pmsby', 'pmvky', 'pmkvy-sp', 'pm-vikas', 'pmuy']",
+          "ELIG-02: evidence schemes ['sire', 'serbrss']",
+          "ELIG-03: evidence schemes ['apy', 'nsap-ignoaps']"
+        ],
+        "reasoning_error/checked_wrong_scheme": [
+          "ELIG-10: checked ['wos-a']",
+          "ELIG-16: checked ['tce-sc']"
+        ],
+        "hallucination/unsupported_claims": [
+          "FAQ-03: Proof of institution approval.",
+          "FAQ-06: Proof of incorporation (for companies).; Detailed budget and matching contribution plan.",
+          "FAQ-10: Eligible students include those from Group 1 (professional courses) and Group 2 (other courses)"
+        ],
+        "tool_call_error/wrong_tool_arguments": [
+          "GRV-03: draft addressed to MOSDE, expected MSMEI"
+        ],
+        "tool_call_error/required_tool_not_called": [
+          "ML-02: needed search_schemes; called ['draft_grievance']"
+        ],
+        "reasoning_error/answered_from_wrong_scheme": [
+          "QA-18: cited ['sbm-g-ii'], gold sbm-g-i"
+        ],
+        "reasoning_error/did_not_refuse": [
+          "REF-03: The assistant correctly states that no such scheme exists and addresses the non-existent request."
+        ]
+      }
+    },
+    "task/single_pass_after_elig_fix": {
+      "failures": 3,
+      "pending_judge": 0,
+      "by_category": {
+        "tool_call_error": 0,
+        "retrieval_miss": 0,
+        "hallucination": 0,
+        "reasoning_error": 3
+      },
+      "by_subtype": {
+        "reasoning_error/checked_wrong_scheme": 3
+      },
+      "examples": {
+        "reasoning_error/checked_wrong_scheme": [
+          "ELIG-10: checked ['wos-a']",
+          "ELIG-15: checked ['pm-yasasvitcceobcebcdnts']",
+          "ELIG-16: checked ['ncscscst']"
+        ]
+      }
+    }
+  },
+  "audit": {
+    "sampled": 20,
+    "labelled": 0,
+    "accuracy": null,
+    "cohen_kappa": null
+  },
+  "failures": [
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ELIG-01",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "I am 60 years old. Am I eligible for Pradhan Mantri Kaushal Vikas Yojana - Recognition Of Prior Learning?",
+      "answer": "**Schemes That May Suit You**  \n- **Pradhan Mantri Suraksha Bima Yojana** [1] **NEEDS_MORE_INFO**: Offers accidental death and disability cover for bank account holders aged 18–70 [2].  \n- **Pradhan Mantri Kaushal Vikas Yojana - Special Projects** [6] **NEEDS_MORE_INFO**: Designed for marginalized groups, including SC/ST, PwD, and those in remote areas [6].  \n\n**Key Benefits & Eligibility**  \n- PMSBY provides Rs. 2 lakh coverage for accidental death or disability [3].  \n- PMKVY-Special Projects supports skill development for vulnerable groups [6].  \n\n**Documents Needed**  \n- For PMSBY: Bank account details and consent for auto-debit [4].  \n- For PMKVY-Special Projects: Proof of social category and residence [6].  \n\n**Next Steps**  \nCheck the official eligibility rules for PMSBY [1] and clarify your social category for PMKVY-Special Projects [6].  \n\n**Follow-up Question**  \nAre you looking for skill training or insurance coverage?",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pmsby', 'pmvky', 'pmkvy-sp', 'pm-vikas', 'pmuy']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ELIG-02",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "I am 70 years old. Am I eligible for SERB - POWER Fellowship?",
+      "answer": "**Schemes That May Suit You**  \n- **SERB International Research Experience** [NEEDS_MORE_INFO] - Offers a monthly fellowship of US $3000 and international research training [4].  \n- **SERB Research Scientist Scheme** [NEEDS_MORE_INFO] - Provides a monthly emolument of ₹1,20,000 and research grants [7].  \n\n**Key Benefits & Eligibility**  \n- SERB schemes are open to Indian nationals with a Ph.D. or equivalent qualifications.  \n- Age limit for most schemes is 40 years, with relaxations for SC/ST/OBC and women [3].  \n- Your age of 70 may disqualify you unless you fall under a relaxed category, which requires clarification [3].  \n\n**Documents Needed**  \n- Passport size photograph  \n- Bio-data of applicant and host  \n- Endorsement letter from employer  \n- Letter of approval from host institution  \n\n**Next Steps**  \nPlease clarify your social category (SC, ST, OBC, or General) and confirm if you are a researcher or student. This will help determine your eligibility.",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['sire', 'serbrss']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ELIG-03",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "I am 73 years old. Am I eligible for Employees' Pension Scheme?",
+      "answer": "**Schemes That May Suit You**  \n- **NSAP - Indira Gandhi National Old Age Pension Scheme** [**ELIGIBLE**] – Get a monthly pension of up to ₹2,000 if you are 60+ and live below the poverty line [7].  \n- **Atal Pension Yojana** [**NEEDS_MORE_INFO**] – You may qualify if you are a worker and not an income tax payer, but more details are needed [4].  \n\n**Key Benefits & Eligibility**  \n- **NSAP** provides financial support to senior citizens in poverty.  \n- **APY** offers guaranteed pension post-60, but only for those aged 18–40 at enrollment [3].  \n\n**Documents Needed**  \n- For **NSAP**, no specific documents are listed, but proof of poverty and age is required.  \n\n**Next Steps**  \n- Apply for **NSAP** directly through your local government office.  \n- Clarify if you are a worker and whether you paid income tax to check **APY** eligibility.  \n\nWould you like to know more about the **NSAP** application process or other pension options?",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['apy', 'nsap-ignoaps']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ELIG-05",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "I am 55 years old. Am I eligible for Right To Information Fellowship?",
+      "answer": "**Recommended Scheme**  \nThere is no verified Central Government scheme named \"Right To Information Fellowship\" in the official myScheme corpus.  \n\n**Key Benefits & Eligibility**  \nIf you are seeking a postdoctoral fellowship, the **Post Doctoral Fellowship To Women Candidates** (PDFWC) might be relevant. You are **Likely Eligible** if:  \n- You are **unemployed** and hold a **Ph.D. degree** [2].  \n- You are **55 years old** as of the application deadline [1].  \n- You meet the **minimum marks criteria** (55% at UG, 60% at PG for general category) [2].  \n\n**Documents Needed**  \n- Copy of Aadhaar Card  \n- Passport-size Photograph  \n- Proof of age  \n- Mark Sheets/Grade Cards & Degrees  \n- Caste certificate (if applicable)  \n- Disability certificate (if applicable)  \n- Bank account details  \n- [NOC/Undertaking](https://pdfw.ugc.ac.in/Downloads/Noc_format.pdf)  \n\n**Next Steps**  \n1. Confirm your **Ph.D. status** and **unemployment**.  \n2. Check if you meet the **marks criteria**.  \n3. Visit [PDFWC official page](https://www.myscheme.gov.in/schemes/pdfwc) to apply.  \n\nFor other schemes, please provide more details about your profile.",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pdfwc', 'serbpowerf', 'wise-phd']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ELIG-13",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "My annual family income is Rs 2,400,000. Am I eligible for Pradhan Mantri Uchchatar Shiksha Protsahan Yojana - Special Scholarship Scheme for Jammu & Kashmir and Ladakh?",
+      "answer": "**Recommended Scheme**  \nThe scheme you mentioned, \"Pradhan Mantri Uchchatar Shiksha Protsahan Yojana - Special Scholarship Scheme for Jammu & Kashmir and Ladakh,\" does not match any verified Central Government scheme in the official corpus [1].  \n\n**Key Benefits & Eligibility**  \nYour annual family income of ₹2,400,000 exceeds the ₹4.5 lakh income limit for the **Pradhan Mantri Uchchatar Shiksha Protsahan Yojana: Central Sector Interest Subsidy Scheme** [2]. This scheme provides interest subsidy on education loans for students from economically weaker sections.  \n\n**Documents Needed**  \n- Identity proof (Aadhaar Card)  \n- PAN Card  \n- Income proof (issued by competent authority)  \n- Educational certificates  \n- Proof of admission to the course  \n- Bank account details  \n\n**Next Steps**  \nSince your income exceeds the eligibility limit, you may explore other schemes. For more details, visit the official portal [1]. If you have further questions, feel free to ask.",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pm-uspycsiss', 'pm-kisan', 'freecoach']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ELIG-14",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "My annual family income is Rs 2,400,000. Am I eligible for Pradhan Mantri Vidyalaxmi (PM-Vidyalaxmi) Scheme?",
+      "answer": "**Recommended Scheme**  \nPradhan Mantri Uchchatar Shiksha Protsahan Yojana: Central Sector Interest Subsidy Scheme [1]  \n\n**Key Benefits & Eligibility**  \n- Full interest subsidy during the moratorium period on education loans up to ₹10 lakhs [5].  \n- Eligible for students from economically weaker sections with family income up to ₹4.5 lakhs [2].  \n\n**Documents Needed**  \n- Aadhaar Card [4]  \n- PAN Card [4]  \n- Income proof (issued by competent authority) [4]  \n- Educational certificates [4]  \n- Proof of admission to the course [4]  \n- Bank account details [4]  \n\n**Next Steps**  \nYour annual income of ₹2,400,000 exceeds the ₹4.5 lakh limit, making you **Not Eligible** [2]. However, if you are a student from an economically weaker section and meet other criteria, you may still qualify. Contact your bank for further assistance.",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pm-uspycsiss', 'pmay-u', 'pm-kisan']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ELIG-15",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "My annual family income is Rs 750,000. Am I eligible for PM-YASASVI: Pre-Matric Scholarship for OBC, EBC and DNT Students?",
+      "answer": "**Schemes That May Suit You**  \n- **PM-YASASVI: Top Class College Education for OBC, EBC and DNT Students** [NEEDS_MORE_INFO]: Provides full tuition, living expenses, and a laptop for students beyond Class XII. [1]  \n- **PM-YASASVI: Post-Matric Scholarship for OBC, EBC and DNT Students** [NEEDS_MORE_INFO]: Offers financial support for students after Class XII, with income limit up to ₹2.50 lakhs. [7]  \n\nYour annual family income of ₹750,000 exceeds the ₹2.50 lakh income limit for eligibility under these schemes. Please clarify your social category (OBC / General) and confirm if you are a student.  \n\n**Next Steps**: Are you a student pursuing education beyond Class XII?",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pm-yasasvitcceobcebcdnts', 'pm-yasasvipmsobcebcdnts']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "FAQ-03",
+      "kind": "info",
+      "category_tag": "faq",
+      "request": "Regarding AICTE - Scheme For Promoting Interests, Creativity And Ethics Among Students: Q.1 What Is AICTE Expecting From The Institution?",
+      "answer": "**Recommended Scheme**  \nAICTE - Scheme For Promoting Interests, Creativity And Ethics Among Students [1]  \n\n**Key Benefits & Eligibility**  \n- Provides ₹1,00,000 grant (one-time) to one institute per year [2].  \n- Supports student clubs for well-rounded development through creative, ethical, and interest-based activities [2].  \n- Open to clubs from any discipline in AICTE-approved institutions [6].  \n- Institutions must commit a minimum ₹1,00,000 contribution to the club [2].  \n\n**Documents Needed**  \n- No specific documents listed in the retrieved evidence.  \n\n**Next Steps**  \n- Review the scheme’s FAQs and eligibility criteria [1][2].  \n- Ensure your institution meets the requirements, including having a minimum of 5 years of existence and a full-time faculty coordinator with at least 10 years of experience [2].  \n- Contact your institution’s AICTE representative for further guidance.",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "Institutions must commit a minimum ₹1,00,000 contribution to the club; having a minimum of 5 years of existence and a full-time faculty coordinator with at least 10 years of experience"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "FAQ-05",
+      "kind": "info",
+      "category_tag": "faq",
+      "request": "Regarding Production Linked Incentive Scheme (PLI) For Promoting Telecom & Networking Products Manufacturing In India: Can An Existing PLI Beneficiary Company Apply For Revision Of Committed Investment / Net Incremental Sales Forecast In The Existing Approval Under The Scheme?",
+      "answer": "**Recommended Scheme**  \nThe Production Linked Incentive (PLI) Scheme for Telecom & Networking Products Manufacturing in India [1] offers financial incentives to boost domestic manufacturing and exports.  \n\n**Key Benefits & Eligibility**  \n- Existing PLI beneficiaries can claim incentives for FY2021-22 with achieved figures under normal rates.  \n- They can also apply for new applications under the Design-Led PLI for the remaining 4 years with higher forecasts, provided they meet Design-led criteria.  \n- However, revising committed investment/net sales requires applying as a fresh company, which may result in forfeiting previous investments [1].  \n\n**Documents Needed**  \n- PAN  \n- Authority Letter for Nodal Officer  \n- Certificate of Incorporation [2]  \n\n**Next Steps**  \nIf you are an existing beneficiary, review the Design-led criteria and consider applying as a fresh company if you wish to revise your forecast. For more details, visit [1].",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "PAN; Authority Letter for Nodal Officer; Certificate of Incorporation"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "FAQ-06",
+      "kind": "info",
+      "category_tag": "faq",
+      "request": "What is the purpose of IDeX, DIO?",
+      "answer": "**Purpose of IDeX & DIO**  \nInnovations for Defence Excellence (iDEX) and the Defence Innovation Organisation (DIO) aim to foster innovation and technology development in India's Defence and Aerospace sectors. iDEX creates an ecosystem to engage industries, including MSMEs, start-ups, individual innovators, and academia, by providing grants and support for R&D projects with potential for adoption by the Armed Forces [1]. DIO, a Section 8 company formed by HAL and BEL, guides iDEX to ensure alignment with national defence goals [2].  \n\n**Key Benefits & Eligibility**  \n- Grants up to Rs. 1.5 crore (up to Rs. 10 crore for iDEX Prime) for prototype development.  \n- Supports innovation in areas like research, prototyping, and market assessment.  \n- Eligible: Startups, MSMEs, individual innovators, and R&D institutes.  \n\n**Documents Needed**  \n- Proof of incorporation (for companies).  \n- Business plan and innovation proposal.  \n\n**Next Steps**  \nCheck if you fit the profile (startup, MSME, etc.) and gather required documents. Visit [https://www.myscheme.gov.in/schemes/idex](https://www.myscheme.gov.in/schemes/idex) for more details.",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "Proof of incorporation (for companies).; Business plan and innovation proposal."
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "FAQ-10",
+      "kind": "info",
+      "category_tag": "faq",
+      "request": "Regarding PM-YASASVI: Post-Matric Scholarship for OBC, EBC and DNT Students: What is the objective of the scheme?",
+      "answer": "**Recommended Scheme**  \nPM-YASASVI: Post-Matric Scholarship for OBC, EBC and DNT Students [1]  \n\n**Key Benefits & Eligibility**  \n- Provides financial assistance to OBC, EBC, and DNT students studying at post-matriculation or post-secondary stages [2].  \n- Covers studies in India only, awarded by the applicant’s home state/UT [1].  \n- Eligible students include those from Group 1 (professional courses) and Group 2 (other courses) [2].  \n\n**Documents Needed**  \n- Proof of OBC/EBC/DNT status.  \n- Income certificate of parents/guardians (not exceeding ₹2.50 lakhs annually).  \n- Academic records and attendance proof.  \n\n**Next Steps**  \n- Apply through the State/UT government where you are domiciled.  \n- Ensure you meet the income and academic criteria.  \n- Submit documents to the relevant authority for verification.  \n\nFor more details, visit [PM-YASASVI official page](https://www.myscheme.gov.in/schemes/pm-yasasvipmsobcebcdnts).",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "Group 2 (other courses)"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "GRV-03",
+      "kind": "draft_grievance",
+      "category_tag": "grievance",
+      "request": "File a CPGRAMS complaint that my PM Vishwakarma artisan toolkit incentive was not disbursed after training.",
+      "answer": "I have drafted a formal CPGRAMS grievance for **PM Vishwakarma Artisan Toolkit Incentive**, routed to **Ministry Of Skill Development And Entrepreneurship (`MOSDE`)**.\n\n- **Draft ID:** `DRAFT-C09373`\n- **Character Count:** `785 / 2000` (CPGRAMS compliant)\n- **Status:** Awaiting your explicit confirmation (Human-in-the-Loop safety gate)\n\nPlease review the drafted complaint carefully in the **Review & Confirm Grievance** card below and click **Confirm & Submit** when ready. Nothing has been submitted yet.",
+      "label": {
+        "category": "tool_call_error",
+        "subtype": "wrong_tool_arguments",
+        "detail": "draft addressed to MOSDE, expected MSMEI"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ML-02",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "Mera PM-KISAN ka pichle 6 mahine se paisa nahi aaya, kya eligibility aur documents check karne chahiye?",
+      "answer": "मैंने **प्रधान मंत्री किसान सम्मान निधि** के लिए एक औपचारिक CPGRAMS शिकायत की रूपरेखा तैयार कर ली है, जिसे **कृषि एवं किसान सुविधा मंत्रालय (`MOAFW`)** के लिए प्रस्तुत कर दिया गया है।\n\n- **ड्राफ्ट आईडी:** `DRAFT-FD58C3`\n- **करकता गिनती:** `741 / 2000` (CPGRAMS अनुरूप)\n- **स्थिति:** आपकी स्पष्ट पुष्टि के इंतजार में (मानव-इन-द-लूप सुरक्षा द्वार)\n\nकृपया नीचे **शिकायत की समीक्षा एवं पुष्टि** कार्ड में तैयार की गई शिकायत को ध्यान से समीक्षा करें और जब तैयार हो जाएं तो **पुष्टि एवं आवेदन** पर क्लिक करें। अब तक कोई आवेदन नहीं किया गया है।",
+      "label": {
+        "category": "tool_call_error",
+        "subtype": "required_tool_not_called",
+        "detail": "needed search_schemes; called ['draft_grievance']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ML-03",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "आयुष्मान भारत प्रधानमंत्री जन आरोग्य योजना में कितने लाख का स्वास्थ्य बीमा मिलता है?",
+      "answer": "**अनुशंसित योजना**  \nआयुष्मान भारत - प्रधान मंत्री जन आरोग्य योजना (PM-JAY) परिवार के लिए प्रतिवर्ष **₹5,00,000 (पांच लाख)** की स्वास्थ्य बीमा कवरेज प्रदान करती है [1]।  \n\n**मुख्य लाभ एवं योग्यता**  \n- अस्पतालीकरण, डे केयर सर्जरी, पूर्व एवं पश्चात अस्पतालीकरण खर्च एवं उपचार संबंधी अस्थिरताओं को शामिल करती है।  \n- पूर्व से बीमारियों को शामिल करती है और राष्ट्रव्यापी एम्पैनल्ड अस्पतालों में उपलब्ध है [2]।  \n\n**आवश्यक दस्तावेज**  \n- आयु एवं पहचान का प्रमाण (आधार कार्ड / पैन कार्ड)।  \n- पता का प्रमाण।  \n- संपर्क विवरण (मोबाइल, ईमेल)।  \n- जाति प्रमाण पत्र।  \n- आय प्रमाण पत्र।  \n- परिवार के वर्तमान स्थिति का दस्तावेज (संयुक्त या नाभिकीय)।  \n- आधार कार्ड।  \n\n**अगले कदम**  \nअधिकारिक योजना पृष्ठ [1] पर योग्यता की पुष्टि करें और UMANG पोर्टल के माध्यम से आवेदन करें।",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "आयु एवं पहचान का प्रमाण (आधार कार्ड / पैन कार्ड)।; जाति प्रमाण पत्र।; आय प्रमाण पत्र।"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ML-04",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "PM Vishwakarma yojana mein karigaron aur carpenter ko toolkit aur loan par kitna labh milta hai?",
+      "answer": "**अनुशंसित योजना**  \nपीएम विश्वकर्मा विशेष रूप से कलाकारों और कारीगरों, जिनमें मेहरबानी कर्मचारी शामिल हैं, के लिए डिज़ाइन की गई है, जिसमें वित्तीय और कौशल समर्थन शामिल हैं।  \n\n**मुख्य लाभ और योग्यता**  \n- **टूलकिट इन्सेंटिव**: ₹15,000 की धनराशि आधुनिक उपकरणों के लिए [1]।  \n- **ऋण समर्थन**: बिना गारंटी के व्यवसाय विकास ऋण अधिकतम ₹1,00,000 (पहले चरण के लिए 18 महीने) और ₹2,00,000 (दूसरे चरण के लिए 30 महीने) [1]।  \n- **योग्यता**: अनुसूचित क्षेत्रों में कार्यरत 18 साल से अधिक आयु के कलाकार, जो 18 पारंपरिक व्यवसायों (जैसे कारीगर, लोहार) में लगे हुए हैं [2]।  \n\n**आवश्यक दस्तावेज**  \n- एडार्ड, मोबाइल नंबर, बैंक विवरण, राशन कार्ड [4]।  \n\n**अगले कदम**  \nआवश्यक दस्तावेजों के साथ [www.pmvishwakarma.gov.in](https://www.pmvishwakarma.gov.in) पर पंजीकरण करें। अपना व्यवसाय 18 पारंपरिक श्रेणियों में सूचीबद्ध है या नहीं, इसकी जांच करें [3]।",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "अनुसूचित क्षेत्रों में कार्यरत 18 साल से अधिक आयु के कलाकार"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ML-05",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "प्रधानमंत्री मुद्रा योजनेअंतर्गत लहान व्यवसायासाठी किती कर्ज मिळते?",
+      "answer": "**पीएम मुद्रा योजनेच्या वापरासाठी कर्ज रक्कम**  \nप्रधान मंत्री मुद्रा योजना (PMMY) अंतर्गत, गृहस्थ व्यवसाय आणि गृहस्थ उद्योगांसाठी अतिरिक्त शेती विभागातील उत्पादन व्यवसाय, वाहतूक, सेवा आणि शेतीसंबंधित गतिविधींसाठी **₹20 लाख** पर्यंत कर्ज उपलब्ध आहे [4]।  \n\n**मुख्य फायदे**  \n- उत्पादन वाढीसाठी खादी, सीएनजी टेम्पो/टॅक्सी खरेदी इत्यादी कार्यांसाठी कर्ज देण्यात येते [6]।  \n- व्याजदर बँकांनी रिझर्व बँकेच्या आदेशांच्या आधारे निर्धारित केले जातात [4]।  \n\n**आवश्यक दस्तऐवज**  \n- आधार आणि रहिवासी विधान.  \n- खरेदी करायच्या यंत्रांची किंमत आणि विवरण.  \n- ₹2 लाख पेक्षा जास्त कर्जासाठी आर्थिक विवरण.  \n\n**पुढील कार्यक्रम**  \nभागिदार बँक किंवा वित्तीय संस्थेशी संपर्क साधा आणि आवेदन करा. तुमच्या पात्रता आणि आवश्यक दस्तऐवजांची तपासणी करा. अधिक माहितीसाठी [4] दृष्टी आणि विचार करा.",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "आधार आणि रहिवासी विधान; खरेदी करायच्या यंत्रांची किंमत आणि विवरण; ₹2 लाख पेक्षा जास्त कर्जासाठी आर्थिक विवरण"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ML-06",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "अटल पेन्शन योजनेसाठी वयोमर्यादा आणि मासिक पेन्शन किती आहे?",
+      "answer": "**अनुशंगित योजना**  \nअतल पेंशन योजना (APY) 18 ते 40 वर्ष या वयोगटातील व्यक्तींसाठी डिझाइन केलेली आहे [1]।  \n\n**मुख्य फायदे आणि पात्रता**  \n- **वय बर्तवा**: योजनेत प्रवेश करण्यासाठी न्यूनतम 18 वर्ष आणि अधिकतम 40 वर्ष आवश्यक आहे. पेंशन 60 वर्षापासून सुरू होते.  \n- **मासिक पेंशन रक्कम**: प्रतिमास 1000/-, 2000/-, 3000/-, 4000/- किंवा 5000/- रुपये, यांपैकी एक अवलंबून योग्य योगदानावर [2]।  \n\n**आवश्यक दस्तऐवज**  \n- सक्रिय वार्षिक बचत बँक किंवा पोस्ट ऑफिस खात्याचे KYC विवरण.  \n\n**पुढील कार्यक्रम**  \n1 ऑक्टोबर 2022 पर्यंत आपण आयकर भागीदार नसल्याचे तपासा [1]। जर योग्य असाल, तर आपल्या बँक किंवा पोस्ट ऑफिसद्वारे अर्ज करा.",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "सक्रिय वार्षिक बचत बँक किंवा पोस्ट ऑफिस खात्याचे KYC विवरण."
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ML-07",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "প্রধানমন্ত্রী আবাস যোজনার সুবিধা এবং যোগ্যতা কী?",
+      "answer": "**আপনার জন্য যোগ্য প্রকল্পগুলি**  \n- **প্রধানমন্ত্রী আবাস যোজনা - শহর** [1] **NEEDS_MORE_INFO**: শহরী এলাকায় পুরুষ ঘর নির্মাণে আর্থিক সহায়তা প্রদান করে।  \n- **প্রধানমন্ত্রী আবাস যোজনা - গ্রামীণ** [2] **NEEDS_MORE_INFO**: পুরুষ ঘর নেই গ্রামীণ পরিবারের জন্য আবাসন সহায়তা প্রদান করে, যার মধ্যে হাতে কাজ করে বিশেষ করে স্ক্যাভেঞ্জার এবং জাতীয় গোষ্ঠী অন্তর্ভুক্ত।  \n\n**মূল সুবিধা এবং যোগ্যতা**  \n- **শহরী প্রকল্প**: বর্তমানে পুরুষ ঘর নেই, আবাসন শহরে রয়েছে, আগে আবাসন সুবিধা পাওয়া হয়নি।  \n- **গ্রামীণ প্রকল্প**: পুরুষ ঘর থাকা পরিবার বাদ দেওয়া হয়, হাতে কাজ করে বিশেষ করে স্ক্যাভেঞ্জার এবং জাতীয় গোষ্ঠী অন্তর্ভুক্ত।  \n\n**প্রয়োজনীয় দলিলগুলি**  \n- বাস প্রমাণ, আয় প্রমাণ এবং পুরুষ ঘর মালিকানা না থাকার প্রমাণ।  \n\n**পরবর্তী পদক্ষেপ**  \nপ্রকল্পের অফিসিয়াল যোগ্যতা নিয়মগুলি পৃষ্ঠা [1] এবং [2] থেকে পরিদর্শন করুন যাতে আপনার অবস্থা নিশ্চিত হয়।  \n\nআপনি শহরী বা গ্রামীণ এলাকায় আবাসন সুবিধার বিষয়ে আরও জানতে চান?",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "পুরুষ ঘর নির্মাণে আর্থিক সহায়তা প্রদান করে; বাস প্রমাণ, আয় প্রমাণ এবং পুরুষ ঘর মালিকানা না থাকার প্রমাণ"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ML-08",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "সুকন্যা সমৃদ্ধি যোজনা অ্যাকাউন্ট কারা খুলতে পারে?",
+      "answer": "**আপনার জন্য যোগ্য প্রকল্পগুলি**  \n- **প্রধানমন্ত্রী জন ধন যোজনা** [1] **NEEDS_MORE_INFO**: এটি কোনও দস্তাবেজ না থাকার ব্যক্তিদের জন্য বিনামূল্যে রুপায় ডেবিট কার্ড, দূর্ঘটনা বীমা এবং ছোট অ্যাকাউন্ট প্রদান করে।  \n- **নিখায় পোষণ যোজনা** [2] **NEEDS_MORE_INFO**: টিবেসিলিসিস রোগীদের আর্থিক সহায়তা প্রদান করে, যার জন্য ব্যাংক অ্যাকাউন্ট প্রয়োজন (এটি প্রধানমন্ত্রী জন ধন যোজনার আওতায় খুলতে পারে)।  \n- **মহিলা সমৃদ্ধি যোজনা** [5] **NEEDS_MORE_INFO**: সিসি/স্ট মহিলাদের জন্য ঋণ প্রদান করে, যার আয় সীমা প্রতি বছর ₹3 লক্ষ পর্যন্ত হতে পারে, যার জন্য জাতীয়তা প্রমাণ এবং পরিচয় প্রমাণ প্রয়োজন।  \n\n**প্রয়োজনীয় দস্তাবেজগুলি**: আআড়ার, পরিচয় প্রমাণ, ঠিকানা প্রমাণ এবং পাসপোর্ট আকারে ছবি [1]।  \n\n**পরবর্তী পদক্ষেপ**: আপনি কি সিসি বা স্ট থেকে মহিলা হন বা আপনার জন্য ব্যাংক অ্যাকাউন্ট খুলতে সাহায্য প্রয়োজন কি তা নিশ্চিত করুন।",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pmjdy', 'nikshay', 'cbssc-msy']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "ML-10",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "ప్రధాన మంత్రి ఫసల్ బీమా యోజన ద్వారా రైతులకు పంట బీమా ప్రయోజనాలు ఏమిటి?",
+      "answer": "**మీకు సరిపోయే పథకాలు**  \n- **ప్రధాన మంత్రి ఫసల్ బిమా యోజన (PMFBY)**: **సాధ్యంగా అర్హుడు** – కొన్ని రాష్ట్రాలలో ప్రీమియం చెల్లింపులకు ప్రభుత్వ సబ్సిడీ కలిగి సులభమైన ఫసలు బిమా అందిస్తుంది [1].  \n- **పరమ్పరగత కృషి వికాస యోజన**: **మరింత సమాచారం అవసరం** – ఆస్తి వ్యవస్థ మరియు బంధాల విషయంలో దృష్టి సారించడం కోసం మీ ప్రోఫైల్ గురించి వివరాలు అవసరం [7].  \n- **ప్రధాన మంత్రి కృషి సమ్మాన్ నిధి**: **మరింత సమాచారం అవసరం** – ప్రతి కుటుంబానికి వార్షికంగా రూ. 6,000 ఆర్థిక సాయం అందిస్తుంది, కానీ కృషి వ్యవస్థ అంగీకరణ అవసరం [8].  \n\n**ప్రధాన ప్రయోజనాలు మరియు అర్హత**  \n- **సులభమైన ప్రీమియంలు**: కాల్వు పంటలకు వ్యవసాయి ప్రీమియం వ్యవసాయి ప్రీమియం వ్యవసాయి ప్రీమియం వ్యవసాయి ప్రీమియం వ్యవసాయి ప్రీమియం వ్యవసాయి ప్రీమియం వ్యవసాయి ప్రీమియం వ్యవసాయి ప",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pmfby', 'pkvy', 'pm-kisan']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "QA-06",
+      "kind": "info",
+      "category_tag": "scheme_qa",
+      "request": "What guaranteed monthly pension slabs and age limits apply under Atal Pension Yojana (APY)?",
+      "answer": "**Guaranteed Monthly Pension Slabs**  \nUnder Atal Pension Yojana (APY), the guaranteed minimum pension amount upon reaching 60 years of age is **Rs. 1000/-, Rs. 2000/-, Rs. 3000/-, Rs. 4000/-, or Rs. 5000/- per month** [1].  \n\n**Age Limits**  \nTo join APY, the minimum age is **18 years**, and the maximum age is **40 years**. Pension begins at the age of **60 years** [2].  \n\n**Key Notes**  \n- The pension amount is fixed at the time of joining the scheme.  \n- The scheme is for individuals who are **not income tax payers** (as of 1st October 2022) [3].  \n\n**Next Steps**  \nIf you meet the criteria, you can apply through your **savings bank account** with auto-debit facility. Ensure you have a **KYC-compliant account** [5].",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "Ensure you have a KYC-compliant account"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "QA-15",
+      "kind": "info",
+      "category_tag": "scheme_qa",
+      "request": "What annual scholarship amount is awarded to meritorious economically weaker students under the National Means-Cum-Merit Scholarship Scheme?",
+      "answer": "**Recommended Scheme**  \nThe National Means-cum-Merit Scholarship Scheme (NMMSS) provides financial support to meritorious students from economically weaker sections.  \n\n**Key Benefits & Eligibility**  \n- **Annual Scholarship Amount**: ₹12,000/- per annum (₹1,000/- per month) [1].  \n- **Eligibility**: Students whose parental income does not exceed ₹3,50,000/- per annum [4].  \n- **Class Level**: Awarded to students entering Class IX, with continuation up to Class XII [2].  \n\n**Documents Needed**  \n- Aadhaar Card  \n- Educational Certificates/Marksheet  \n- Income Certificate of Parents  \n- Caste Certificate (if applicable)  \n\n**Next Steps**  \nCheck if you meet the income and academic criteria. If so, gather the required documents and apply through your school or local education office. For more details, visit [NMMSS official page](https://www.myscheme.gov.in/schemes/nmmss).",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "Aadhaar Card; Educational Certificates/Marksheet; Income Certificate of Parents"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "QA-21",
+      "kind": "info",
+      "category_tag": "scheme_qa",
+      "request": "What are the main benefits and application documents required for Biotechnology Ignition Grant Scheme?",
+      "answer": "**Recommended Scheme**  \nThe **Biotechnology Ignition Grant Scheme (BIG)** supports innovative biotech ideas for Proof of Concept (PoC) with funding up to ₹50 lakh for 18 months [1].  \n\n**Key Benefits & Eligibility**  \n- **Funding**: Up to ₹50 lakh for equipment, reagents, team hiring, and incubation [5].  \n- **Mentorship & Support**: Technical, legal, and business mentoring, networking, and training [1].  \n- **Eligibility**: Open to Indian citizens, entrepreneurs, startups, or researchers with a valid incubator MoU [4].  \n\n**Documents Needed**  \n- Letter of commitment from scientific advisors [2].  \n- Letter of intent from technical team members [2].  \n- MoU with an incubator [2].  \n- Evidence of access to facilities and samples (e.g., bio-fluids) [2].  \n- Undertaking that the project hasn’t received funding elsewhere [2].  \n\n**Next Steps**  \nIdentify an incubator and gather required documents. Visit [https://www.myscheme.gov.in/schemes/big](https://www.myscheme.gov.in/schemes/big) for full guidelines.",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "Open to Indian citizens, entrepreneurs, startups, or researchers with a valid incubator MoU"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "loop",
+      "item_id": "QA-22",
+      "kind": "info",
+      "category_tag": "scheme_qa",
+      "request": "What are the main benefits and application documents required for Production Linked Incentive Scheme (PLI) For Promoting Telecom & Networking Products Manufacturing In India?",
+      "answer": "**Recommended Scheme**  \nThe **Production Linked Incentive (PLI) Scheme** promotes telecom and networking products manufacturing in India, offering financial incentives to eligible companies [1].  \n\n**Key Benefits & Eligibility**  \n- **Benefits**: Incentives are provided based on incremental investment and sales thresholds. For MSMEs, the minimum investment is ₹10 Crores, with incentive rates ranging from 17% to 54% depending on thresholds [3].  \n- **Eligibility**: Companies must meet minimum global revenue criteria (e.g., MSMEs need ₹10 Crore in base year revenue) and achieve incremental investment and sales targets over four years [5].  \n\n**Documents Needed**  \n- PAN  \n- Authority Letter for Nodal Officer  \n- Certificate of Incorporation [2]  \n\n**Next Steps**  \nCheck if you meet the criteria (e.g., MSME status). If so, gather the required documents and submit an application through the official portal. For more details, visit [1].",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "MSMEs need ₹10 Crore in base year revenue"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ELIG-01",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "I am 60 years old. Am I eligible for Pradhan Mantri Kaushal Vikas Yojana - Recognition Of Prior Learning?",
+      "answer": "**Recommended Scheme**  \nPradhan Mantri Kaushal Vikas Yojana - Recognition Of Prior Learning is **not** listed in the retrieved evidence.  \n\n**Key Benefits & Eligibility**  \nNo matching verified Central Government scheme was found in the official myScheme corpus.  \n\n**Next Steps**  \nPlease verify the scheme name and check the official government website for accurate information. If you need assistance with other schemes, feel free to ask.",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pmsby', 'pmvky', 'pmkvy-sp', 'pm-vikas', 'pmuy']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ELIG-02",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "I am 70 years old. Am I eligible for SERB - POWER Fellowship?",
+      "answer": "**Recommended Scheme**  \nSERB International Research Experience (SIRE) is the only scheme mentioned, but it is **not** the \"SERB - POWER Fellowship.\" No matching verified Central Government scheme was found in the official myScheme corpus.  \n\n**Key Benefits & Eligibility**  \n- **Age Limit**: Maximum age is 40 years, with relaxation for SC/ST/OBC and women [3].  \n- **Education**: Requires a Ph.D. in Science/Engineering from India or MBBS/MD/Veterinary degrees [3].  \n- **Occupation**: Must hold a permanent position in an Indian research or academic institution [3].  \n\n**Documents Needed**  \n- Passport size photo  \n- Bio-data of applicant and host  \n- Research Plan  \n- Endorsement letter from institution  \n- Host approval letter  \n- Age proof and category certificate (if applicable)  \n\n**Next Steps**  \n- Verify if you meet the age and education criteria.  \n- Contact SERB for clarification on eligibility for senior researchers.  \n- Explore other schemes for senior citizens.  \n\n**Note**: The \"SERB - POWER Fellowship\" is not a verified scheme. Check official sources for accurate information.",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['sire', 'serbrss']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ELIG-03",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "I am 73 years old. Am I eligible for Employees' Pension Scheme?",
+      "answer": "**Recommended Scheme**  \nThe Employees' Pension Scheme (EPS) is not listed in the retrieved evidence. No matching verified Central Government scheme was found in the official myScheme corpus [1].  \n\n**Key Benefits & Eligibility**  \nYou are 73 years old, which is above the age limit for the Atal Pension Yojana (APY), which is for individuals aged 18–40 years [4]. The Indira Gandhi National Old Age Pension Scheme (IGNOAPS) is for individuals aged 60 years or older living below the poverty line [7].  \n\n**Documents Needed**  \n- Proof of age  \n- Proof of income (if applicable)  \n- Proof of residence  \n- Proof of being below the poverty line [7].  \n\n**Next Steps**  \nContact your local government office or visit the official IGNOAPS website for further assistance. If you are a pensioner under EPS, ensure your details are updated with your employer or the Pension Fund Regulatory and Development Authority (PFRDA).",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['apy', 'nsap-ignoaps']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ELIG-05",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "I am 55 years old. Am I eligible for Right To Information Fellowship?",
+      "answer": "**Recommended Scheme**  \nThere is no verified Central Government scheme named \"Right To Information Fellowship\" in the official myScheme corpus.  \n\n**Key Benefits & Eligibility**  \nIf you are seeking a postdoctoral fellowship, the **Post Doctoral Fellowship To Women Candidates** (PDFWC) might be relevant. You are **Likely Eligible** if:  \n- You are **unemployed** and hold a **Ph.D. degree** [2].  \n- You are **55 years old** as of the application deadline [1].  \n- You meet the **minimum marks criteria** (55% at UG, 60% at PG for general category) [2].  \n\n**Documents Needed**  \n- Copy of Aadhaar Card  \n- Passport-size Photograph  \n- Proof of age  \n- Mark Sheets/Grade Cards & Degrees  \n- Caste certificate (if applicable)  \n- Disability certificate (if applicable)  \n- Bank account details  \n- [NOC/Undertaking](https://pdfw.ugc.ac.in/Downloads/Noc_format.pdf)  \n\n**Next Steps**  \n1. Confirm your **Ph.D. status** and **unemployment**.  \n2. Check if you meet the **marks criteria**.  \n3. Visit [PDFWC official page](https://www.myscheme.gov.in/schemes/pdfwc) to apply.  \n\nFor other schemes, please provide more details about your profile.",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pdfwc', 'serbpowerf', 'wise-phd']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ELIG-10",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "I am 42 years old. Can I qualify for Women Scientist Scheme-B and what documents are needed?",
+      "answer": "**Recommended Scheme**  \nWomen Scientist Scheme-B [6]  \n\n**Key Benefits & Eligibility**  \n- **Eligible if**: Female, unemployed or in non-regular employment, aged 27–57 (with 5-year relaxation for SC/ST/OBC or PWD).  \n- **Qualifications**: Minimum Post Graduate degree (M.Sc., B.Tech., MBBS, etc.) or Ph.D. in Basic or Applied Sciences.  \n- **Age**: You are 42, which falls within the eligible age range [6].  \n\n**Documents Needed**  \n- Proof of age (e.g., Aadhaar, PAN).  \n- Educational certificates (PG/Ph.D. degree).  \n- Proof of unemployment or non-regular employment.  \n- Caste certificate (if applicable).  \n- Disability certificate (if applicable).  \n\n**Next Steps**  \n- Apply online at [https://dst.gov.in](https://dst.gov.in).  \n- Ensure all documents are in PDF format and ≤2MB [1].  \n- Submit your application before the deadline.  \n\n**Note**: Clarify your social category and occupation to confirm full eligibility.",
+      "label": {
+        "category": "reasoning_error",
+        "subtype": "checked_wrong_scheme",
+        "detail": "checked ['wos-a']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ELIG-13",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "My annual family income is Rs 2,400,000. Am I eligible for Pradhan Mantri Uchchatar Shiksha Protsahan Yojana - Special Scholarship Scheme for Jammu & Kashmir and Ladakh?",
+      "answer": "**Recommended Scheme**  \nThe scheme you mentioned, \"Pradhan Mantri Uchchatar Shiksha Protsahan Yojana - Special Scholarship Scheme for Jammu & Kashmir and Ladakh,\" does not match any verified Central Government scheme in the official corpus [1].  \n\n**Key Benefits & Eligibility**  \nYour annual family income of ₹2,400,000 exceeds the ₹4.5 lakh income limit for the **Pradhan Mantri Uchchatar Shiksha Protsahan Yojana: Central Sector Interest Subsidy Scheme** [2]. This scheme provides interest subsidy on education loans for students from economically weaker sections with family income up to ₹4.5 lakhs.  \n\n**Documents Needed**  \n- Identity proof (Aadhaar Card)  \n- PAN Card  \n- Income proof (issued by competent authority)  \n- Educational certificates  \n- Proof of admission to the course  \n- Bank account details  \n\n**Next Steps**  \nSince your income exceeds the eligibility limit, you may explore other schemes. For more details, visit the official portal [https://www.myscheme.gov.in](https://www.myscheme.gov.in).",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pm-uspycsiss', 'pm-kisan', 'freecoach']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ELIG-14",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "My annual family income is Rs 2,400,000. Am I eligible for Pradhan Mantri Vidyalaxmi (PM-Vidyalaxmi) Scheme?",
+      "answer": "**Recommended Scheme**  \nPradhan Mantri Uchchatar Shiksha Protsahan Yojana: Central Sector Interest Subsidy Scheme [1]  \n\n**Key Benefits & Eligibility**  \n- Full interest subsidy during the moratorium period on education loans up to ₹10 lakhs [5].  \n- Eligible for students from economically weaker sections with family income up to ₹4.5 lakhs [2].  \n\n**Documents Needed**  \n- Aadhaar Card [4]  \n- PAN Card [4]  \n- Income proof (issued by competent authority) [4]  \n- Educational certificates [4]  \n- Proof of admission to the course [4]  \n- Bank account details [4]  \n\n**Next Steps**  \nYour annual income of ₹2,400,000 exceeds the ₹4.5 lakh limit, making you **Not Eligible** [2]. However, if you are a student from an economically weaker section and meet other criteria, you may still qualify. Contact your bank for further clarification.",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pm-uspycsiss', 'pmay-u', 'pm-kisan']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ELIG-15",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "My annual family income is Rs 750,000. Am I eligible for PM-YASASVI: Pre-Matric Scholarship for OBC, EBC and DNT Students?",
+      "answer": "**Recommended Scheme**  \nYou mentioned the **PM-YASASVI: Pre-Matric Scholarship for OBC, EBC and DNT Students**, but the retrieved evidence refers to the **PM-YASASVI: Top Class College Education for OBC, EBC and DNT Students** [1]. There is no verified Central Government scheme named \"Pre-Matric Scholarship\" in the official corpus.  \n\n**Key Benefits & Eligibility**  \nIf you meant the **Top Class College Education Scheme**, your annual family income of ₹750,000 exceeds the ₹2.50 lakh income limit [2]. This makes you **Not Eligible** for the scholarship.  \n\n**Documents Needed**  \nIf you are unsure about the correct scheme, gather documents like:  \n- Aadhaar Card  \n- Income certificate  \n- Caste/Community Certificate  \n- Educational qualification certificates  \n\n**Next Steps**  \nVerify the scheme name with the Ministry of Social Justice and Empowerment. If you are certain about the \"Pre-Matric\" scheme, no matching verified Central Government scheme was found in the official corpus.",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pm-yasasvitcceobcebcdnts', 'pm-yasasvipmsobcebcdnts']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ELIG-16",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "My annual family income is Rs 400,000 and I belong to SC category. Am I eligible for National Overseas Scholarship For Scheduled Caste Etc. Candidates?",
+      "answer": "**Recommended Scheme**  \nThe **Top Class Education For Scheduled Caste Students** scheme may apply to you, but more details are needed. [1]  \n\n**Key Benefits & Eligibility**  \n- **Eligibility**: You belong to the SC category, and your annual family income of ₹400,000 is within the ₹8 lakh limit. [1]  \n- **Requirements**: You must be a student pursuing studies beyond class 12th in a full-time course at a notified institution. [2]  \n- **Exclusions**: The scheme does not apply to those already studying abroad or completing studies abroad via other means. [5]  \n\n**Documents Needed**  \n- No specific documents are listed for this scheme.  \n\n**Next Steps**  \n- Confirm if you are a student and provide your current course details.  \n- Visit [https://www.myscheme.gov.in/schemes/tce-sc](https://www.myscheme.gov.in/schemes/tce-sc) for further guidance.  \n\n**Note**: The **National Overseas Scholarship For Scheduled Caste Etc. Candidates** was not confirmed as applicable based on your profile. [5]",
+      "label": {
+        "category": "reasoning_error",
+        "subtype": "checked_wrong_scheme",
+        "detail": "checked ['tce-sc']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "FAQ-03",
+      "kind": "info",
+      "category_tag": "faq",
+      "request": "Regarding AICTE - Scheme For Promoting Interests, Creativity And Ethics Among Students: Q.1 What Is AICTE Expecting From The Institution?",
+      "answer": "**Recommended Scheme**  \nAICTE - Scheme For Promoting Interests, Creativity And Ethics Among Students [1], [2]  \n\n**Key Benefits & Eligibility**  \n- Provides ₹1,00,000 financial support for one student club per institution [2].  \n- Supports clubs promoting creativity, ethics, and student development [2].  \n- Open to all AICTE-approved institutions, including non-technical clubs [6].  \n\n**Documents Needed**  \n- Proof of institution approval.  \n- Club proposal and activity plan.  \n- Acceptance letter uploaded within 7 days [4].  \n\n**Next Steps**  \n- Prepare a detailed proposal for a student club.  \n- Submit the application through the SPICES review portal.  \n- Ensure collaboration with other clubs and document activities [6].  \n\nFor more details, visit [https://www.myscheme.gov.in/schemes/aicte-spices](https://www.myscheme.gov.in/schemes/aicte-spices).",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "Proof of institution approval."
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "FAQ-06",
+      "kind": "info",
+      "category_tag": "faq",
+      "request": "What is the purpose of IDeX, DIO?",
+      "answer": "**Purpose of IDEX & DIO**  \nInnovations for Defence Excellence (iDEX) and the Defence Innovation Organisation (DIO) aim to foster innovation and technology development in India's Defence and Aerospace sectors. iDEX creates an ecosystem to engage industries, including MSMEs, start-ups, and academia, by providing grants and support for R&D projects with potential for Defence adoption [1]. DIO, formed by HAL and BEL, manages iDEX and provides policy guidance to ensure alignment with Defence needs [2].  \n\n**Key Benefits & Eligibility**  \n- Grants up to Rs. 1.5 crore (up to Rs. 10 crore for iDEX Prime cases) for prototype development.  \n- Focus areas include research, prototyping, and market assessment for Defence and non-Defence technologies.  \n- Open to start-ups, MSMEs, individual innovators, and R&D institutes.  \n\n**Documents Needed**  \n- Business plan and project proposal.  \n- Proof of incorporation (for companies).  \n- Detailed budget and matching contribution plan.  \n\n**Next Steps**  \nReview the [iDEX website](https://www.myscheme.gov.in/schemes/idex) for application guidelines and submit your proposal through the official portal.",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "Proof of incorporation (for companies).; Detailed budget and matching contribution plan."
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "FAQ-10",
+      "kind": "info",
+      "category_tag": "faq",
+      "request": "Regarding PM-YASASVI: Post-Matric Scholarship for OBC, EBC and DNT Students: What is the objective of the scheme?",
+      "answer": "**Recommended Scheme**  \nPM-YASASVI: Post-Matric Scholarship for OBC, EBC and DNT Students [1]  \n\n**Key Benefits & Eligibility**  \n- Provides financial assistance to OBC, EBC, and DNT students studying at post-matriculation or post-secondary stages [2].  \n- Covers studies in India only, awarded by the applicant’s home state/UT [1].  \n- Eligible students include those from Group 1 (professional courses) and Group 2 (other courses) [2].  \n\n**Documents Needed**  \n- Proof of OBC/EBC/DNT status.  \n- Income certificate of parents/guardians (not exceeding ₹2.50 lakhs annually).  \n- Academic records and attendance proof.  \n\n**Next Steps**  \n- Apply through the State/UT government where you are domiciled.  \n- Ensure you meet the income and academic criteria.  \n- Submit documents to the awarding authority for verification.  \n\nFor more details, visit [PM-YASASVI official page](https://www.myscheme.gov.in/schemes/pm-yasasvipmsobcebcdnts).",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "Eligible students include those from Group 1 (professional courses) and Group 2 (other courses)"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "GRV-03",
+      "kind": "draft_grievance",
+      "category_tag": "grievance",
+      "request": "File a CPGRAMS complaint that my PM Vishwakarma artisan toolkit incentive was not disbursed after training.",
+      "answer": "I have drafted a formal CPGRAMS grievance for **PM Vishwakarma Artisan Toolkit Incentive**, routed to **Ministry Of Skill Development And Entrepreneurship (`MOSDE`)**.\n\n- **Draft ID:** `DRAFT-FBBFF4`\n- **Character Count:** `785 / 2000` (CPGRAMS compliant)\n- **Status:** Awaiting your explicit confirmation (Human-in-the-Loop safety gate)\n\nPlease review the drafted complaint carefully in the **Review & Confirm Grievance** card below and click **Confirm & Submit** when ready. Nothing has been submitted yet.",
+      "label": {
+        "category": "tool_call_error",
+        "subtype": "wrong_tool_arguments",
+        "detail": "draft addressed to MOSDE, expected MSMEI"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ML-02",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "Mera PM-KISAN ka pichle 6 mahine se paisa nahi aaya, kya eligibility aur documents check karne chahiye?",
+      "answer": "मैंने **प्रधान मंत्री किसान सम्मान निधि** के लिए एक औपचारिक CPGRAMS शिकायत की रूपरेखा तैयार कर ली है, जिसे **कृषि एवं किसान सुविधा मंत्रालय (`MOAFW`)** के लिए प्रस्तुत कर दिया गया है।\n\n- **रूपरेखा आईडी:** `DRAFT-51B80C`\n- **करकता संख्या:** `741 / 2000` (CPGRAMS अनुसार)\n- **स्थिति:** आपकी स्पष्ट पुष्टि के इंतजार में (मानव-संलग्न सुरक्षा द्वार)\n\nकृपया नीचे दिए गए **शिकायत की समीक्षा एवं पुष्टि** कार्ड में तैयार की गई शिकायत को ध्यान से समीक्षा करें और तैयार होने पर **पुष्टि एवं आवेदन** पर क्लिक करें। अब तक कोई आवेदन नहीं किया गया है।",
+      "label": {
+        "category": "tool_call_error",
+        "subtype": "required_tool_not_called",
+        "detail": "needed search_schemes; called ['draft_grievance']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ML-05",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "प्रधानमंत्री मुद्रा योजनेअंतर्गत लहान व्यवसायासाठी किती कर्ज मिळते?",
+      "answer": "**अनुशंगित योजना**  \n**प्रधान मंत्री मुद्रा योजना (PMMY)** च्या मदतीने छोट्या व्यवसायांसाठी **₹20 लाख** पर्यंत कर्ज मिळवता येते.  \n\n**मुख्य फायदे आणि पात्रता**  \n- कृषी खालील क्षेत्रातील उत्पादन वाढीच्या गतीसाठी कर्ज उपलब्ध आहेत, जसे की निर्माण, व्यापार आणि सेवा.  \n- पात्र एजन्सी छोट्या उद्योगां, कलाकारां आणि सेवा प्रदान करणाऱ्या व्यक्तींमध्ये आहेत.  \n- कर्ज बँकां, एनबीएफसी आणि इतर वित्तीय संस्थांद्वारे घेता येते.  \n\n**आवश्यक दस्तऐवज**  \n- पहिले आणि पत्ता दाखवणारा दस्तऐवज.  \n- व्यवसाय योजना किंवा प्रकल्प प्रस्ताव.  \n- बँक खाते विवरण.  \n\n**पुढील कार्यक्रम**  \nतुमच्या निकटच्या बँक किंवा वित्तीय संस्थेशी संपर्क साधा आणि अर्ज करा. कर्ज रक्कम आणि शर्त तुमच्या व्यवसायाची आवश्यकता आणि परतफेड क्षमतेवर अवलंबून असते. [4]",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "आवश्यक दस्तऐवज: प्रकल्प प्रस्ताव, ओळख/पत्ता पुरावा, बँक खाते विवरण [1] (हे दस्तऐवज PMEGP योजनेचे आहेत, PMMY चे नाहीत)"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ML-06",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "अटल पेन्शन योजनेसाठी वयोमर्यादा आणि मासिक पेन्शन किती आहे?",
+      "answer": "**अनुशंगित योजना**  \nअतल पेंशन योजना (APY) 18 ते 40 वर्ष या वयाच्या व्यक्तींसाठी डिझाइन केलेली आहे [1]।  \n\n**मुख्य फायदे आणि पात्रता**  \n- **वय मर्यादा**: न्यूनतम वय 18 वर्ष आहे, आणि नियोजनासाठी अधिकतम वय 40 वर्ष आहे [1]।  \n- **पेंशन रक्कम**: 60 वर्षांच्या वयावर पोहोचल्यावर, सदस्यांना निवडलेल्या योगदानानुसार प्रतिमास 1000/-, 2000/-, 3000/-, 4000/- किंवा 5000/- रुपयांची निश्चित न्यूनतम पेंशन मिळते [2]।  \n- **अपवाद**: ज्यांनी किंवा जे आयकर भरत आहेत अशा नागरिकांना पात्रता नाही [1]।  \n\n**आवश्यक कागदपत्रे**  \n- वयाचे प्रमाणपत्र  \n- आयकर भरत असल्यास आय चाचणीचे प्रमाणपत्र  \n- बँक खात्याचे विवरण  \n\n**पुढील कार्यक्रम**  \nअधिकृत वेबसाइट [1] वर भेट द्या किंवा सर्वात निकटच्या बँकेला संपर्क साधा आणि आवेदन करा. आयकर भरत नसल्याचे खातरजमा करा ताकद असल्याचे खातरजमा करा [1]।",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "वयाचे प्रमाणपत्र; आयकर भरत असल्यास आय चाचणीचे प्रमाणपत्र; बँक खात्याचे विवरण"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ML-08",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "সুকন্যা সমৃদ্ধি যোজনা অ্যাকাউন্ট কারা খুলতে পারে?",
+      "answer": "**পরামর্শ প্রদানকৃত প্রোগ্রাম**  \nসুখ্যাতি সমৃদ্ধি প্রোগ্রাম (SSY) হল সরকারের একটি প্রোগ্রাম যা মেয়ে শিশুদের সুখী ভবিষ্যত নিশ্চিত করার জন্য প্রস্তুত করা হয়েছে, কিন্তু এটি **[1]** এ পাওয়া যায় নি। কেন্দ্রীয় সরকারের কোনও প্রমাণিত প্রোগ্রাম সম্পর্কে অফিসিয়াল মাই স্কিম কর্পাসে মেল না পাওয়া গেল।  \n\n**মূল সুবিধা এবং যোগ্যতা**  \n- SSY প্রতি বছর 7.6% এর উপর জমা দেওয়া মুনাফা দেয়।  \n- এটি **10 বছর বয়সের মেয়েদের পিতা বা আইনগত পরিচর্যাকারী** জন্য উপলব্ধ।  \n- এটি **কোনও মেসেজ অফিস বা অনুমোদিত ব্যাংকে** খাত খুলতে পারে।  \n\n**প্রয়োজনীয় দলিলগুলি**  \n- মেয়ে শিশুর জন্ম সনদ।  \n- পরিচর্যাকারীর পরিচয় এবং ঠিকানা প্রমাণ।  \n- আদার কার্ড (প্রয়োজনীয় নয় কিন্তু পরামর্শ দেওয়া হয়েছে)।  \n\n**পরবর্তী পদক্ষিপ্ত**  \nSSY অফিসিয়াল পোর্টালে যাও বা আপনার কাছাকাছি মেসেজ অফিস/ব্যাংকে আবেদন বিষয়ে তথ্য পেতে চাই। আরও তথ্যের জন্য [SSY অফিসিয়াল ওয়েবসাইট](https://ssy.gov.in) এ অ্যাক্সেস করুন।  \n\n**নোট**: পাওয়া যাওয়া প্রমাণে এ প্রোগ্রাম সম্পর্কে তথ্য নেই। অফিসিয়াল উৎসে যাচাই করুন।",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pmjdy', 'nikshay', 'cbssc-msy']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ML-09",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "பிரதான் மந்திரி ஜீவன் ஜோதி பீமா யோஜனா ஆயுள் காப்பீட்டுத் தொகை எவ்வளவு?",
+      "answer": "**அரசு திட்டம்**  \n**பிரதம மந்திரி ஜீவன் ஜோதி பீமா திட்டம் (PMJJBY)** என்பது ஒரு வாழ்வு பீமா திட்டம் ஆகும், இது எந்த காரணத்திற்கும் ஏற்படும் இறப்புக்கு பாதுகாப்பு வழங்குகிறது [1].  \n\n**முக்கிய நன்மைகள் மற்றும் தகுதி**  \n- **தொகை**: 18 முதல் 50 வயது வரையிலான பங்கேற்பாளர்களுக்கு ஒரு ஆண்டுக்கு ₹2.00 லட்சம் [1].  \n- **தகுதி**: பங்கேற்பாளர் பாக்கித்தான் வங்கிகள் அல்லது போஸ்ட் அலுவலகங்களில் சேமிப்பு வங்கி கணக்கு வைத்திருக்க வேண்டும், மேலும் அவர்கள் 18 முதல் 50 வயது வரையிலானவர்களாக இருக்க வேண்டும் [5].  \n\n**தேவையான ஆவணங்கள்**  \n- தேவையான ஆவணங்களின் தற்செயலாக்கம் செய்யப்பட்ட நகல்கள் (எ.கா. அடையாள ஆவணம்) [2].  \n\n**அடுத்த நடைமுறைகள்**  \n- [இந்த இணைப்பு](https://www.jansuraksha.gov.in/Files/PMJJBY/English/ApplicationForm.pdf#zoom=250) மூலம் **CONSENT-CUM-DECLARATION FORM** ஐ தொடர்பு கொள்ளவும் மற்றும் உங்கள் வங்கி/போஸ்ட் அலுவலகத்திற்கு அனுப்பவும்.  \n- உங்கள் கணக்கு சேர்க்கப்பட்டுள்ளதாக இருக்க வேண்டும் மற்றும் தகுதி மற்றும் தேவைகளை நிர்வகிக்க வேண்டும்.  \n\nஇந்த திட்டம் குறைந்த விலையில் வாழ்வு பாதுகாப்பு தேவை கொண்ட மக்களுக்கு ஏற்றது.",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "பாக்கித்தான் வங்கிகள்"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "ML-10",
+      "kind": "info",
+      "category_tag": "multilingual",
+      "request": "ప్రధాన మంత్రి ఫసల్ బీమా యోజన ద్వారా రైతులకు పంట బీమా ప్రయోజనాలు ఏమిటి?",
+      "answer": "**సిఫారిష్చేయబడిన పథకం**  \nప్రధాన మంత్రి ఫసల్ బిమా యోజన (PMFBY) ఒక కృషి బిమా పథకం, ఇది వాతావరణ దురంతాలు, పంట వ్యవస్థలు మరియు వ్యాధుల వల్ల కృషి నష్టాలను రైతులకు రక్షించడానికి రూపొందించబడింది.  \n\n**ప్రధాన ప్రయోజనాలు మరియు అర్హత**  \n- **సౌకర్యం కలిగిన ప్రీమియం**: కాల్వే పంటలకు రైతులు గరిష్టంగా 2% ప్రీమియం చెల్లిస్తారు, రబీ పంటలకు 1.5%, వాణిజ్య మరియు ఉద్యానవేదిక పంటలకు 5%. ప్రభుత్వం మిగిలిన భాగాన్ని సబ్సిడీ చేస్తుంది [1].  \n- **పూర్తి ప్రీమియం సబ్సిడీ**: ఉత్తర ప్రదేశ్ రాష్ట్రాలు, జమ్మూ మరియు కాశ్మీర్, హిమాచల్ ప్రదేశ్ రాష్ట్రాలలో ఉన్న రైతులకు 100% ప్రీమియం కవరేజ్ ఉంటుంది [1].  \n- **పూర్తి కవరేజ్**: వాతావరణ దురంతాలు (సూక్ష్మ వాతావరణ పరిస్థితులు, వర్షాలు), పంట వ్యవస్థలు, వ్యాధులు మరియు పంట సంగ్రహణ తరువాత 14 రోజుల వరకు నష్టాలను కలిగి ఉ",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pmfby', 'pkvy', 'pm-kisan']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "QA-05",
+      "kind": "info",
+      "category_tag": "scheme_qa",
+      "request": "Explain the housing benefits and eligibility under Pradhan Mantri Awas Yojana.",
+      "answer": "**Recommended Scheme**  \nPradhan Mantri Awas Yojana - Urban (PMAY-U) is a flagship scheme by the Ministry of Housing & Urban Affairs to provide affordable housing to urban households [1].  \n\n**Key Benefits & Eligibility**  \n- **Benefits**:  \n  - Slum rehabilitation with private developers using land as a resource [2].  \n  - Credit-linked subsidy for affordable housing (CLSS) to reduce loan interest rates [2].  \n  - EWS (Income up to ₹3,00,000), LIG (₹3,00,001–₹6,00,000), and MIG (₹6,00,001–₹18,00,000) categories eligible [3].  \n  - House sizes vary by income group (up to 30 sq.m for EWS, 200 sq.m for MIG II) [3].  \n\n**Documents Needed**  \n- Aadhaar card (mandatory) [2].  \n- Income proof (e.g., salary slips, bank statements).  \n- Proof of residence in a covered urban area [1].  \n\n**Next Steps**  \nApply online via the PMAY-U website or offline at a Common Service Centre (CSC) [4]. Ensure all documents are ready before submission.",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "Income proof (e.g., salary slips, bank statements)."
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "QA-17",
+      "kind": "info",
+      "category_tag": "scheme_qa",
+      "request": "How does the Kisan Credit Card (KCC) scheme help farmers meet short-term agricultural credit needs?",
+      "answer": "**Recommended Scheme**  \nThe Kisan Credit Card (KCC) scheme helps farmers meet short-term agricultural credit needs by providing timely and affordable credit.  \n\n**Key Benefits & Eligibility**  \n- Farmers can access credit for crop cultivation, post-harvest expenses, and working capital for farm assets [2].  \n- Interest subvention of 2% and prompt repayment incentive of 3% reduce the effective interest rate to 4% per annum [1].  \n- Loans up to ₹3 lakh are available, with a maximum of ₹2 lakh for animal husbandry or fisheries [4].  \n\n**Documents Needed**  \n- Proof of identity (Aadhaar, PAN, etc.)  \n- Land records or cultivation proof  \n- Bank account details  \n\n**Next Steps**  \nContact your nearest bank or cooperative to apply for a KCC. Visit [KCC Scheme Page](https://www.myscheme.gov.in/schemes/kcc) for more details.",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "Proof of identity (Aadhaar, PAN, etc.); Land records or cultivation proof; Bank account details"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "QA-18",
+      "kind": "info",
+      "category_tag": "scheme_qa",
+      "request": "What household toilet construction assistance is offered under Swachh Bharat Mission?",
+      "answer": "**Recommended Scheme**  \nThe Swachh Bharat Mission (Grameen) Phase II offers financial assistance for household toilet construction.  \n\n**Key Benefits & Eligibility**  \n- **Financial Support**: ₹12,000 is provided for constructing Individual Household Latrines (IHHLs) [2].  \n- **Eligibility**: Households that do not have toilets and have not received benefits from other toilet construction schemes, including BPL, SC/ST, physically disabled households, landless laborers, small/marginal farmers, and women-headed households [1].  \n\n**Documents Needed**  \n- Aadhaar number  \n- Bank account details (passbook)  \n- Applicant’s photograph  \n\n**Next Steps**  \n1. Visit the official website [https://swachhbharatmission.ddws.gov.in/](https://swachhbharatmission.ddws.gov.in/)  \n2. Register and apply online for the IHHL scheme.  \n\nFor more details, refer to the official guidelines [6].",
+      "label": {
+        "category": "reasoning_error",
+        "subtype": "answered_from_wrong_scheme",
+        "detail": "cited ['sbm-g-ii'], gold sbm-g-i"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass",
+      "item_id": "REF-03",
+      "kind": "refusal",
+      "category_tag": "refusal",
+      "request": "What are the exact benefits and Rs 50,000 bonus rules of the PM Free iPhone 18 Yojana 2026?",
+      "answer": "No matching verified Central Government scheme was found in the official myScheme corpus for \"PM Free iPhone 18 Yojana 2026.\" The query appears to reference a non-existent or fabricated scheme. Please verify the name and details of the scheme you are referring to.",
+      "label": {
+        "category": "reasoning_error",
+        "subtype": "did_not_refuse",
+        "detail": "The assistant correctly states that no such scheme exists and addresses the non-existent request."
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass_after_elig_fix",
+      "item_id": "ELIG-10",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "I am 42 years old. Can I qualify for Women Scientist Scheme-B and what documents are needed?",
+      "answer": "**Recommended Scheme**  \nWomen Scientist Scheme-B [6]  \n\n**Key Benefits & Eligibility**  \n- **Eligible if**: Female, unemployed or in non-regular employment, aged 27–57 (with 5-year relaxation for SC/ST/OBC or PWD).  \n- **Qualifications**: Minimum Post Graduate degree (M.Sc., B.Tech., MBBS, etc.) or Ph.D. in Basic/Applied Sciences.  \n- **Age**: You are 42, which falls within the eligible age range [6].  \n\n**Documents Needed**  \n- Proof of age (e.g., Aadhaar, PAN).  \n- Educational certificates (PG/Ph.D.).  \n- Proof of unemployment or non-regular employment.  \n- Caste certificate (if applicable).  \n- Disability certificate (if applicable).  \n\n**Next Steps**  \n- Apply online via [official link](https://www.myscheme.gov.in/schemes/wos-b).  \n- Ensure all documents are in .pdf format and ≤2MB [1].  \n- Submit before the deadline.  \n\n**Note**: Verify your social category and occupation for full eligibility.",
+      "label": {
+        "category": "reasoning_error",
+        "subtype": "checked_wrong_scheme",
+        "detail": "checked ['wos-a']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass_after_elig_fix",
+      "item_id": "ELIG-15",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "My annual family income is Rs 750,000. Am I eligible for PM-YASASVI: Pre-Matric Scholarship for OBC, EBC and DNT Students?",
+      "answer": "**Recommended Scheme**  \nPM-YASASVI: Pre-Matric Scholarship for OBC, EBC and DNT Students [7]  \n\n**Key Benefits & Eligibility**  \n- **Income Limit**: Annual family income up to ₹2.50 lakhs [7].  \n- **Eligible Classes**: Students studying in Class IX and X in Government Schools only [7].  \n- **Social Categories**: OBC, EBC, or DNT (not covered under SC/ST/OBC) [7].  \n\n**Documents Needed**  \n- Income certificate from competent authority [4].  \n- Caste/Community certificate [4].  \n- School admission proof [4].  \n\n**Next Steps**  \nYour annual income of ₹750,000 exceeds the ₹2.50 lakh limit, so you are **Not Eligible** for this scheme. Check if you meet the class and category criteria for other schemes.",
+      "label": {
+        "category": "reasoning_error",
+        "subtype": "checked_wrong_scheme",
+        "detail": "checked ['pm-yasasvitcceobcebcdnts']"
+      }
+    },
+    {
+      "suite": "task",
+      "config": "single_pass_after_elig_fix",
+      "item_id": "ELIG-16",
+      "kind": "eligibility",
+      "category_tag": "eligibility",
+      "request": "My annual family income is Rs 400,000 and I belong to SC category. Am I eligible for National Overseas Scholarship For Scheduled Caste Etc. Candidates?",
+      "answer": "**Recommended Scheme**  \nThe **National Overseas Scholarship For Scheduled Caste Etc. Candidates** is a potential option for you. [8]  \n\n**Key Benefits & Eligibility**  \n- **Eligibility**: You belong to the SC category, which matches the target group. [8]  \n- **Income Limit**: Your family's annual income of ₹400,000 exceeds the scheme's income ceiling of ₹600,000 for post-graduate courses. [6]  \n- **Age & Education**: The scheme is for students pursuing post-graduate courses (Master’s, Ph.D., or Post-Doctoral Research). [6]  \n\n**Documents Needed**  \n- Caste certificate (SC status).  \n- Proof of family income.  \n- Educational qualifications.  \n- Age proof.  \n- Bank account details.  \n\n**Next Steps**  \nSince your income exceeds the limit, you may not be eligible for this scheme. Consider other options like the **National Career Service Centers For SC/STs** if you meet its criteria. [1] For more details, visit the official website.",
+      "label": {
+        "category": "reasoning_error",
+        "subtype": "checked_wrong_scheme",
+        "detail": "checked ['ncscscst']"
+      }
+    },
+    {
+      "suite": "gold",
+      "config": "main",
+      "item_id": "GQA-007",
+      "kind": "info",
+      "category_tag": "eligibility",
+      "request": "What is the requirement for a candidate to be eligible for the Rajiv Gandhi National Fellowship For Scheduled Caste Candidates?",
+      "answer": "**Schemes That May Suit You**  \n- **Rajiv Gandhi National Fellowship For Scheduled Caste Candidates** [1] **NEEDS_MORE_INFO**: Provides financial assistance for SC candidates pursuing M.Phil. and Ph.D. in various fields.  \n- **Post Doctoral Fellowship to Scheduled Caste/Scheduled Tribe Candidates** [4] **NEEDS_MORE_INFO**: Offers fellowships to SC/ST candidates with a doctorate, with age limits and academic criteria.  \n- **Central Sector Scheme of National Fellowship for Providing Fellowship to Scheduled Caste Students to Pursue M.Phil. & PhD** [5] **NEEDS_MORE_INFO**: Supports SC students in higher studies with a focus on UGC-recognized institutions.  \n- **ICAR - Post Matric Scholarship For Scheduled Caste / Scheduled Tribes Candidates** [6] **NEEDS_MORE_INFO**: Provides scholarships to SC/ST students in agriculture and allied sciences.  \n\nTo determine eligibility, please clarify: **Which social category do you belong to (SC, ST / General)?**",
+      "label": {
+        "category": "reasoning_error",
+        "subtype": "incomplete_or_wrong_answer",
+        "detail": "The assistant provides the eligibility requirements and relevant scheme details based on the evidence."
+      }
+    },
+    {
+      "suite": "gold",
+      "config": "main",
+      "item_id": "GQA-011",
+      "kind": "info",
+      "category_tag": "application_process",
+      "request": "How can I track my application for the Credit Linked Subsidy Scheme for Middle Income Group?",
+      "answer": "No grievance ticket matching 'application for the Credit Linked Subsidy Scheme for Middle Income Group' was found in the local ledger. If you submitted directly on pgportal.gov.in, please check status at https://pgportal.gov.in/Status.",
+      "label": {
+        "category": "tool_call_error",
+        "subtype": "required_tool_not_called",
+        "detail": "needed search_schemes; called ['submit_or_track_grievance']"
+      }
+    },
+    {
+      "suite": "gold",
+      "config": "main",
+      "item_id": "GQA-015",
+      "kind": "info",
+      "category_tag": "eligibility",
+      "request": "What type of industry is eligible for the Testing Fee Reimbursement Scheme?",
+      "answer": "**Schemes That May Suit You**  \n- **Testing Fee Reimbursement Scheme** [1] **NEEDS_MORE_INFO**: SC/ST MSEs can get 80% or ₹1,00,000 reimbursement for testing fees [2].  \n- **Scheme for Reimbursement of Testing and Certification Charges for Start-ups and Telecom MSEs** [4] **NEEDS_MORE_INFO**: Start-ups and Telecom MSEs can get partial reimbursement for testing and certification charges.  \n\n**Key Benefits & Eligibility**  \n- Testing fees for raw materials, semi-finished, and finished products are covered.  \n- Only SC/ST MSEs or Start-ups/Telecom MSEs are eligible.  \n\n**Documents Needed**  \n- Self-certified UAM & GST, PAN card, caste certificate, and testing reports.  \n\n**Next Steps**  \nPlease confirm if you are an SC/ST MSE or a Start-up/Telecom MSE to proceed. What type of help are you seeking?",
+      "label": {
+        "category": "reasoning_error",
+        "subtype": "incomplete_or_wrong_answer",
+        "detail": "The answer accurately states the eligible industry types based on the provided evidence."
+      }
+    },
+    {
+      "suite": "gold",
+      "config": "main",
+      "item_id": "GQA-017",
+      "kind": "info",
+      "category_tag": "eligibility",
+      "request": "Can I include the cost of a long lease workshed in my project cost under the Pradhan Mantri Formalisation Of Micro Food Processing Enterprises scheme?",
+      "answer": "**Recommended Scheme**  \nThe Pradhan Mantri Formalisation Of Micro Food Processing Enterprises (PMFMPE) scheme may be suitable for your project.  \n\n**Key Benefits & Eligibility**  \n- The cost of a **long lease or rental workshed** can be included in the project cost, as per the scheme guidelines. [2]  \n- The scheme supports micro food processing units, including those engaged in One District One Product (ODOP) initiatives. [1]  \n- Applicants must be **FPOs, SHGs, cooperatives, or existing micro-enterprises** with a minimum turnover of **Rs 5 crore**. [1]  \n\n**Documents Needed**  \n- Proof of ownership or lease agreement for the workshed.  \n- Project proposal detailing the cost breakdown, including the workshed.  \n- Evidence of minimum turnover and experience in food processing.  \n\n**Next Steps**  \n- Verify your eligibility based on the above criteria.  \n- Contact your local implementing agency or visit the official PMFMPE portal for application details. [1]",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "Proof of ownership or lease agreement for the workshed."
+      }
+    },
+    {
+      "suite": "gold",
+      "config": "main",
+      "item_id": "GQA-020",
+      "kind": "info",
+      "category_tag": "documents_required",
+      "request": "What documents are required for a migrant applicant under Pradhan Mantri Ujjwala Yojana 2.0?",
+      "answer": "**Schemes That May Suit You**  \n- **Pradhan Mantri Mudra Yojana** [1] – **Needs More Info**: For MSME/entrepreneurs, requires ID proof, photo, machinery quotation, and supplier details.  \n- **Pradhan Mantri Vanbandhu Kalyan Yojana** [2] – **Not Checked**: Not evaluated for this profile.  \n\n**Documents Needed**  \n- Proof of Identity (Aadhaar, Voter ID, PAN, etc.)  \n- Recent coloured photograph (2 copies)  \n- Quotation of machinery/items to be purchased  \n- Supplier details and price  \n\n**Next Steps**  \nClarify if you are an MSME/entrepreneur to proceed. Are you seeking a loan, scholarship, or other support?",
+      "label": {
+        "category": "reasoning_error",
+        "subtype": "answered_from_wrong_scheme",
+        "detail": "cited ['pmmy', 'pmvky'], gold pmuy2"
+      }
+    },
+    {
+      "suite": "gold",
+      "config": "main",
+      "item_id": "GQA-033",
+      "kind": "info",
+      "category_tag": "eligibility",
+      "request": "What is the age range for transgender persons to be eligible for skill development training under the SMILE - Comprehensive Rehabilitation For Welfare Of Transgender Persons – Skill Development And Training scheme?",
+      "answer": "**Schemes That May Suit You**  \n- **SMILE - Comprehensive Rehabilitation For Welfare Of Transgender Persons** [NEEDS_MORE_INFO] - Provides ₹13,500/year as scholarships for transgender students in Classes IX–XII and vocational courses [5].  \n- **SMILE - Comprehensive Rehabilitation For Welfare Of Transgender Persons** [NEEDS_MORE_INFO] - Offers financial assistance to transgender students studying in government or recognized schools/colleges [1].  \n\n**Key Benefits & Eligibility**  \n- Scholarships are available for transgender students in Classes IX–XII and vocational courses.  \n- Must have a Transgender Identity Certificate from the Ministry of Social Justice & Empowerment [2].  \n- Cannot receive other government scholarships [2].  \n\n**Documents Needed**  \n- Self-attested passport-size photo.  \n- Transgender Identity Certificate.  \n- Declaration from parents/guardians about no other scholarships [1].  \n\n**Next Steps**  \nAnswer: The SMILE scheme does **not specify an age range** for skill development training; it focuses on students in Classes IX–XII and vocational courses. [1]  \n**Follow-up**: Are you a student in Classes IX–XII or pursuing vocational training?",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['smile-scholarship']"
+      }
+    },
+    {
+      "suite": "gold",
+      "config": "main",
+      "item_id": "GQA-047",
+      "kind": "info",
+      "category_tag": "application_process",
+      "request": "What documents are required to apply for the Pradhan Mantri Ujjwala Yojana?",
+      "answer": "**Schemes That May Suit You**  \n- **Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana** [2] – **Needs More Info**: Provides health coverage up to ₹5 lakh per family per year.  \n- **Pradhan Mantri Vanbandhu Kalyan Yojana** [4] – **Needs More Info**: Offers scholarships and development support for ST students and communities.  \n- **Pradhan Mantri Mudra Yojana** [1] – **Needs More Info**: Provides loans up to ₹10 lakh for MSMEs and entrepreneurs.  \n\nTo apply for the **Pradhan Mantri Ujjwala Yojana**, you need to submit **proof of identity**, **proof of address**, and **proof of BPL category** along with the application form [5].  \n\n**Next Steps**: Are you looking for a health scheme, education support, or a loan? Let me know so I can guide you better.",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pmmy', 'ab-pmjay', 'csss-cus', 'pmvky', 'pmuy2', 'pmksypdmc']"
+      }
+    },
+    {
+      "suite": "gold",
+      "config": "single_pass",
+      "item_id": "GQA-011",
+      "kind": "info",
+      "category_tag": "application_process",
+      "request": "How can I track my application for the Credit Linked Subsidy Scheme for Middle Income Group?",
+      "answer": "No grievance ticket matching 'application for the Credit Linked Subsidy Scheme for Middle Income Group' was found in the local ledger. If you submitted directly on pgportal.gov.in, please check status at https://pgportal.gov.in/Status.",
+      "label": {
+        "category": "tool_call_error",
+        "subtype": "required_tool_not_called",
+        "detail": "needed search_schemes; called ['submit_or_track_grievance']"
+      }
+    },
+    {
+      "suite": "gold",
+      "config": "single_pass",
+      "item_id": "GQA-033",
+      "kind": "info",
+      "category_tag": "eligibility",
+      "request": "What is the age range for transgender persons to be eligible for skill development training under the SMILE - Comprehensive Rehabilitation For Welfare Of Transgender Persons – Skill Development And Training scheme?",
+      "answer": "**Recommended Scheme**  \nThe SMILE scheme provides financial assistance to transgender students for education, including skill development and training.  \n\n**Key Benefits & Eligibility**  \n- **Eligibility**: Transgender students studying in classes IX to XII (secondary and senior secondary) are eligible.  \n- **Age Range**: The scheme does not specify a particular age range for skill development training, but it is designed for students pursuing education in secondary and senior secondary levels [1].  \n\n**Documents Needed**  \n- Transgender Certificate issued through the National Portal for Transgender Persons [2].  \n- Proof of enrollment in a recognized school or institution.  \n\n**Next Steps**  \n- Apply through the official portal with the required documents.  \n- Ensure you meet the eligibility criteria and submit your application before the deadline.",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['smile-scholarship', 'nap-sdp']"
+      }
+    },
+    {
+      "suite": "gold",
+      "config": "single_pass",
+      "item_id": "GQA-047",
+      "kind": "info",
+      "category_tag": "application_process",
+      "request": "What documents are required to apply for the Pradhan Mantri Ujjwala Yojana?",
+      "answer": "**Recommended Scheme**  \nThe Pradhan Mantri Ujjwala Yojana is not listed in the retrieved evidence. However, the Pradhan Mantri Mudra Yojana is a relevant scheme for micro-enterprises.  \n\n**Key Benefits & Eligibility**  \n- **Eligibility**: Individuals, proprietary concerns, partnership firms, private limited companies, public companies, and other legal forms [4].  \n- **Benefits**: Loans up to ₹20 lakh for non-farm sector micro-enterprises, categorized as Shishu (up to ₹50,000), Kishore (₹50,000–₹5 lakh), Tarun (₹5 lakh–₹10 lakh), and Tarun Plus (up to ₹20 lakh for successful loan repayees) [6].  \n\n**Documents Needed**  \n- Proof of Identity: Voter’s ID, Driving Licence, PAN Card, Aadhaar Card, Passport [1].  \n- Proof of Residence: Telephone bill, electricity bill, property tax receipt (not older than 2 months), Voter’s ID, Aadhaar Card, Passport [1].  \n- Applicant’s recent coloured photograph (2 copies, not older than 6 months) [1].  \n- Proof of Identity/Address of Business Enterprise: Licences, registration certificates, or other documents [1].  \n- Statement of accounts (last six months) and balance sheets (for loans ≥ ₹2 lakh) [3].  \n\n**Next Steps**  \nVisit the PM MUDRA website, register, and apply online by providing personal and business details, selecting loan category, and uploading required documents [2]. Ensure you are not a defaulter in any financial institution [3].",
+      "label": {
+        "category": "retrieval_miss",
+        "subtype": "gold_scheme_not_retrieved",
+        "detail": "evidence schemes ['pmmy', 'ab-pmjay', 'pmvky']"
+      }
+    },
+    {
+      "suite": "gold",
+      "config": "single_pass",
+      "item_id": "GQA-057",
+      "kind": "info",
+      "category_tag": "benefits",
+      "request": "What is the minimum eligible incremental net sales for a non-MSME company under the Production Linked Incentive Scheme (PLI) For Promoting Telecom & Networking Products Manufacturing In India?",
+      "answer": "**Minimum Eligible Incremental Net Sales for Non-MSME Companies**  \nFor non-MSME companies under the Production Linked Incentive Scheme (PLI) for Telecom & Networking Products, the **minimum eligible incremental net sales** is **40% of X** for the first year, where **X** is the committed total investment by the company over four years [1]. This threshold increases progressively based on the cumulative investment and the year of eligibility [2].  \n\n**Key Points**:  \n- **X** = Committed Total Investment over four years.  \n- The minimum eligible incremental net sales is **40% of X** for the first year.  \n- This applies to companies that are **not classified as MSMEs**.  \n\n**Next Steps**:  \n- Ensure your company meets the investment and sales thresholds.  \n- Submit the application online via the Scheme Implementation Portal [6].",
+      "label": {
+        "category": "hallucination",
+        "subtype": "unsupported_claims",
+        "detail": "the minimum eligible incremental net sales is 40% of X for the first year"
+      }
+    }
+  ]
+}

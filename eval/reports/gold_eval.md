@@ -8,27 +8,38 @@
 
 | Config | Model | n | ROUGE-L | BLEU | BERTScore | Judge (1-5) | Judge correct | Gold scheme in context |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| `main` | Qwen/Qwen3-8B | 60 | 0.230 | 7.240 | 0.174 | 4.567 (n=60) | 90.0% | 94.9% |
+| `main` | Qwen/Qwen3-8B | 60 | 0.230 | 7.196 | 0.172 | 4.533 (n=60) | 88.3% | 94.9% |
 | `main_before_guards` | Qwen/Qwen3-8B | 60 | 0.185 | 5.570 | 0.120 | - (n=0) | - | 96.5% |
 | `main_guards_only` | Qwen/Qwen3-8B | 60 | 0.202 | 5.967 | 0.144 | 3.914 (n=58) | 69.0% | 96.6% |
 | `no_corpus` | Qwen/Qwen3-8B | 60 | 0.224 | 5.342 | 0.233 | 2.586 (n=58) | 19.0% | - |
+| `single_pass` | Qwen/Qwen3-8B | 60 | 0.250 | 8.060 | 0.206 | 4.717 (n=60) | 93.3% | 96.6% |
 
 ## Latency and cost
 
 | Config | Retrieval | Planning | Answer writing | Total (avg) | Total (p95) | Tokens | Web fallback skipped |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| `main` | 3.55s | 4.60s | 6.77s | 15.02s | 18.98s | 9199 | 0.0% |
+| `main` | 3.25s | 4.53s | 6.86s | 14.75s | 18.15s | 9258 | 0.0% |
 | `main_before_guards` | 2.21s | 4.34s | 6.75s | 13.40s | 22.26s | 7117 | 0.0% |
 | `main_guards_only` | 2.37s | 4.52s | 7.54s | 14.50s | 22.37s | 7811 | 0.0% |
 | `no_corpus` | 0.00s | 0.00s | 1.73s | 1.73s | 2.35s | 153 | 0.0% |
+| `single_pass` | 2.55s | 2.25s | 6.04s | 10.91s | 14.37s | 7156 | 0.0% |
 
 ## Compared with the main pipeline on the same questions
 
 | Config | n | ROUGE-L (config / main) | BERTScore (config / main) | Judge (config / main) |
 |---|---:|---:|---:|---:|
-| `main_before_guards` | 60 | 0.185 / 0.230 | 0.120 / 0.174 | - / 4.567 |
-| `main_guards_only` | 60 | 0.202 / 0.230 | 0.144 / 0.174 | 3.914 / 4.567 |
-| `no_corpus` | 60 | 0.224 / 0.230 | 0.233 / 0.174 | 2.586 / 4.567 |
+| `main_before_guards` | 60 | 0.185 / 0.230 | 0.120 / 0.172 | - / 4.533 |
+| `main_guards_only` | 60 | 0.202 / 0.230 | 0.144 / 0.172 | 3.914 / 4.533 |
+| `no_corpus` | 60 | 0.224 / 0.230 | 0.233 / 0.172 | 2.586 / 4.533 |
+| `single_pass` | 60 | 0.250 / 0.230 | 0.206 / 0.172 | 4.717 / 4.533 |
+
+### Is the difference real? (paired tests on questions both configs were judged on)
+
+| Config | n | Only config correct | Only main correct | McNemar p | Judge score diff (config - main), 95% CI |
+|---|---:|---:|---:|---:|---|
+| `main_guards_only` | 58 | 3 | 14 | 0.0127 | -0.60 (-1.00 to -0.22) |
+| `no_corpus` | 58 | 1 | 41 | 0.0 | -1.93 (-2.26 to -1.59) |
+| `single_pass` | 60 | 4 | 1 | 0.375 | +0.18 (+0.00 to +0.38) |
 
 ## Retrievers on the gold questions (no LLM)
 
@@ -45,3 +56,4 @@
 - `main_before_guards`: {'ok': 52, 'awaiting_user_input': 6, 'out_of_scope': 2} (errors excluded: 0)
 - `main_guards_only`: {'ok': 60} (errors excluded: 0)
 - `no_corpus`: {'ok': 60} (errors excluded: 0)
+- `single_pass`: {'ok': 60} (errors excluded: 0)
