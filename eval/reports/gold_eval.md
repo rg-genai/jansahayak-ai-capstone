@@ -13,6 +13,9 @@
 | `main_guards_only` | Qwen/Qwen3-8B | 60 | 0.202 | 5.967 | 0.144 | 3.914 (n=58) | 69.0% | 96.6% |
 | `no_corpus` | Qwen/Qwen3-8B | 60 | 0.224 | 5.342 | 0.233 | 2.586 (n=58) | 19.0% | - |
 | `single_pass` | Qwen/Qwen3-8B | 60 | 0.250 | 8.060 | 0.206 | 4.717 (n=60) | 93.3% | 96.6% |
+| `top1` | Qwen/Qwen3-8B | 30 | 0.255 | 8.766 | 0.242 | 4.600 (n=30) | 93.3% | 100.0% |
+| `top3` | Qwen/Qwen3-8B | 30 | 0.241 | 8.322 | 0.225 | 4.700 (n=30) | 93.3% | 100.0% |
+| `top5` | Qwen/Qwen3-8B | 30 | 0.237 | 8.774 | 0.217 | 4.733 (n=30) | 96.7% | 100.0% |
 
 ## Latency and cost
 
@@ -23,6 +26,9 @@
 | `main_guards_only` | 2.37s | 4.52s | 7.54s | 14.50s | 22.37s | 7811 | 0.0% |
 | `no_corpus` | 0.00s | 0.00s | 1.73s | 1.73s | 2.35s | 153 | 0.0% |
 | `single_pass` | 2.55s | 2.25s | 6.04s | 10.91s | 14.37s | 7156 | 0.0% |
+| `top1` | 2.53s | 3.49s | 5.35s | 11.43s | 17.09s | 3870 | 0.0% |
+| `top3` | 2.23s | 3.54s | 5.41s | 11.23s | 15.71s | 5285 | 0.0% |
+| `top5` | 2.25s | 6.03s | 5.66s | 13.98s | 36.42s | 6628 | 0.0% |
 
 ## Compared with the main pipeline on the same questions
 
@@ -32,6 +38,9 @@
 | `main_guards_only` | 60 | 0.202 / 0.230 | 0.144 / 0.172 | 3.914 / 4.533 |
 | `no_corpus` | 60 | 0.224 / 0.230 | 0.233 / 0.172 | 2.586 / 4.533 |
 | `single_pass` | 60 | 0.250 / 0.230 | 0.206 / 0.172 | 4.717 / 4.533 |
+| `top1` | 30 | 0.255 / 0.211 | 0.242 / 0.152 | 4.600 / 4.367 |
+| `top3` | 30 | 0.241 / 0.211 | 0.225 / 0.152 | 4.700 / 4.367 |
+| `top5` | 30 | 0.237 / 0.211 | 0.217 / 0.152 | 4.733 / 4.367 |
 
 ### Is the difference real? (paired tests on questions both configs were judged on)
 
@@ -40,6 +49,9 @@
 | `main_guards_only` | 58 | 3 | 14 | 0.0127 | -0.60 (-1.00 to -0.22) |
 | `no_corpus` | 58 | 1 | 41 | 0.0 | -1.93 (-2.26 to -1.59) |
 | `single_pass` | 60 | 4 | 1 | 0.375 | +0.18 (+0.00 to +0.38) |
+| `top1` | 30 | 4 | 1 | 0.375 | +0.23 (-0.13 to +0.63) |
+| `top3` | 30 | 4 | 1 | 0.375 | +0.33 (+0.00 to +0.70) |
+| `top5` | 30 | 4 | 0 | 0.125 | +0.37 (+0.07 to +0.70) |
 
 ## Retrievers on the gold questions (no LLM)
 
@@ -57,3 +69,6 @@
 - `main_guards_only`: {'ok': 60} (errors excluded: 0)
 - `no_corpus`: {'ok': 60} (errors excluded: 0)
 - `single_pass`: {'ok': 60} (errors excluded: 0)
+- `top1`: {'ok': 30} (errors excluded: 0)
+- `top3`: {'ok': 30} (errors excluded: 0)
+- `top5`: {'ok': 30} (errors excluded: 0)
