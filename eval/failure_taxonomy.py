@@ -53,11 +53,16 @@ from eval.score_task_eval import (
     FAILED_TOOL_STATUSES,
     GROUNDING_CACHE_PATH,
     TaskKind,
+    accepted_verdicts,
+    checked_verdicts,
     grade_runs,
     grounding_requests,
+    load_corrections,
     load_task_runs,
+    reached_schemes,
     task_kind,
     was_refused,
+    with_corrections,
 )
 
 REPORT_DIR = PROJECT_ROOT / "eval" / "reports"
@@ -65,7 +70,8 @@ AUDIT_PATH = PROJECT_ROOT / "eval" / "failure_audit.csv"
 GOLD_SUITE = "gold"
 TASK_SUITE = "task"
 # Configurations whose failures are classified (production agent and its no-loop ablation, in both suites).
-CLASSIFIED_CONFIGS = {TASK_SUITE: ("loop", "single_pass"), GOLD_SUITE: ("main", "single_pass")}
+CLASSIFIED_CONFIGS = {TASK_SUITE: ("loop", "single_pass", "loop_after_elig_fix", "single_pass_after_elig_fix"),
+                      GOLD_SUITE: ("main", "single_pass")}
 AUDIT_CONFIGS = {TASK_SUITE: "loop", GOLD_SUITE: "main"}  # the human audit samples the production agent
 AUDIT_SAMPLE_SIZE = 20
 AUDIT_SEED = 20261125
@@ -138,11 +144,10 @@ def _reasoning_subtype(kind: TaskKind, record: dict[str, Any], gold_slug: str | 
                        verdict: GroundingVerdict | None) -> FailureLabel:
     """Stage 4: right tools and evidence, nothing invented, outcome still wrong. Which way was it wrong?"""
     if kind == "eligibility":
-        got = next((v["verdict"] for v in record.get("eligibility_verdicts") or [] if v.get("scheme_slug") == gold_slug),
-                   None)
+        verdicts = checked_verdicts(record)
+        got = verdicts.get(gold_slug or "")
         if got is None:
-            return FailureLabel("reasoning_error", "checked_wrong_scheme",
-                                f"verdicts for {[v.get('scheme_slug') for v in record.get('eligibility_verdicts') or []]}")
+            return FailureLabel("reasoning_error", "checked_wrong_scheme", f"checked {sorted(verdicts)}")
         return FailureLabel("reasoning_error", "wrong_eligibility_verdict", f"got {got}, expected {gold_verdict}")
     if kind == "draft_grievance":
         if (record.get("grievance_receipt") or {}).get("registration_number"):
@@ -170,7 +175,7 @@ def classify_failure(kind: TaskKind, record: dict[str, Any], *, gold_slug: str |
              or _tool_choice_failure(kind, record, gold_ministry))
     if early:
         return early
-    if gold_slug and gold_slug not in (record.get("retrieved_schemes") or []):
+    if gold_slug and gold_slug not in reached_schemes(record):
         return FailureLabel("retrieval_miss", "gold_scheme_not_retrieved",
                             f"evidence schemes {record.get('retrieved_schemes') or 'none'}")
     if judge_needed and verdict is None:
@@ -187,8 +192,12 @@ def _has_diagnostics(run: dict[str, Any]) -> bool:
 
 
 def task_failures(cache: dict[str, dict[str, Any]], max_tool_calls: int) -> list[dict[str, Any]]:
-    """Every not-completed task in the classified task configs, with its label (None = pending judge)."""
-    tasks = {t["id"]: t for t in load_tasks()}
+    """Every not-completed task in the classified task configs, with its label (None = pending judge).
+
+    Graded with the documented answer-key corrections, so a task is only counted as failed when it really failed.
+    """
+    raw_tasks = load_tasks()
+    tasks = {t["id"]: t for t in with_corrections(raw_tasks, load_corrections(raw_tasks))}
     runs = {n: r for n, r in load_task_runs().items() if n in CLASSIFIED_CONFIGS[TASK_SUITE] and _has_diagnostics(r)}
     out: list[dict[str, Any]] = []
     for config, rows in grade_runs(list(tasks.values()), runs, cache, max_tool_calls).items():
@@ -200,7 +209,8 @@ def task_failures(cache: dict[str, dict[str, Any]], max_tool_calls: int) -> list
             verdict = GroundingVerdict.model_validate(row["grounding_verdict"]) if row["grounding_verdict"] else None
             judge_needed = kind == "info" or (kind == "refusal" and not was_refused(row))
             label = classify_failure(kind, row, gold_slug=task.get("gold_scheme_slug"),
-                                     gold_verdict=task.get("gold_verdict"), gold_ministry=task.get("gold_ministry_code"),
+                                     gold_verdict=" or ".join(str(v) for v in accepted_verdicts(task)),
+                                     gold_ministry=task.get("gold_ministry_code"),
                                      verdict=verdict, judge_needed=judge_needed)
             out.append({"suite": TASK_SUITE, "config": config, "item_id": task_id, "kind": kind,
                         "category_tag": task["category"], "request": task["query"], "answer": row.get("answer", ""),

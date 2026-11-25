@@ -929,7 +929,11 @@ class JanSahayakAgent:
                             raw_args["query"], CitizenProfile.model_validate(profile_dict)
                         )
                     inp = SearchSchemesInput.model_validate(raw_args)
-                    res = await self.toolbox.search_schemes(inp, citizen_profile=profile_dict)
+                    # Profile filters (age, income, category) narrow DISCOVERY searches. A question about one named
+                    # scheme must reach that scheme even if the citizen does not qualify, so the eligibility check can
+                    # say so (task eval ELIG-01: age 60 filtered out PMKVY-RPL, ages 18-45, and no verdict was given).
+                    search_profile = {} if named_scheme_question else profile_dict
+                    res = await self.toolbox.search_schemes(inp, citizen_profile=search_profile)
                     searched_queries.append(inp.query)
                     # Newer results first; keep earlier evidence the agent may still cite (deduped, capped).
                     # Keyed by chunk_id: a section split into several chunks shares one citation_id, and keying by

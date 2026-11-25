@@ -61,6 +61,12 @@ TASK_CONFIGS: dict[str, EvalConfig] = {c.name: c for c in [
     EvalConfig("loop", "Full agent with the Reflector loop (production settings)", exclude_faq_chunks=False),
     EvalConfig("single_pass", "Same agent without the Reflector loop (one retrieval pass)", reflection=False,
                exclude_faq_chunks=False),
+    # Re-runs after the ELIG-01 fix (named-scheme searches no longer filtered by the profile). Kept as separate runs so
+    # the original 80-task results stay as the "before" measurement.
+    EvalConfig("loop_after_elig_fix", "Full agent with the loop, after the ELIG-01 named-scheme search fix",
+               exclude_faq_chunks=False),
+    EvalConfig("single_pass_after_elig_fix", "Single pass, after the ELIG-01 named-scheme search fix", reflection=False,
+               exclude_faq_chunks=False),
 ]}
 
 
@@ -147,12 +153,17 @@ def main() -> None:
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument("--list", action="store_true", help="Show the available configurations")
     action.add_argument("--config", choices=sorted(TASK_CONFIGS), help="Configuration to run")
+    parser.add_argument("--category", help="Run only tasks of this category (e.g. eligibility)")
     args = parser.parse_args()
     if args.list:
         for c in TASK_CONFIGS.values():
-            print(f"{c.name:<12} {c.description}")
+            print(f"{c.name:<28} {c.description}")
         return
     tasks = load_tasks()
+    if args.category:
+        tasks = [t for t in tasks if t["category"] == args.category]
+        if not tasks:
+            parser.error(f"No tasks in category {args.category!r}")
     print(f"{len(tasks)} tasks")
     asyncio.run(run_task_config(TASK_CONFIGS[args.config], tasks))
 

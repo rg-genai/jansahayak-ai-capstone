@@ -46,7 +46,7 @@ REPORT_DIR = PROJECT_ROOT / "eval" / "reports"
 JUDGE_CACHE_FILE = "judge_scores.json"
 BERTSCORE_MODEL = "roberta-large"  # bert-score's default for English; scores rescaled with its shipped baseline
 MAIN_CONFIG = "main"
-JUDGE_MAX_TOKENS = 200
+JUDGE_MAX_TOKENS = 1024  # ceiling only; Gemini's hidden reasoning can count against it and cut the JSON off
 JUDGE_CORRECT_MIN_SCORE = 4  # judge score at or above this counts as a correct answer
 LATENCY_PERCENTILE = 95
 

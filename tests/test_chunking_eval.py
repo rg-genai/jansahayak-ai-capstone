@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
+
 import numpy as np
 import pytest
 from rank_bm25 import BM25Okapi
@@ -11,11 +13,13 @@ from backend.retrieval.etl import EnrichedScheme
 from backend.retrieval.hybrid_retriever import HybridRetriever
 from eval.run_chunking_eval import (
     BASELINE,
+    EMBED_MODEL_MAX_TOKENS,
     FIXED_WINDOW_SECTION,
     STRATEGIES,
     chunk_record,
     chunk_with_strategy,
     evidence_coverage,
+    fit_to_model_limit,
 )
 from scripts.ingest_data import build_bm25_doc_tokens
 
@@ -64,6 +68,23 @@ def test_fixed_windows_ignore_sections_but_keep_faq_chunks_unchanged():
     assert {c.section for c in fixed} == {FIXED_WINDOW_SECTION, FAQ_SECTION}
     assert [c.text for c in fixed if c.section == FAQ_SECTION] == \
         [c.text for c in chunk_scheme(scheme) if c.section == FAQ_SECTION]
+
+
+def test_chunks_over_the_model_limit_are_split_keeping_header_and_every_word():
+    """Regression: the no-overlap strategy produced a chunk the estimator put under 440 but the embedding server
+    counted at 526 tokens (> 512) and rejected."""
+    chunk = chunk_scheme(_scheme(eligibility_sentences=2))[0]
+    header = chunk.text.split("\n", 1)[0]
+    long_chunk = replace(chunk, text=f"{header}\n" + " ".join(f"word{i}" for i in range(1200)))
+    word_count = lambda texts: [len(t.split()) for t in texts]  # stand-in for the exact tokenizer
+    parts = fit_to_model_limit([chunk, long_chunk], word_count)
+    assert parts[0] is chunk, "chunks within the limit are untouched"
+    split = parts[1:]
+    assert len(split) == 4 and all(len(p.text.split()) <= EMBED_MODEL_MAX_TOKENS for p in split)
+    assert all(p.text.startswith(header + "\n") for p in split)
+    body_words = [w for p in split for w in p.text.split("\n", 1)[1].split()]
+    assert body_words == [f"word{i}" for i in range(1200)], "no word lost or reordered"
+    assert len({p.chunk_id for p in split}) == 4
 
 
 def test_evidence_coverage_measures_the_contiguous_share_of_the_quote():

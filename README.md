@@ -252,7 +252,30 @@ Log in on http://localhost:5173 using any of the pre-configured accounts below (
 .\.venv\Scripts\python.exe eval\score_gold_eval.py --judge --judge-max-calls 60 --judge-configs main
 ```
 
-The report goes to `eval/reports/gold_eval.md` and `eval/reports/gold_eval.json`.
+The report goes to `eval/reports/gold_eval.md` and `eval/reports/gold_eval.json`. Comparisons with `main` include paired significance tests (exact McNemar on "judge-correct", bootstrap interval on the judge score); `single_pass` is the same agent without the Reflector loop.
+
+### Task completion, tool calls, failure taxonomy and chunking experiments
+
+- **Task suite** (`eval/golden_dataset.json`, 80 tasks: scheme questions, FAQs, six languages, eligibility, grievance drafting/tracking, refusals). Each kind of task has a fixed "done" rule written before scoring (see the top of `eval/score_task_eval.py`). Runs use live retrieval settings, the in-process mock CPGRAMS and a temporary copy of the database, so eval drafts never reach the real grievance list.
+- **Answer-key corrections** are kept in `eval/golden_dataset_corrections.json` (each with the scheme's own eligibility text); the original key is never edited and completion is reported under both keys.
+- **Failure taxonomy**: every failure gets one root cause (tool-call error -> retrieval miss -> hallucination -> reasoning error). `eval/failure_audit.csv` is a 20-row sample for a person to label (`human_category`); the report then shows how often the classifier agreed.
+- **Chunking experiments**: five chunking strategies, each in a temporary in-memory index (the production index is never touched). Embedding API only.
+
+```powershell
+# Generate (hosted Qwen, resumable): with and without the Reflector loop
+.\.venv\Scripts\python.exe eval\run_task_eval.py --config loop
+.\.venv\Scripts\python.exe eval\run_task_eval.py --config single_pass
+
+# Grade (no key needed with cached verdicts; the Gemini grounding judge is optional and capped)
+.\.venv\Scripts\python.exe eval\score_task_eval.py
+.\.venv\Scripts\python.exe eval\score_task_eval.py --judge --judge-max-calls 50
+.\.venv\Scripts\python.exe eval\failure_taxonomy.py                 # add --judge --judge-max-calls N for gold failures
+
+# Chunking experiments (embedding API only; new vectors cached in data/eval_cache/)
+.\.venv\Scripts\python.exe eval\run_chunking_eval.py
+```
+
+Reports: `eval/reports/task_eval.md`, `failure_taxonomy.md`, `chunking_eval.md` (each with a `.json`). Grounding-judge verdicts are cached in `eval/reports/grounding_judge.json`. Every saved run records the git revision and agent settings it was made with.
 
 ### Reviewing without API keys
 

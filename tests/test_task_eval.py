@@ -4,6 +4,7 @@ taxonomy's root-cause order, and the human-audit sheet."""
 from __future__ import annotations
 
 import csv
+import json
 import sqlite3
 from contextlib import closing
 
@@ -21,14 +22,16 @@ from eval.grounding_judge import (
     judge_grounding,
 )
 from eval.run_gold_eval import NoWebToolbox, agent_diagnostics, cited_scheme_slugs
-from eval.run_task_eval import TASK_CONFIGS, run_task_config, sandbox_repository
+from eval.run_task_eval import TASK_CONFIGS, load_tasks, run_task_config, sandbox_repository
 from eval.score_gold_eval import judge_significance
 from eval.score_task_eval import (
     compare_configs,
     completion_summary,
     grade_task,
+    load_corrections,
     needs_grounding_judge,
     task_kind,
+    with_corrections,
 )
 from tests.test_agent_loop import ScriptedLLM, _search_plan
 from tests.test_gold_eval import FakeRetriever
@@ -79,13 +82,54 @@ def test_every_task_fails_on_errors_failed_tools_or_the_step_cap():
     assert grade_task(task, _record(tool_calls=11), GOOD, MAX_CALLS).checks["within_step_cap"] is False
 
 
+def _checked(slug: str, verdict: str) -> list[dict]:
+    """Tool log of a search followed by one eligibility check."""
+    return [{"tool": "search_schemes", "status": "ok", "args": {}},
+            {"tool": "check_eligibility", "status": "ok", "args": {"scheme_slug": slug}, "verdict": verdict}]
+
+
 def test_eligibility_task_compares_the_tool_verdict_for_the_gold_scheme():
     task = _task("eligibility", gold_verdict="NOT_ELIGIBLE")
-    right = _record(eligibility_verdicts=[{"scheme_slug": "pm-kisan", "verdict": "NOT_ELIGIBLE"}])
-    other_scheme = _record(eligibility_verdicts=[{"scheme_slug": "pmay-g", "verdict": "NOT_ELIGIBLE"}])
+    right = _record(tool_log=_checked("pm-kisan", "NOT_ELIGIBLE"))
+    other_scheme = _record(tool_log=_checked("pmay-g", "NOT_ELIGIBLE"))
     assert grade_task(task, right, None, MAX_CALLS).completed is True
     assert grade_task(task, other_scheme, None, MAX_CALLS).completed is False
     assert not needs_grounding_judge(task, right), "eligibility is graded by code, not the judge"
+
+
+def test_eligibility_verdict_comes_from_the_tool_log_not_the_filtered_cards():
+    # Multi-scheme answers drop NOT_ELIGIBLE schemes from the final cards and evidence (_drop_ruled_out_schemes);
+    # a correct NOT_ELIGIBLE check must still count, and must not look like a retrieval miss.
+    task = _task("eligibility", gold_verdict="NOT_ELIGIBLE")
+    dropped = _record(tool_log=_checked("pm-kisan", "NOT_ELIGIBLE"), eligibility_verdicts=[],
+                      retrieved_schemes=["pmay-g"])
+    assert grade_task(task, dropped, None, MAX_CALLS).completed is True
+    wrong = {**dropped, "tool_log": _checked("pm-kisan", "ELIGIBLE")}
+    label = classify_failure("eligibility", wrong, gold_slug="pm-kisan", gold_verdict="NOT_ELIGIBLE",
+                             judge_needed=False)
+    assert (label.category, label.subtype) == ("reasoning_error", "wrong_eligibility_verdict")
+
+
+def test_answer_key_corrections_are_applied_openly_and_checked_against_the_key(tmp_path):
+    task = _task("eligibility", gold_verdict="ELIGIBLE")
+    partial = _record(tool_log=_checked("pm-kisan", "PARTIALLY_ELIGIBLE"))
+    path = tmp_path / "corrections.json"
+    path.write_text(json.dumps({"corrections": [{"id": task["id"], "field": "gold_verdict", "original": "ELIGIBLE",
+                                                 "accepted": ["PARTIALLY_ELIGIBLE", "NEEDS_MORE_INFO"]}]}))
+    corrected = with_corrections([task], load_corrections([task], path))[0]
+    assert grade_task(corrected, partial, None, MAX_CALLS).completed is True
+    assert grade_task(task, partial, None, MAX_CALLS).completed is False, "the original key is still graded as-is"
+    assert "accepted_verdicts" not in task, "the original task is not modified"
+    stale = {**task, "gold_verdict": "NOT_ELIGIBLE"}  # the key changed after the correction was written
+    with pytest.raises(ValueError):
+        load_corrections([stale], path)
+
+
+def test_shipped_corrections_file_matches_the_answer_key():
+    tasks = load_tasks()
+    corrections = load_corrections(tasks)
+    assert corrections, "the corrections file should load"
+    assert all("ELIGIBLE" not in v for v in corrections.values()), "corrections only withdraw unsupported ELIGIBLE"
 
 
 def test_draft_grievance_must_pause_for_confirmation_and_never_submit():
@@ -181,12 +225,14 @@ def test_taxonomy_waits_for_the_judge_then_splits_hallucination_from_reasoning()
 
 
 def test_taxonomy_wrong_eligibility_verdict_is_a_reasoning_error():
-    checked = _record(tool_log=[{"tool": "search_schemes", "status": "ok", "args": {}},
-                                {"tool": "check_eligibility", "status": "ok", "args": {"scheme_slug": "pm-kisan"}}],
-                      eligibility_verdicts=[{"scheme_slug": "pm-kisan", "verdict": "ELIGIBLE"}])
+    checked = _record(tool_log=_checked("pm-kisan", "ELIGIBLE"))
     label = classify_failure("eligibility", checked, gold_slug="pm-kisan", gold_verdict="NOT_ELIGIBLE",
                              judge_needed=False)
     assert (label.category, label.subtype) == ("reasoning_error", "wrong_eligibility_verdict")
+    other = _record(tool_log=_checked("pmay-g", "ELIGIBLE"), retrieved_schemes=["pmay-g", "pm-kisan"])
+    label = classify_failure("eligibility", other, gold_slug="pm-kisan", gold_verdict="NOT_ELIGIBLE",
+                             judge_needed=False)
+    assert (label.category, label.subtype) == ("reasoning_error", "checked_wrong_scheme")
 
 
 def test_audit_sheet_is_never_overwritten_and_agreement_is_measured(tmp_path):

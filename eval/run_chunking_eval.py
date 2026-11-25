@@ -32,7 +32,8 @@ import logging
 import re
 import sys
 import time
-from dataclasses import asdict, dataclass
+from collections.abc import Callable
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Any
 
@@ -53,6 +54,7 @@ from backend.retrieval.chunker import (
     SchemeChunk,
     build_chunks,
     chunk_faqs,
+    estimate_tokens,
     scheme_sections,
     section_header,
     split_body_with_header,
@@ -73,6 +75,7 @@ HIT_KS = (1, 3, 5)
 MODES: tuple[RetrievalMode, ...] = ("bm25", "dense", "hybrid_rrf", "hybrid_rerank")
 PRODUCTION_MODE: RetrievalMode = "hybrid_rerank"
 EVIDENCE_COVERAGE_MIN = 0.8  # share of the gold evidence sentence that must appear contiguously in one chunk
+EMBED_MODEL_MAX_TOKENS = 512  # bge-small-en-v1.5 input limit, enforced by the embedding server
 FIXED_WINDOW_SECTION = "fixed_window"
 _WORD_RE = re.compile(r"[a-z0-9]+")
 
@@ -117,6 +120,41 @@ def chunk_with_strategy(scheme: EnrichedScheme, strategy: ChunkingStrategy) -> l
     return chunks
 
 
+TokenCounter = Callable[[list[str]], list[int]]
+
+
+def exact_token_counter() -> TokenCounter:
+    """Exact WordPiece token counts (with [CLS]/[SEP]) as the embedding server counts them.
+
+    The local reranker's tokenizer uses the same bert-base-uncased vocabulary as bge-small-en-v1.5 (verified: it
+    reproduces the server's own count, 526, for the chunk the server rejected). Loaded from the local cache only.
+    """
+    from transformers import AutoTokenizer  # heavy import, only when the experiment runs
+
+    tokenizer = AutoTokenizer.from_pretrained(get_settings().reranker_model, local_files_only=True)
+    return lambda texts: [len(ids) for ids in tokenizer(texts, add_special_tokens=True)["input_ids"]]
+
+
+def fit_to_model_limit(chunks: list[SchemeChunk], count: TokenCounter) -> list[SchemeChunk]:
+    """Split (in halves, keeping the header) any chunk over the embedding model's limit; the rest are unchanged.
+
+    The chunker's token estimate can undercount (a 440-estimate chunk was 526 real tokens), so every strategy goes
+    through this same exact check and the report says how many chunks needed it.
+    """
+    out: list[SchemeChunk] = []
+    for chunk, n_tokens in zip(chunks, count([c.text for c in chunks])):
+        if n_tokens <= EMBED_MODEL_MAX_TOKENS:
+            out.append(chunk)
+            continue
+        header, _, body = chunk.text.partition("\n")
+        words = body.split()
+        halves = [" ".join(words[: len(words) // 2]), " ".join(words[len(words) // 2:])]
+        parts = [replace(chunk, chunk_id=f"{chunk.chunk_id}_split{i}", text=f"{header}\n{half}",
+                         token_count=estimate_tokens(f"{header}\n{half}")) for i, half in enumerate(halves)]
+        out.extend(fit_to_model_limit(parts, count))
+    return out
+
+
 def chunk_record(chunk: SchemeChunk, idx: int) -> dict[str, Any]:
     """A chunk in the shape HybridRetriever keeps in memory (same fields as a `chunks_meta` row)."""
     return {"chunk_id": chunk.chunk_id, "vector_idx": idx, "scheme_slug": chunk.scheme_slug,
@@ -145,15 +183,17 @@ def embed_chunks(chunks: list[SchemeChunk], known: dict[str, np.ndarray], client
 
 
 def build_index(strategy: ChunkingStrategy, schemes: list[EnrichedScheme], known: dict[str, np.ndarray],
-                client: EmbeddingClient) -> tuple[list[dict[str, Any]], np.ndarray, BM25Okapi, dict[str, Any]]:
+                client: EmbeddingClient, count: TokenCounter,
+                ) -> tuple[list[dict[str, Any]], np.ndarray, BM25Okapi, dict[str, Any]]:
     """Chunks, embeddings and BM25 for one strategy, plus index statistics."""
-    chunks = [c for scheme in schemes for c in chunk_with_strategy(scheme, strategy)]
+    raw = [c for scheme in schemes for c in chunk_with_strategy(scheme, strategy)]
+    chunks = fit_to_model_limit(raw, count)
     embeddings, newly_embedded = embed_chunks(chunks, known, client)
     bm25 = BM25Okapi([build_bm25_doc_tokens(c) for c in chunks])
     official = [c.token_count for c in chunks if c.section != "faq_group"]
     stats = {"chunks_total": len(chunks), "official_text_chunks": len(official),
              "official_tokens_avg": round(float(np.mean(official)), 1), "official_tokens_max": max(official),
-             "newly_embedded": newly_embedded}
+             "newly_embedded": newly_embedded, "split_for_model_limit": len(chunks) - len(raw)}
     return [chunk_record(c, i) for i, c in enumerate(chunks)], embeddings, bm25, stats
 
 
@@ -252,10 +292,11 @@ QUERY_SET_EXCLUDES_FAQ = {"gold_qa": True, "task_queries": False}
 
 def run_strategy(strategy: ChunkingStrategy, schemes: list[EnrichedScheme], known: dict[str, np.ndarray],
                  client: EmbeddingClient, query_sets: dict[str, list[dict[str, Any]]],
-                 query_embs: dict[str, np.ndarray], modes: tuple[RetrievalMode, ...]) -> dict[str, Any]:
+                 query_embs: dict[str, np.ndarray], modes: tuple[RetrievalMode, ...],
+                 count: TokenCounter) -> dict[str, Any]:
     """Build one strategy's temporary index and score every query set against it."""
     t0 = time.perf_counter()
-    chunks, embeddings, bm25, stats = build_index(strategy, schemes, known, client)
+    chunks, embeddings, bm25, stats = build_index(strategy, schemes, known, client, count)
     per_set = {}
     for set_name, queries in query_sets.items():
         retriever = retriever_for(chunks, embeddings, bm25, QUERY_SET_EXCLUDES_FAQ[set_name], client)
@@ -330,13 +371,15 @@ def render_markdown(report: dict[str, Any]) -> str:
         "",
         "## Index size",
         "",
-        "| Strategy | Description | Official-text chunks | Avg / max tokens | Newly embedded |",
-        "|---|---|---:|---|---:|",
+        "| Strategy | Description | Official-text chunks | Avg / max tokens (estimate) | Newly embedded | "
+        "Split to fit 512 |",
+        "|---|---|---:|---|---:|---:|",
     ]
     for name, s in summary.items():
         i = s["index"]
         lines.append(f"| `{name}` | {s['strategy']['description']} | {i['official_text_chunks']} | "
-                     f"{i['official_tokens_avg']:.0f} / {i['official_tokens_max']} | {i['newly_embedded']} |")
+                     f"{i['official_tokens_avg']:.0f} / {i['official_tokens_max']} | {i['newly_embedded']} | "
+                     f"{i['split_for_model_limit']} |")
     for set_name, title in QUERY_SET_TITLES.items():
         lines += ["", f"## {title}", ""]
         for mode in MODES:
@@ -373,7 +416,8 @@ def main() -> None:
     if not reproduces:
         logger.warning("Baseline chunking does not reproduce the production index: results are not comparable.")
 
-    results = {name: run_strategy(STRATEGIES[name], schemes, known, client, query_sets, query_embs, modes)
+    count = exact_token_counter()
+    results = {name: run_strategy(STRATEGIES[name], schemes, known, client, query_sets, query_embs, modes, count)
                for name in names}
     report = build_report(results, reproduces)
     REPORT_DIR.mkdir(parents=True, exist_ok=True)

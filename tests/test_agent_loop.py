@@ -238,6 +238,37 @@ async def test_named_scheme_question_reads_all_of_its_application_process():
     assert "other__process_documents__0" in ids and len(ids) <= 8
 
 
+def _recording_search(results: list[dict], seen_profiles: list):
+    async def search(inp, citizen_profile=None):
+        seen_profiles.append(citizen_profile)
+        return {"results": results, "top_rerank_score": 0.9, "low_confidence": False}
+    return search
+
+
+@pytest.mark.asyncio
+async def test_named_scheme_eligibility_is_not_hidden_by_profile_filters():
+    """Regression task eval ELIG-01: a 60-year-old asked about PMKVY-RPL (ages 18-45). The age filter removed that
+    scheme from the search, so the agent checked other schemes and never said 'not eligible'."""
+    q = "I am 60 years old. Am I eligible for Pradhan Mantri Kaushal Vikas Yojana - Recognition Of Prior Learning?"
+    seen: list = []
+    agent = JanSahayakAgent(llm=ScriptedLLM(_search_plan("ELIGIBILITY_CHECK"), []))
+    agent.toolbox.search_schemes = _recording_search([_chunk("pmkvy-rpl", 0, "eligibility_exclusions")], seen)
+    state = await agent.run(q, "test-loop-elig01", citizen_profile={"age": 60})
+    assert seen and not any(seen), "a named-scheme search must not filter by the citizen's profile"
+    verdicts = {t["args"]["scheme_slug"]: t.get("verdict") for t in state["tool_calls_log"] if t["tool"] == "check_eligibility"}
+    assert verdicts.get("pmkvy-rpl") == "NOT_ELIGIBLE", "age 60 is over the scheme's 45-year limit"
+
+
+@pytest.mark.asyncio
+async def test_discovery_search_still_uses_the_profile_filters():
+    """Filters stay on for questions that name no scheme: there they narrow the catalog to what may fit."""
+    seen: list = []
+    agent = JanSahayakAgent(llm=ScriptedLLM(_search_plan("ELIGIBILITY_CHECK"), []))
+    agent.toolbox.search_schemes = _recording_search([_chunk("a", 0, "eligibility_exclusions")], seen)
+    await agent.run("I need money for my studies", "test-loop-discovery", citizen_profile={"age": 19})
+    assert seen and seen[0]["age"] == 19
+
+
 @pytest.mark.parametrize("message", ["1234 5678 9012", "NSP/2024/123456", "[AADHAAR_MASKED:XXXX-XXXX-0124]", "MH12AB1234"])
 def test_bare_identifier_detected(message):
     assert _is_bare_identifier(message)

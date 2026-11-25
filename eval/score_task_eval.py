@@ -56,6 +56,7 @@ from eval.run_task_eval import TASK_CONFIGS, TASK_RUNS_DIR, load_tasks
 
 REPORT_DIR = PROJECT_ROOT / "eval" / "reports"
 GROUNDING_CACHE_PATH = REPORT_DIR / "grounding_judge.json"
+CORRECTIONS_PATH = PROJECT_ROOT / "eval" / "golden_dataset_corrections.json"
 TASK_SUITE = "task"
 BASELINE_CONFIG = "loop"
 LATENCY_PERCENTILES = (50, 95)
@@ -92,6 +93,30 @@ def task_kind(task: dict[str, Any]) -> TaskKind:
     raise ValueError(f"Unknown task category {category!r} in {task['id']}")
 
 
+def accepted_verdicts(task: dict[str, Any]) -> list[str]:
+    """Verdicts that count as correct: the corrected list when a documented correction applies, else the key's."""
+    return task.get("accepted_verdicts") or [task.get("gold_verdict")]
+
+
+def load_corrections(tasks: list[dict[str, Any]], path: Path = CORRECTIONS_PATH) -> dict[str, list[str]]:
+    """{task id: accepted verdicts} from the corrections file; refuses corrections that no longer match the key."""
+    if not path.exists():
+        return {}
+    by_id = {t["id"]: t for t in tasks}
+    out: dict[str, list[str]] = {}
+    for c in json.loads(path.read_text(encoding="utf-8"))["corrections"]:
+        task = by_id.get(c["id"])
+        if c["field"] != "gold_verdict" or task is None or task.get("gold_verdict") != c["original"]:
+            raise ValueError(f"Correction for {c['id']} does not match the answer key ({path.name}); review it")
+        out[c["id"]] = list(c["accepted"])
+    return out
+
+
+def with_corrections(tasks: list[dict[str, Any]], corrections: dict[str, list[str]]) -> list[dict[str, Any]]:
+    """Copies of the tasks with the corrected acceptable verdicts attached (the originals are not modified)."""
+    return [{**t, "accepted_verdicts": corrections[t["id"]]} if t["id"] in corrections else t for t in tasks]
+
+
 def was_refused(record: dict[str, Any]) -> bool:
     """Stopped by the input guardrail or routed out of scope (no answer from the corpus)."""
     return bool(record.get("guardrail_blocked")) or record.get("status") in REFUSAL_STATUSES
@@ -109,8 +134,23 @@ def _tool_calls(record: dict[str, Any], tool: str) -> list[dict[str, Any]]:
     return [t for t in record.get("tool_log") or [] if t.get("tool") == tool]
 
 
+def checked_verdicts(record: dict[str, Any]) -> dict[str, str]:
+    """{scheme: last verdict} from every eligibility check in the tool log.
+
+    The tool log is the source of truth: the final eligibility cards (and evidence) of a multi-scheme answer have
+    NOT_ELIGIBLE schemes removed on purpose (`_drop_ruled_out_schemes`), so they can hide a correct check.
+    """
+    return {str(t["args"]["scheme_slug"]): str(t["verdict"]) for t in _tool_calls(record, "check_eligibility")
+            if t.get("verdict") and t.get("args", {}).get("scheme_slug")}
+
+
+def reached_schemes(record: dict[str, Any]) -> set[str]:
+    """Schemes retrieval brought to the agent: final evidence plus every scheme the agent checked eligibility for."""
+    return set(record.get("retrieved_schemes") or []) | set(checked_verdicts(record))
+
+
 def _gold_verdict(record: dict[str, Any], slug: str | None) -> str | None:
-    return next((v["verdict"] for v in record.get("eligibility_verdicts") or [] if v.get("scheme_slug") == slug), None)
+    return checked_verdicts(record).get(slug) if slug else None
 
 
 def _combine(checks: dict[str, bool | None]) -> bool | None:
@@ -135,7 +175,7 @@ def grade_task(task: dict[str, Any], record: dict[str, Any], verdict: GroundingV
         checks["answers_request"] = verdict.answers_request if verdict else None
         checks["grounded"] = verdict.grounded if verdict else None
     elif kind == "eligibility":
-        checks["gold_verdict_matches"] = _gold_verdict(record, gold_slug) == task.get("gold_verdict")
+        checks["gold_verdict_matches"] = _gold_verdict(record, gold_slug) in accepted_verdicts(task)
     elif kind == "draft_grievance":
         draft = record.get("grievance_draft") or {}
         receipt = record.get("grievance_receipt") or {}
@@ -290,18 +330,21 @@ def compare_configs(a_rows: dict[str, dict[str, Any]], b_rows: dict[str, dict[st
     }
 
 
-def build_report(runs: dict[str, dict[str, Any]], graded: dict[str, dict[str, dict[str, Any]]]) -> dict[str, Any]:
+def build_report(runs: dict[str, dict[str, Any]], graded: dict[str, dict[str, dict[str, Any]]],
+                 graded_original_key: dict[str, dict[str, dict[str, Any]]], corrected_ids: list[str]) -> dict[str, Any]:
+    """Summaries graded with the corrected key, plus completion under the original key for every config."""
     settings = get_settings()
     price_in, price_out = settings.eval_price_input_usd_per_mtok, settings.eval_price_output_usd_per_mtok
     configs = {name: {"description": TASK_CONFIGS[name].description, "meta": runs[name]["meta"],
-                      **summarize_config(rows, settings.agent_max_tool_calls, price_in, price_out)}
+                      **summarize_config(rows, settings.agent_max_tool_calls, price_in, price_out),
+                      "completion_original_key": completion_summary(list(graded_original_key[name].values()))}
                for name, rows in graded.items()}
     comparisons = {name: compare_configs(graded[BASELINE_CONFIG], rows) for name, rows in graded.items()
                    if name != BASELINE_CONFIG and BASELINE_CONFIG in graded}
     return {"created_at": now_ist_iso(), "judge_model": settings.gemini_judge_model,
             "max_tool_calls": settings.agent_max_tool_calls,
-            "price_usd_per_mtok": {"input": price_in, "output": price_out}, "configs": configs,
-            "compared_with_loop": comparisons}
+            "price_usd_per_mtok": {"input": price_in, "output": price_out}, "corrected_task_ids": corrected_ids,
+            "configs": configs, "compared_with_loop": comparisons}
 
 
 def _pct(value: float | None) -> str:
@@ -335,14 +378,20 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"- A task is done only if it passes every rule for its kind (see `eval/score_task_eval.py`) and uses at most "
         f"{report['max_tool_calls']} tool calls. Grounding judge: `{report['judge_model']}`.",
         "- 95% CIs are Wilson intervals; with ~80 tasks a difference of a few tasks is within noise.",
+        f"- Answer-key corrections: {len(report['corrected_task_ids'])} eligibility verdicts "
+        f"({', '.join(report['corrected_task_ids']) or 'none'}) are corrected in `eval/golden_dataset_corrections.json` "
+        "(each with the scheme's own text). The original key is unchanged; completion is shown under both.",
+        "- `*_after_elig_fix` runs re-ran only the 20 eligibility tasks after the ELIG-01 fix (named-scheme searches no "
+        "longer filtered by the citizen profile); `loop` and `single_pass` are the before-fix runs.",
         "",
         "## Task completion",
         "",
-        "| Config | Completion | Pipeline errors | Status counts |",
-        "|---|---|---:|---|",
+        "| Config | Completion (corrected key) | Completion (original key) | Pipeline errors | Status counts |",
+        "|---|---|---|---:|---|",
     ]
     for name, c in configs.items():
-        lines.append(f"| `{name}` | {_rate_cell(c['completion'])} | {c['pipeline_errors']} | {c['status']} |")
+        lines.append(f"| `{name}` | {_rate_cell(c['completion'])} | {_rate_cell(c['completion_original_key'])} | "
+                     f"{c['pipeline_errors']} | {c['status']} |")
     kinds = sorted({k for c in configs.values() for k in c["completion_by_kind"]})
     lines += ["", "## Completion by kind of task", "", "| Kind | " + " | ".join(f"`{n}`" for n in configs) + " |",
               "|---|" + "---|" * len(configs)]
@@ -403,8 +452,11 @@ def main() -> None:
         requests = grounding_requests(tasks, runs, settings.db_abs_path)
         asyncio.run(judge_grounding(requests, GROUNDING_CACHE_PATH, args.judge_max_calls,
                                     get_gemini_gateway(settings.gemini_judge_model)))
-    graded = grade_runs(tasks, runs, load_cache(GROUNDING_CACHE_PATH), settings.agent_max_tool_calls)
-    report = build_report(runs, graded)
+    cache = load_cache(GROUNDING_CACHE_PATH)
+    corrections = load_corrections(tasks)
+    graded = grade_runs(with_corrections(tasks, corrections), runs, cache, settings.agent_max_tool_calls)
+    graded_original = grade_runs(tasks, runs, cache, settings.agent_max_tool_calls)
+    report = build_report(runs, graded, graded_original, sorted(corrections))
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
     (REPORT_DIR / "task_eval.json").write_text(json.dumps({**report, "per_task": graded}, ensure_ascii=False, indent=2),
                                                encoding="utf-8")
