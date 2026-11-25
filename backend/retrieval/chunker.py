@@ -19,6 +19,7 @@ except Exception:
 # Hard upper bound in conservative token estimation (leaves generous margin under BERT 512 WordPiece tokens)
 MAX_SAFE_TOKENS = 440
 HARD_TOKEN_LIMIT = 512
+DEFAULT_OVERLAP_WORDS = 35  # words carried from one chunk into the next when a section is split
 # Section label of chunks built from a scheme's FAQ pairs (the retriever can exclude them for evaluation).
 FAQ_SECTION = "faq_group"
 
@@ -65,7 +66,7 @@ def split_body_with_header(
     header: str,
     body: str,
     max_tokens: int = MAX_SAFE_TOKENS,
-    overlap_words: int = 35,
+    overlap_words: int = DEFAULT_OVERLAP_WORDS,
 ) -> list[str]:
     """Split body into chunks prepended with `header`, each strictly <= max_tokens."""
     body = body.strip()
@@ -134,10 +135,18 @@ class SchemeChunk:
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
-def chunk_scheme(scheme: EnrichedScheme) -> list[SchemeChunk]:
-    """Generate section-aware chunks for one scheme + all its FAQs."""
-    chunks: list[SchemeChunk] = []
-    base_meta = {
+@dataclass(frozen=True)
+class SchemeSection:
+    """One section of a scheme's official text, before it is split into chunks."""
+
+    key: str  # chunk section label, e.g. "overview_benefits"
+    title: str  # human-readable section name used in the chunk header
+    body: str
+
+
+def scheme_metadata(scheme: EnrichedScheme) -> dict[str, Any]:
+    """Metadata stored with every chunk of a scheme (used by retrieval filters and citations)."""
+    return {
         "scheme_slug": scheme.slug,
         "scheme_name": scheme.scheme_name,
         "short_title": scheme.short_title,
@@ -156,29 +165,48 @@ def chunk_scheme(scheme: EnrichedScheme) -> list[SchemeChunk]:
         "income_cap_inr": scheme.income_cap_inr,
     }
 
-    def _emit(section: str, texts: list[str], faq_nums_per_chunk: list[list[int]] | None = None) -> None:
-        for idx, txt in enumerate(texts):
-            toks = estimate_tokens(txt)
-            fnums = faq_nums_per_chunk[idx] if faq_nums_per_chunk else []
-            cid = f"{scheme.slug}__{section}__{idx}"
-            meta = dict(base_meta)
-            meta["section"] = section
-            if fnums:
-                meta["faq_numbers"] = fnums
-            chunks.append(
-                SchemeChunk(
-                    chunk_id=cid,
-                    scheme_slug=scheme.slug,
-                    scheme_name=scheme.scheme_name,
-                    ministry=scheme.ministry,
-                    section=section,
-                    text=txt,
-                    token_count=toks,
-                    source_url=scheme.source_url,
-                    faq_numbers=fnums,
-                    metadata=meta,
-                )
+
+def section_header(scheme: EnrichedScheme, title: str | None) -> str:
+    """The bracketed header prepended to every chunk (keeps the scheme name in each chunk for retrieval)."""
+    section_part = f" | Section: {title}" if title else ""
+    return f"[Scheme: {scheme.scheme_name} | Ministry: {scheme.ministry}{section_part}]"
+
+
+def build_chunks(
+    scheme: EnrichedScheme,
+    section: str,
+    texts: list[str],
+    faq_nums_per_chunk: list[list[int]] | None = None,
+) -> list[SchemeChunk]:
+    """Wrap already-split chunk texts of one section as SchemeChunks with ids and metadata."""
+    base_meta = scheme_metadata(scheme)
+    chunks: list[SchemeChunk] = []
+    for idx, txt in enumerate(texts):
+        fnums = faq_nums_per_chunk[idx] if faq_nums_per_chunk else []
+        meta = dict(base_meta)
+        meta["section"] = section
+        if fnums:
+            meta["faq_numbers"] = fnums
+        chunks.append(
+            SchemeChunk(
+                chunk_id=f"{scheme.slug}__{section}__{idx}",
+                scheme_slug=scheme.slug,
+                scheme_name=scheme.scheme_name,
+                ministry=scheme.ministry,
+                section=section,
+                text=txt,
+                token_count=estimate_tokens(txt),
+                source_url=scheme.source_url,
+                faq_numbers=fnums,
+                metadata=meta,
             )
+        )
+    return chunks
+
+
+def scheme_sections(scheme: EnrichedScheme) -> list[SchemeSection]:
+    """The scheme's official text grouped into its three non-FAQ sections (empty sections are left out)."""
+    sections: list[SchemeSection] = []
 
     # 1. Overview & Benefits
     overview_parts: list[str] = []
@@ -194,8 +222,7 @@ def chunk_scheme(scheme: EnrichedScheme) -> list[SchemeChunk]:
         overview_parts.append(f"Tags: {scheme.tags}")
 
     if overview_parts:
-        hdr = f"[Scheme: {scheme.scheme_name} | Ministry: {scheme.ministry} | Section: Overview & Benefits]"
-        _emit("overview_benefits", split_body_with_header(hdr, "\n".join(overview_parts)))
+        sections.append(SchemeSection("overview_benefits", "Overview & Benefits", "\n".join(overview_parts)))
 
     # 2. Eligibility & Exclusions (keep together whenever possible)
     elig_parts: list[str] = []
@@ -204,8 +231,7 @@ def chunk_scheme(scheme: EnrichedScheme) -> list[SchemeChunk]:
     if scheme.exclusions:
         elig_parts.append(f"Exclusions: {scheme.exclusions}")
     if elig_parts:
-        hdr = f"[Scheme: {scheme.scheme_name} | Ministry: {scheme.ministry} | Section: Eligibility & Exclusions]"
-        _emit("eligibility_exclusions", split_body_with_header(hdr, "\n".join(elig_parts)))
+        sections.append(SchemeSection("eligibility_exclusions", "Eligibility & Exclusions", "\n".join(elig_parts)))
 
     # 3. Application Process & Documents Required
     proc_parts: list[str] = []
@@ -218,12 +244,15 @@ def chunk_scheme(scheme: EnrichedScheme) -> list[SchemeChunk]:
     if scheme.references_text:
         proc_parts.append(f"Official References: {scheme.references_text}")
     if proc_parts:
-        hdr = f"[Scheme: {scheme.scheme_name} | Ministry: {scheme.ministry} | Section: Application Process & Documents]"
-        _emit("process_documents", split_body_with_header(hdr, "\n".join(proc_parts)))
+        sections.append(SchemeSection("process_documents", "Application Process & Documents", "\n".join(proc_parts)))
+    return sections
 
-    # 4. Grouped FAQs (2-3 consecutive FAQs per chunk up to MAX_SAFE_TOKENS)
+
+def chunk_faqs(scheme: EnrichedScheme) -> list[SchemeChunk]:
+    """Grouped FAQ chunks: 2-3 consecutive FAQs per chunk up to MAX_SAFE_TOKENS."""
+    chunks: list[SchemeChunk] = []
     if scheme.faqs:
-        hdr = f"[Scheme: {scheme.scheme_name} | Ministry: {scheme.ministry} | Section: FAQs]"
+        hdr = section_header(scheme, "FAQs")
         faq_chunks: list[str] = []
         faq_num_lists: list[list[int]] = []
 
@@ -256,8 +285,27 @@ def chunk_scheme(scheme: EnrichedScheme) -> list[SchemeChunk]:
             faq_chunks.append(f"{hdr}\n" + "\n".join(cur_entries))
             faq_num_lists.append(list(cur_nums))
 
-        _emit(FAQ_SECTION, faq_chunks, faq_num_lists)
+        chunks.extend(build_chunks(scheme, FAQ_SECTION, faq_chunks, faq_num_lists))
 
+    return chunks
+
+
+def chunk_scheme(
+    scheme: EnrichedScheme,
+    max_tokens: int = MAX_SAFE_TOKENS,
+    overlap_words: int = DEFAULT_OVERLAP_WORDS,
+) -> list[SchemeChunk]:
+    """Section-aware chunks for one scheme + all its FAQs.
+
+    `max_tokens` and `overlap_words` apply to the three official-text sections (the chunking experiments in
+    eval/run_chunking_eval.py vary them); FAQ chunks always use the defaults.
+    """
+    chunks: list[SchemeChunk] = []
+    for section in scheme_sections(scheme):
+        texts = split_body_with_header(section_header(scheme, section.title), section.body,
+                                       max_tokens=max_tokens, overlap_words=overlap_words)
+        chunks.extend(build_chunks(scheme, section.key, texts))
+    chunks.extend(chunk_faqs(scheme))
     return chunks
 
 

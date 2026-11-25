@@ -187,6 +187,57 @@ async def test_out_of_scope_without_a_scheme_name_is_still_refused():
     assert state["planner_output"]["intent"] == "OUT_OF_SCOPE" and not state.get("tool_calls_log")
 
 
+def _chunk(slug: str, part: int, section: str = "process_documents") -> dict:
+    return {"chunk_id": f"{slug}__{section}__{part}", "citation_id": f"SCHEME:{slug}#{section}", "scheme_slug": slug,
+            "scheme_name": slug, "ministry": "M", "section": section, "source_url": "https://x.gov.in",
+            "text": f"{slug} {section} part {part}", "scores": {"rerank": 0.9}}
+
+
+def _fixed_search(results: list[dict]):
+    async def search(inp, citizen_profile=None):
+        return {"results": results, "top_rerank_score": 0.9, "low_confidence": False}
+    return search
+
+
+@pytest.mark.asyncio
+async def test_parts_of_one_section_are_all_kept():
+    """Regression gold eval GQA-021: chunks were deduped by citation_id, so parts 2-4 of a section were dropped."""
+    agent = JanSahayakAgent(llm=ScriptedLLM(_search_plan("SCHEME_QA"), []))
+    agent.toolbox.search_schemes = _fixed_search([_chunk("a", 0), _chunk("a", 1), _chunk("b", 0)])
+    state = await agent.run("how do these grants work", "test-loop-12", citizen_profile={})
+    assert [c["chunk_id"] for c in state["retrieved_chunks"]] == ["a__process_documents__0", "a__process_documents__1",
+                                                                  "b__process_documents__0"]
+
+
+def test_named_scheme_evidence_keeps_lead_scheme_then_two_other_slots():
+    from backend.agent.graph import _lead_scheme_first
+    results = [_chunk("lead", 2), _chunk("other1", 0), _chunk("lead", 0), _chunk("other2", 0), _chunk("other3", 0)]
+    sections = [_chunk("lead", i) for i in range(4)] + [_chunk("lead", 0, "overview_benefits")]
+    ids = [c["chunk_id"] for c in _lead_scheme_first(results, sections, evidence_cap=8)]
+    assert ids == [
+        "lead__process_documents__2", "lead__process_documents__0",  # what search ranked first stays first
+        "lead__process_documents__1", "lead__process_documents__3", "lead__overview_benefits__0",  # rest of the scheme
+        "other1__process_documents__0", "other2__process_documents__0", "other3__process_documents__0",
+    ]
+    many_sections = [_chunk("lead", i) for i in range(10)]
+    ids = [c["chunk_id"] for c in _lead_scheme_first(results, many_sections, evidence_cap=8)][:8]
+    assert ids[6:] == ["other1__process_documents__0", "other2__process_documents__0"], "2 slots stay for other schemes"
+
+
+@pytest.mark.asyncio
+async def test_named_scheme_question_reads_all_of_its_application_process():
+    """Regression gold eval GQA-021: the answer said the scheme does not mention NGO-PS Portal registration."""
+    q = ("Do I need to register with the NGO-PS Portal to apply for the Financial Assistance For Promotion Of "
+         "Guru-Shishya Parampara (Repertory Grant)?")
+    agent = JanSahayakAgent(llm=ScriptedLLM(_search_plan("SCHEME_QA"), []))
+    agent.toolbox.search_schemes = _fixed_search([_chunk("fapgsprg", 0, "overview_benefits"), _chunk("other", 0)])
+    state = await agent.run(q, "test-loop-13", citizen_profile={})
+    ids = [c["chunk_id"] for c in state["retrieved_chunks"]]
+    assert "fapgsprg__process_documents__0" in ids, "the only chunk that mentions the NGO-PS Portal must be read"
+    assert sum(i.startswith("fapgsprg__") for i in ids) == 6, "the named scheme fills all but the reserved slots"
+    assert "other__process_documents__0" in ids and len(ids) <= 8
+
+
 @pytest.mark.parametrize("message", ["1234 5678 9012", "NSP/2024/123456", "[AADHAAR_MASKED:XXXX-XXXX-0124]", "MH12AB1234"])
 def test_bare_identifier_detected(message):
     assert _is_bare_identifier(message)

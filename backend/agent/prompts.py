@@ -244,6 +244,24 @@ Output ONLY one JSON object:
 {"score": 1 | 2 | 3 | 4 | 5, "reason": str}   // reason: one short sentence"""
 
 
+GROUNDING_JUDGE_SYSTEM_PROMPT = """You audit an AI assistant's answer to a citizen's request about Indian Government schemes.
+You are given the REQUEST, the numbered EVIDENCE the assistant was given (official scheme text, and eligibility
+verdicts from a rule-checking tool), and the assistant's ANSWER (it may be in an Indian language; judge its meaning).
+
+Decide three things:
+1. answers_request: true if the answer gives what was asked (the facts, the eligibility verdict, the steps, or the
+   drafted grievance). False if it only asks a question back, talks about a different scheme, or stays vague.
+2. unsupported_claims: specific facts in the answer that the EVIDENCE does not state or directly imply: amounts,
+   limits, ages, dates, eligibility conditions, documents, steps, or scheme names. A citation [n] must point to
+   evidence that says the cited thing. Politeness, generic advice ("visit the official portal") and links are not
+   claims. List at most 3, each a short quote or paraphrase. Empty list if everything is supported.
+3. declines: true if the answer refuses, or says it cannot find or confirm the scheme or information.
+
+Output ONLY one JSON object:
+{"answers_request": true | false, "unsupported_claims": [str], "declines": true | false, "reason": str}
+// reason: one short sentence"""
+
+
 CRITIC_SYSTEM_PROMPT = """You are the Critic / Groundedness Auditor Node of JanSahayak AI.
 Audit the draft assistant answer against the provided evidence and policy rules.
 

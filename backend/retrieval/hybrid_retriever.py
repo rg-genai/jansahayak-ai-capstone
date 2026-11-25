@@ -143,10 +143,10 @@ class HybridRetriever:
                 """
             ).fetchall()
 
-        self.chunks = []
+        chunks: list[dict[str, Any]] = []
         for r in rows:
             meta = json.loads(r["metadata_json"] or "{}")
-            self.chunks.append(
+            chunks.append(
                 {
                     "chunk_id": r["chunk_id"],
                     "vector_idx": r["vector_idx"],
@@ -162,15 +162,22 @@ class HybridRetriever:
                 }
             )
 
-        self.embeddings = np.load(str(emb_path)).astype(np.float32)
+        embeddings = np.load(str(emb_path))
         with bm25_path.open("rb") as f:
             bundle = pickle.load(f)
-            self.bm25 = bundle["bm25"]
+        self.load_from_memory(chunks, embeddings, bundle["bm25"])
 
-        if len(self.chunks) != self.embeddings.shape[0]:
+    def load_from_memory(self, chunks: list[dict[str, Any]], embeddings: np.ndarray, bm25: Any) -> None:
+        """Use an index built in memory (chunk dicts shaped like `chunks_meta` rows, row-aligned embeddings, a
+        BM25 model over the same chunks). `load()` uses this for the on-disk index; the chunking experiments use it
+        for temporary indexes that never touch `data/index`."""
+        if len(chunks) != embeddings.shape[0]:
             raise RuntimeError(
-                f"Index mismatch: {len(self.chunks)} chunks in SQLite vs {self.embeddings.shape[0]} rows in embeddings.npy"
+                f"Index mismatch: {len(chunks)} chunks vs {embeddings.shape[0]} embedding rows"
             )
+        self.chunks = chunks
+        self.embeddings = embeddings.astype(np.float32)
+        self.bm25 = bm25
         self._searchable_idx = np.asarray(
             [i for i, ch in enumerate(self.chunks) if not (self.exclude_faq_chunks and ch["section"] == FAQ_SECTION)],
             dtype=np.int32,
@@ -189,6 +196,37 @@ class HybridRetriever:
             logger.info("Loading local CPU CrossEncoder reranker: %s", self.settings.reranker_model)
             self._reranker = CrossEncoder(self.settings.reranker_model, device="cpu")
         return self._reranker
+
+    def _to_result(self, idx: int, **scores: float) -> RetrievedChunk:
+        ch = self.chunks[idx]
+        sec_tag = ch["section"]
+        if ch["faq_numbers"]:
+            sec_tag = f"faq_{','.join(str(n) for n in ch['faq_numbers'])}"
+        return RetrievedChunk(
+            chunk_id=ch["chunk_id"],
+            citation_id=f"SCHEME:{ch['scheme_slug']}#{sec_tag}",
+            scheme_slug=ch["scheme_slug"],
+            scheme_name=ch["scheme_name"],
+            ministry=ch["ministry"],
+            section=ch["section"],
+            text=ch["text"],
+            source_url=ch["source_url"],
+            faq_numbers=ch["faq_numbers"],
+            metadata=ch["metadata"],
+            **scores,
+        )
+
+    def scheme_section_chunks(self, scheme_slug: str, query: str) -> list[dict[str, Any]]:
+        """One scheme's official text (benefits, eligibility, process/documents; no FAQ chunks), most relevant to
+        `query` first by the local cross-encoder (document order if the reranker is disabled)."""
+        self.load()
+        idxs = [i for i, ch in enumerate(self.chunks) if ch["scheme_slug"] == scheme_slug and ch["section"] != FAQ_SECTION]
+        reranker = self._get_reranker()
+        if reranker is None or len(idxs) < 2:
+            return [self._to_result(i).to_dict() for i in idxs]
+        logits = reranker.predict([(query, self.chunks[i]["text"]) for i in idxs])
+        ranked = sorted(zip(idxs, logits), key=lambda pair: float(pair[1]), reverse=True)
+        return [self._to_result(i, rerank_logit=float(lg)).to_dict() for i, lg in ranked]
 
     def _filter_indices(self, filters: dict[str, Any] | None) -> tuple[np.ndarray, bool, bool]:
         """Permissive metadata pre-filtering: null/empty fields on a scheme NEVER exclude a citizen."""
@@ -341,33 +379,17 @@ class HybridRetriever:
             else:
                 ordered_indices = ordered_indices[:top_k]
 
-        results: list[RetrievedChunk] = []
-        for idx in ordered_indices:
-            ch = self.chunks[idx]
-            sec_tag = ch["section"]
-            if ch["faq_numbers"]:
-                sec_tag = f"faq_{','.join(str(n) for n in ch['faq_numbers'])}"
-            citation_id = f"SCHEME:{ch['scheme_slug']}#{sec_tag}"
-            rr_score = rerank_prob_map.get(idx, dense_scores_map.get(idx, 0.0))
-            results.append(
-                RetrievedChunk(
-                    chunk_id=ch["chunk_id"],
-                    citation_id=citation_id,
-                    scheme_slug=ch["scheme_slug"],
-                    scheme_name=ch["scheme_name"],
-                    ministry=ch["ministry"],
-                    section=ch["section"],
-                    text=ch["text"],
-                    source_url=ch["source_url"],
-                    faq_numbers=ch["faq_numbers"],
-                    bm25_score=bm25_scores_map.get(idx, 0.0),
-                    dense_score=dense_scores_map.get(idx, 0.0),
-                    rrf_score=rrf_scores_map.get(idx, 0.0),
-                    rerank_score=rr_score,
-                    rerank_logit=rerank_logit_map.get(idx, 0.0),
-                    metadata=ch["metadata"],
-                )
+        results = [
+            self._to_result(
+                idx,
+                bm25_score=bm25_scores_map.get(idx, 0.0),
+                dense_score=dense_scores_map.get(idx, 0.0),
+                rrf_score=rrf_scores_map.get(idx, 0.0),
+                rerank_score=rerank_prob_map.get(idx, dense_scores_map.get(idx, 0.0)),
+                rerank_logit=rerank_logit_map.get(idx, 0.0),
             )
+            for idx in ordered_indices
+        ]
 
         top_rerank = max((r.rerank_score for r in results), default=0.0)
         low_conf = top_rerank < self.settings.web_fallback_threshold

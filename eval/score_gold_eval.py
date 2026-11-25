@@ -36,6 +36,7 @@ from backend.agent.tools import parse_and_repair_json
 from backend.config import get_settings
 from backend.db.repositories import now_ist_iso
 from backend.gateway.llm_client import LLMGateway, QuotaExhaustedError, get_gemini_gateway
+from eval.eval_stats import paired_bootstrap_diff, paired_outcome_test
 from eval.run_gold_eval import CONFIGS, RETRIEVAL_ONLY_FILE, RUNS_DIR
 
 logging.basicConfig(level=logging.WARNING, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
@@ -203,6 +204,19 @@ def summarize_retrieval(data: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return out
 
 
+def judge_significance(rows: dict[str, dict[str, Any]], main_rows: dict[str, dict[str, Any]],
+                       common: list[str]) -> dict[str, Any]:
+    """Paired tests on questions both configs have judge scores for: McNemar on 'correct', bootstrap on the score."""
+    both = [i for i in common if rows[i].get("judge_score") is not None and main_rows[i].get("judge_score") is not None]
+    if not both:
+        return {}
+    config_scores = [float(rows[i]["judge_score"]) for i in both]
+    main_scores = [float(main_rows[i]["judge_score"]) for i in both]
+    return {"judge_correct_test": paired_outcome_test([s >= JUDGE_CORRECT_MIN_SCORE for s in config_scores],
+                                                      [s >= JUDGE_CORRECT_MIN_SCORE for s in main_scores]),
+            "judge_score_diff": paired_bootstrap_diff(config_scores, main_scores)}
+
+
 def build_report(runs: dict[str, dict[str, Any]], scored: dict[str, dict[str, dict[str, Any]]],
                  retrieval: dict[str, Any] | None) -> dict[str, Any]:
     """Per-config summaries, same-question comparisons against the main pipeline, and the retriever table."""
@@ -217,7 +231,8 @@ def build_report(runs: dict[str, dict[str, Any]], scored: dict[str, dict[str, di
         common = sorted(set(rows) & set(main_rows))
         if name != MAIN_CONFIG and common:
             paired[name] = {"n": len(common), name: summarize({i: rows[i] for i in common}),
-                            MAIN_CONFIG: summarize({i: main_rows[i] for i in common})}
+                            MAIN_CONFIG: summarize({i: main_rows[i] for i in common}),
+                            **judge_significance(rows, main_rows, common)}
     return {"created_at": now_ist_iso(), "bertscore_model": BERTSCORE_MODEL,
             "judge_model": get_settings().gemini_judge_model, "configs": configs,
             "paired_with_main": paired, "retrieval_only": summarize_retrieval(retrieval) if retrieval else None}
@@ -271,6 +286,16 @@ def render_markdown(report: dict[str, Any], gold_meta: dict[str, Any]) -> str:
             lines.append(f"| `{name}` | {p['n']} | {_fmt(a['rouge_l'])} / {_fmt(b['rouge_l'])} | "
                          f"{_fmt(a['bertscore_f1'])} / {_fmt(b['bertscore_f1'])} | "
                          f"{_fmt(a['judge_mean'])} / {_fmt(b['judge_mean'])} |")
+        tested = {name: p for name, p in report["paired_with_main"].items() if p.get("judge_correct_test")}
+        if tested:
+            lines += ["", "### Is the difference real? (paired tests on questions both configs were judged on)", "",
+                      "| Config | n | Only config correct | Only main correct | McNemar p | "
+                      "Judge score diff (config - main), 95% CI |",
+                      "|---|---:|---:|---:|---:|---|"]
+            for name, p in tested.items():
+                t, d = p["judge_correct_test"], p["judge_score_diff"]
+                lines.append(f"| `{name}` | {t['n']} | {t['only_a']} | {t['only_b']} | {t['p_value']} | "
+                             f"{d['mean_diff']:+.2f} ({d['ci_low']:+.2f} to {d['ci_high']:+.2f}) |")
     if report["retrieval_only"]:
         lines += ["", "## Retrievers on the gold questions (no LLM)", "",
                   "| Retriever | n | Hit@1 | Hit@3 | Hit@5 | MRR | Source section in top 5 | Avg latency |",

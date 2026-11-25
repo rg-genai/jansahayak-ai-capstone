@@ -85,6 +85,9 @@ _BROAD_ELIGIBILITY_MAX_SCHEMES = 5
 
 # Evidence chunks kept for the Synthesizer across loop rounds (keeps the 8B prompt within budget).
 _MAX_EVIDENCE_CHUNKS = 8
+# When a question names one scheme, its official sections fill the evidence except these slots, which keep
+# other schemes' search results (a comparison question names two schemes).
+_RESERVED_OTHER_SCHEME_SLOTS = 2
 
 
 # ---- Agent loop (Reflector) helpers ----
@@ -250,6 +253,21 @@ def _validate_reflection(
         return answer("general_question_not_about_citizen")  # gold eval GQA-031: asked age for a rule question
 
     return decision, None
+
+
+def _chunk_key(chunk: dict[str, Any]) -> str:
+    return chunk.get("chunk_id") or chunk["citation_id"]
+
+
+def _lead_scheme_first(results: list[dict[str, Any]], scheme_sections: list[dict[str, Any]],
+                       evidence_cap: int) -> list[dict[str, Any]]:
+    """Evidence for a question about one named scheme: its retrieved chunks, then the rest of its official
+    sections, then other schemes' results in `_RESERVED_OTHER_SCHEME_SLOTS` slots (for comparison questions)."""
+    lead = results[0]["scheme_slug"]
+    lead_chunks = list({_chunk_key(c): c for c in [*(c for c in results if c["scheme_slug"] == lead),
+                                                     *scheme_sections]}.values())
+    lead_chunks = lead_chunks[: max(1, evidence_cap - _RESERVED_OTHER_SCHEME_SLOTS)]
+    return [*lead_chunks, *(c for c in results if c["scheme_slug"] != lead)]
 
 
 def _is_broad_eligibility_query(query_en: str, vocab: CatalogVocabulary) -> bool:
@@ -873,6 +891,7 @@ class JanSahayakAgent:
         # (TRC-6232CFB779: the bare need text scored 0.05 relevance and missed PM-USP / PM-YASASVI.)
         open_ended_eligibility = intent == "ELIGIBILITY_CHECK" and not vocab.mentions_specific_scheme(query_en)
         apply_need_query = open_ended_eligibility and not broad_eligibility and round_no == 0
+        named_scheme_question = intent in _REFLECTIVE_INTENTS and vocab.mentions_specific_scheme(query_en)
 
         def budget_left() -> int:
             return settings.agent_max_tool_calls - len(tool_logs)
@@ -913,7 +932,13 @@ class JanSahayakAgent:
                     res = await self.toolbox.search_schemes(inp, citizen_profile=profile_dict)
                     searched_queries.append(inp.query)
                     # Newer results first; keep earlier evidence the agent may still cite (deduped, capped).
-                    merged = {c["citation_id"]: c for c in [*res["results"], *(retrieved_chunks if round_no else [])]}
+                    # Keyed by chunk_id: a section split into several chunks shares one citation_id, and keying by
+                    # it silently dropped every part after the first (gold eval: "how to apply" answers missing).
+                    new_chunks = res["results"]
+                    if new_chunks and round_no == 0 and named_scheme_question and not settings.retrieval_top_k_override:
+                        sections = self.toolbox.retriever.scheme_section_chunks(new_chunks[0]["scheme_slug"], query_en)
+                        new_chunks = _lead_scheme_first(new_chunks, sections, _MAX_EVIDENCE_CHUNKS)
+                    merged = {_chunk_key(c): c for c in [*new_chunks, *(retrieved_chunks if round_no else [])]}
                     # With a top-k override (evals) the answer sees at most k chunks in total, across all rounds.
                     evidence_cap = settings.retrieval_top_k_override or _MAX_EVIDENCE_CHUNKS
                     retrieved_chunks = list(merged.values())[:evidence_cap]

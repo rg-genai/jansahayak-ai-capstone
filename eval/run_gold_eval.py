@@ -23,6 +23,8 @@ import argparse
 import asyncio
 import json
 import logging
+import re
+import subprocess
 import sys
 import time
 from collections import defaultdict
@@ -53,6 +55,12 @@ CLOSED_BOOK_MAX_TOKENS = 300
 CLOSED_BOOK_TEMPERATURE = 0.1
 RETRIEVAL_ONLY_TOP_K = 5
 RETRIEVAL_ONLY_MODES: tuple[RetrievalMode, ...] = ("bm25", "dense", "hybrid_rrf", "hybrid_rerank")
+# Citation markers such as [2] or [1, 3] in an answer.
+_CITATION_MARKER_RE = re.compile(r"\[(\d+(?:\s*,\s*\d+)*)\]")
+# Settings saved with every run (the switches that change agent behaviour).
+PROVENANCE_SETTINGS = ("llm_model", "agent_reflection_enabled", "agent_max_tool_calls", "agent_max_reflection_rounds",
+                       "agent_token_budget", "retrieval_top_k_override", "retrieval_exclude_faq_chunks",
+                       "web_fallback_threshold")
 # Which retrieval chunk section holds each gold aspect's source text (see backend/retrieval/chunker.py).
 ASPECT_CHUNK_SECTION = {
     "benefits": "overview_benefits",
@@ -73,12 +81,15 @@ class EvalConfig:
     retrieval_mode: RetrievalMode = "hybrid_rerank"
     top_k: int | None = None  # None = the live chatbot's retrieval depth
     reflection: bool = True
+    exclude_faq_chunks: bool = True  # the gold set must not be answerable from the FAQs; the task suite uses live settings
 
 
 CONFIGS: dict[str, EvalConfig] = {c.name: c for c in [
     EvalConfig("main", "Full pipeline: agent loop + hybrid BM25/dense/RRF + reranker (live settings)"),
     EvalConfig("main_before_guards", "Main pipeline before the two gold-eval guards (archived 24 Nov run of `main`)"),
-    EvalConfig("single_pass","Same, without the Reflector loop (one retrieval pass)", reflection=False),
+    EvalConfig("main_guards_only", "Main pipeline with the two guards, before the chunk-dedup fix and named-scheme "
+                                   "sections (archived 25 Nov run of `main`)"),
+    EvalConfig("single_pass", "Same, without the Reflector loop (one retrieval pass)", reflection=False),
     EvalConfig("top1", "Main pipeline, answer sees 1 retrieved chunk", top_k=1),
     EvalConfig("top3", "Main pipeline, answer sees 3 retrieved chunks", top_k=3),
     EvalConfig("top5", "Main pipeline, answer sees 5 retrieved chunks", top_k=5),
@@ -103,7 +114,7 @@ def eval_settings(config: EvalConfig) -> Iterator[None]:
     """Apply a configuration's settings for the duration of a run, then restore them."""
     settings = get_settings()
     wanted = {"agent_reflection_enabled": config.reflection, "retrieval_top_k_override": config.top_k,
-              "retrieval_exclude_faq_chunks": True}
+              "retrieval_exclude_faq_chunks": config.exclude_faq_chunks}
     saved = {key: getattr(settings, key) for key in wanted}
     for key, value in wanted.items():
         setattr(settings, key, value)
@@ -140,8 +151,71 @@ def gold_rank(slugs: list[str], gold_slug: str) -> int | None:
     return distinct.index(gold_slug) + 1 if gold_slug in distinct else None
 
 
+def _json_safe_args(args: dict[str, Any] | None) -> dict[str, Any]:
+    """Tool arguments that can be saved as JSON (a failed call can log raw objects such as a CitizenProfile)."""
+    return {k: v for k, v in (args or {}).items() if isinstance(v, (str, int, float, bool, list, dict, type(None)))}
+
+
+def cited_scheme_slugs(state: dict[str, Any]) -> list[str]:
+    """Schemes the answer actually cites with [n] markers (checked in both the English draft and the final answer)."""
+    by_index = {int(c["index"]): c.get("scheme_slug") or "" for c in state.get("citations") or [] if c.get("index")}
+    text = f"{state.get('draft_answer_en') or ''}\n{state.get('final_answer') or ''}"
+    numbers = [int(n) for group in _CITATION_MARKER_RE.findall(text) for n in re.findall(r"\d+", group)]
+    return list(dict.fromkeys(by_index[n] for n in numbers if by_index.get(n)))
+
+
+def agent_diagnostics(state: dict[str, Any]) -> dict[str, Any]:
+    """What the agent did on one query: enough to grade the task and to classify a failure without the trace."""
+    spans = state.get("spans") or []
+    planner_statuses = [s.get("status") for s in spans if str(s.get("name", "")).startswith("Planner")]
+    draft = state.get("grievance_draft")
+    receipt = state.get("grievance_receipt")
+    return {
+        "intent": (state.get("planner_output") or {}).get("intent"),
+        "planner_status": planner_statuses[-1] if planner_statuses else None,
+        "tool_log": [{"tool": t.get("tool"), "status": t.get("status"), "args": _json_safe_args(t.get("args")),
+                      **({"verdict": t["verdict"]} if t.get("verdict") else {}),
+                      **({"error": t["error"]} if t.get("error") else {})}
+                     for t in state.get("tool_calls_log") or []],
+        "reflection_decisions": [{"decision": r.get("decision"), "guard": r.get("guard")}
+                                 for r in state.get("reflections") or []],
+        "evidence_chunk_ids": [c.get("chunk_id") for c in state.get("retrieved_chunks") or [] if c.get("chunk_id")],
+        "eligibility_verdicts": [{"scheme_slug": c.get("scheme_slug"), "verdict": c.get("verdict")}
+                                 for c in state.get("eligibility_cards") or []],
+        "cited_schemes": cited_scheme_slugs(state),
+        "critic_passed": (state.get("critic_output") or {}).get("passed"),
+        "guardrail_blocked": bool(state.get("guardrail_blocked")),
+        "guardrail_category": state.get("guardrail_category"),
+        "hitl_paused": bool(state.get("hitl_paused")),
+        "grievance_draft": {"ministry_code": draft.get("ministry_code"), "char_count": draft.get("char_count")}
+        if draft else None,
+        "grievance_receipt": {k: receipt.get(k) for k in ("registration_number", "status", "error") if k in receipt}
+        if receipt else None,
+    }
+
+
+def git_revision() -> str:
+    """Short commit hash of the code under test, with '-dirty' when there are uncommitted changes."""
+    try:
+        commit = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=PROJECT_ROOT, capture_output=True,
+                                text=True, check=True).stdout.strip()
+        dirty = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"], cwd=PROJECT_ROOT,
+                               capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError) as exc:
+        logger.warning("Could not read the git revision: %s", exc)
+        return "unknown"
+    return f"{commit}-dirty" if dirty else commit
+
+
+def run_provenance() -> dict[str, Any]:
+    """Code version and agent settings a run was made with, so results can be traced and reproduced."""
+    settings = get_settings()
+    return {"git_revision": git_revision(),
+            "settings": {key: getattr(settings, key) for key in PROVENANCE_SETTINGS}}
+
+
 def record_from_state(state: dict[str, Any], item: dict[str, Any], total_ms: float) -> dict[str, Any]:
-    """The answer plus everything needed for the retrieval, latency and cost tables."""
+    """The answer plus everything needed for the retrieval, latency, cost and failure-taxonomy tables."""
     logs = state.get("tool_calls_log") or []
     searches = [t for t in logs if t.get("tool") == "search_schemes"]
     lat = state.get("step_latencies") or {}
@@ -162,6 +236,7 @@ def record_from_state(state: dict[str, Any], item: dict[str, Any], total_ms: flo
         "search_calls": len(searches),
         "reflection_rounds": len(state.get("reflections") or []),
         "web_fallback_skipped": any(t.get("tool") == "web_search_gov_schemes" for t in logs),
+        **agent_diagnostics(state),
     }
 
 
@@ -192,8 +267,9 @@ def run_path(config_name: str, runs_dir: Path = RUNS_DIR) -> Path:
 def load_run(path: Path, config: EvalConfig, model: str) -> dict[str, Any]:
     if path.exists():
         return json.loads(path.read_text(encoding="utf-8"))
-    return {"meta": {**asdict(config), "model": model, "faq_chunks_excluded": True, "web_fallback": "disabled",
-                     "started_at": now_ist_iso()}, "results": {}}
+    return {"meta": {**asdict(config), "model": model, "faq_chunks_excluded": config.exclude_faq_chunks,
+                     "web_fallback": "disabled",
+                     "started_at": now_ist_iso(), **run_provenance()}, "results": {}}
 
 
 def save_run(run: dict[str, Any], path: Path) -> None:
@@ -213,7 +289,7 @@ async def run_config(config: EvalConfig, items: list[dict[str, Any]], runs_dir: 
     with eval_settings(config):
         agent = None
         if config.kind == "agent":
-            retriever = retriever or HybridRetriever(exclude_faq_chunks=True)
+            retriever = retriever or HybridRetriever(exclude_faq_chunks=config.exclude_faq_chunks)
             toolbox = NoWebToolbox(retriever=retriever, retrieval_mode=config.retrieval_mode)
             agent = JanSahayakAgent(llm=llm, toolbox=toolbox)
         t_start = time.perf_counter()

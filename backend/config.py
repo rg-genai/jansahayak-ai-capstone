@@ -65,6 +65,11 @@ class Settings(BaseSettings):
     agent_max_reflection_rounds: int = Field(default=2, ge=0, le=4)
     agent_token_budget: int = Field(default=24000, ge=2000)  # prompt+completion tokens per query
 
+    # Eval cost reporting: the hosted VM has no price, so cost per query uses a reference price the team chooses
+    # (USD per million tokens). Unset = reports show tokens only.
+    eval_price_input_usd_per_mtok: float | None = Field(default=None, ge=0)
+    eval_price_output_usd_per_mtok: float | None = Field(default=None, ge=0)
+
     # Grievance Execution Mode
     grievance_mode: Literal["sandbox", "assisted", "apisetu"] = Field(default="sandbox")
     mock_cpgrams_base_url: str = Field(default="http://127.0.0.1:8000/mock-cpgrams/v1")
