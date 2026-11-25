@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Literal, TypedDict
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class CitizenProfile(BaseModel):
@@ -57,6 +57,12 @@ class PlannerOutput(BaseModel):
     reasoning: str = ""
     # Set when this message answers the assistant's clarifying question: the original request it continues.
     continues_request: str | None = None
+
+    @field_validator("continues_request", mode="before")
+    @classmethod
+    def _non_text_continuation_is_empty(cls, value: Any) -> Any:
+        """Fault eval FI-03..05: Qwen3-8B's JSON repair filled this text field with true/false, failing the whole plan."""
+        return value if value is None or isinstance(value, str) else None
 
 
 class ReflectionOutput(BaseModel):

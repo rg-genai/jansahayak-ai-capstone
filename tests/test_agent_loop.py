@@ -12,7 +12,7 @@ from typing import Any
 import pytest
 
 from backend.agent.graph import JanSahayakAgent, _is_bare_identifier, _validate_reflection, _verified_continuation
-from backend.agent.state import ReflectionOutput
+from backend.agent.state import PlannerOutput, ReflectionOutput
 from backend.config import get_settings
 from backend.gateway.llm_client import LLMResponse
 
@@ -351,6 +351,27 @@ async def test_continuation_detected_even_when_model_omits_it():
     llm = ScriptedLLM({"intent": "ELIGIBILITY_CHECK", "profile_updates": {"age": 45, "occupation": "Farmer"},
                        "tool_calls": [{"tool_name": "search_schemes", "arguments": {"query": "x"}}]}, [])
     state = await JanSahayakAgent(llm=llm).run("I am 45 and a farmer", "test-loop-7", citizen_profile={}, history=_HISTORY)
+    assert state["query_en"] == "Which schemes am I eligible for?"
+
+
+@pytest.mark.parametrize("flag", [True, False])
+def test_boolean_continues_request_does_not_reject_the_plan(flag: bool):
+    """Fault eval FI-03..05 (25 Nov re-run): Qwen3-8B's JSON repair wrote continues_request as true/false."""
+    plan = PlannerOutput.model_validate({"intent": "ELIGIBILITY_CHECK", "continues_request": flag,
+                                         "tool_calls": [{"tool_name": "search_schemes", "arguments": {"query": "x"}}]})
+    assert plan.continues_request is None
+    assert plan.intent == "ELIGIBILITY_CHECK" and plan.tool_calls[0].tool_name == "search_schemes"
+    assert PlannerOutput.model_validate({"continues_request": "Which schemes am I eligible for?"}).continues_request \
+        == "Which schemes am I eligible for?"
+
+
+@pytest.mark.asyncio
+async def test_boolean_continues_request_still_continues_via_history():
+    """With continues_request coerced to None, our own clarifying question in history still drives the continuation."""
+    llm = ScriptedLLM({"intent": "ELIGIBILITY_CHECK", "continues_request": True,
+                       "profile_updates": {"age": 45, "occupation": "Farmer"},
+                       "tool_calls": [{"tool_name": "search_schemes", "arguments": {"query": "x"}}]}, [])
+    state = await JanSahayakAgent(llm=llm).run("I am 45 and a farmer", "test-loop-8", citizen_profile={}, history=_HISTORY)
     assert state["query_en"] == "Which schemes am I eligible for?"
 
 
