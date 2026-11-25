@@ -5,14 +5,14 @@ task,loop,GRV-03,File a CPGRAMS complaint that my PM Vishwakarma artisan toolkit
 - **Character Count:** `785 / 2000` (CPGRAMS compliant)
 - **Status:** Awaiting your explicit confirmation (Human-in-the-Loop safety gate)
 
-Please review the drafted complaint carefully in the **Review & Confirm Grievance** card below and click **Confirm & Submit** when ready. Nothing has been submitted yet.",tool_call_error,wrong_tool_arguments,"draft addressed to MOSDE, expected MSMEI",,
+Please review the drafted complaint carefully in the **Review & Confirm Grievance** card below and click **Confirm & Submit** when ready. Nothing has been submitted yet.",tool_call_error,wrong_tool_arguments,"draft addressed to MOSDE, expected MSMEI",tool_call_error ,
 gold,main,GQA-033,What is the age range for transgender persons to be eligible for skill development training under the SMILE - Comprehensive Rehabilitation For Welfare Of Transgender Persons – Skill Development And Training scheme?,"**Schemes That May Suit You**  
 - **SMILE - Comprehensive Rehabilitation For Welfare Of Transgender Persons** [NEEDS_MORE_INFO] - Provides ₹13,500/year as scholarships for transgender students in Classes IX–XII and vocational courses [5].  
 - **SMILE - Comprehensive Rehabilitation For Welfare Of Transgender Persons** [NEEDS_MORE_INFO] - Offers financial assistance to transgender students studying in government or recognized schools/colleges [1].  
 
 **Key Benefits & Eligibility**  
 - Scholarships are available for transgender students in Classes IX–XII and vocational courses.  
-- Must have a Tr",retrieval_miss,gold_scheme_not_retrieved,evidence schemes ['smile-scholarship'],,
+- Must have a Tr",retrieval_miss,gold_scheme_not_retrieved,evidence schemes ['smile-scholarship'],retrieval_miss ,
 gold,main,GQA-017,Can I include the cost of a long lease workshed in my project cost under the Pradhan Mantri Formalisation Of Micro Food Processing Enterprises scheme?,"**Recommended Scheme**  
 The Pradhan Mantri Formalisation Of Micro Food Processing Enterprises (PMFMPE) scheme may be suitable for your project.  
 
@@ -22,18 +22,18 @@ The Pradhan Mantri Formalisation Of Micro Food Processing Enterprises (PMFMPE) s
 - Applicants must be **FPOs, SHGs, cooperatives, or existing micro-enterprises** with a minimum turnover of **Rs 5 crore**. [1]  
 
 **Documents Needed**  
-- Proof of ow",hallucination,unsupported_claims,Proof of ownership or lease agreement for the workshed.,,
+- Proof of ow",hallucination,unsupported_claims,Proof of ownership or lease agreement for the workshed.,hallucination,
 gold,main,GQA-007,What is the requirement for a candidate to be eligible for the Rajiv Gandhi National Fellowship For Scheduled Caste Candidates?,"**Schemes That May Suit You**  
 - **Rajiv Gandhi National Fellowship For Scheduled Caste Candidates** [1] **NEEDS_MORE_INFO**: Provides financial assistance for SC candidates pursuing M.Phil. and Ph.D. in various fields.  
 - **Post Doctoral Fellowship to Scheduled Caste/Scheduled Tribe Candidates** [4] **NEEDS_MORE_INFO**: Offers fellowships to SC/ST candidates with a doctorate, with age limits and academic criteria.  
-- **Central Sector Scheme of National Fellowship for Providing Fellowship to Scheduled Caste Students to Pursue M.Phil. & PhD** [5] **NEEDS_MORE_INFO**: Supports SC students in ",reasoning_error,incomplete_or_wrong_answer,The assistant provides the eligibility requirements and relevant scheme details based on the evidence.,,
-gold,main,GQA-011,How can I track my application for the Credit Linked Subsidy Scheme for Middle Income Group?,"No grievance ticket matching 'application for the Credit Linked Subsidy Scheme for Middle Income Group' was found in the local ledger. If you submitted directly on pgportal.gov.in, please check status at https://pgportal.gov.in/Status.",tool_call_error,required_tool_not_called,needed search_schemes; called ['submit_or_track_grievance'],,
+- **Central Sector Scheme of National Fellowship for Providing Fellowship to Scheduled Caste Students to Pursue M.Phil. & PhD** [5] **NEEDS_MORE_INFO**: Supports SC students in ",reasoning_error,incomplete_or_wrong_answer,The assistant provides the eligibility requirements and relevant scheme details based on the evidence.,reasoning_error,misread info question as personal eligibility check; never stated requirements.
+gold,main,GQA-011,How can I track my application for the Credit Linked Subsidy Scheme for Middle Income Group?,"No grievance ticket matching 'application for the Credit Linked Subsidy Scheme for Middle Income Group' was found in the local ledger. If you submitted directly on pgportal.gov.in, please check status at https://pgportal.gov.in/Status.",tool_call_error,required_tool_not_called,needed search_schemes; called ['submit_or_track_grievance'],tool_call_error,track application' misread as grievance tracking; passed question text as ticket number
 task,loop,ML-08,সুকন্যা সমৃদ্ধি যোজনা অ্যাকাউন্ট কারা খুলতে পারে?,"**আপনার জন্য যোগ্য প্রকল্পগুলি**  
 - **প্রধানমন্ত্রী জন ধন যোজনা** [1] **NEEDS_MORE_INFO**: এটি কোনও দস্তাবেজ না থাকার ব্যক্তিদের জন্য বিনামূল্যে রুপায় ডেবিট কার্ড, দূর্ঘটনা বীমা এবং ছোট অ্যাকাউন্ট প্রদান করে।  
 - **নিখায় পোষণ যোজনা** [2] **NEEDS_MORE_INFO**: টিবেসিলিসিস রোগীদের আর্থিক সহায়তা প্রদান করে, যার জন্য ব্যাংক অ্যাকাউন্ট প্রয়োজন (এটি প্রধানমন্ত্রী জন ধন যোজনার আওতায় খুলতে পারে)।  
 - **মহিলা সমৃদ্ধি যোজনা** [5] **NEEDS_MORE_INFO**: সিসি/স্ট মহিলাদের জন্য ঋণ প্রদান করে, যার আয় সীমা প্রতি বছর ₹3 লক্ষ পর্যন্ত হতে পারে, যার জন্য জাতীয়তা প্রমাণ এবং পরিচয় প্রমাণ প্রয়োজন।  
 
-**প্রয়",retrieval_miss,gold_scheme_not_retrieved,"evidence schemes ['pmjdy', 'nikshay', 'cbssc-msy']",,
+**প্রয়",retrieval_miss,gold_scheme_not_retrieved,"evidence schemes ['pmjdy', 'nikshay', 'cbssc-msy']",retrieval_miss,
 task,loop,ML-06,अटल पेन्शन योजनेसाठी वयोमर्यादा आणि मासिक पेन्शन किती आहे?,"**अनुशंगित योजना**  
 अतल पेंशन योजना (APY) 18 ते 40 वर्ष या वयोगटातील व्यक्तींसाठी डिझाइन केलेली आहे [1]।  
 
@@ -45,7 +45,7 @@ task,loop,ML-06,अटल पेन्शन योजनेसाठी वय�
 - सक्रिय वार्षिक बचत बँक किंवा पोस्ट ऑफिस खात्याचे KYC विवरण.  
 
 **पुढील कार्यक्रम**  
-1 ऑक्टोबर 2022 पर्यंत आपण आयकर भागीदार नसल्याचे तपासा [1]। जर योग्य असाल, तर आपल्या बँक किंवा पोस्ट ऑफि",hallucination,unsupported_claims,सक्रिय वार्षिक बचत बँक किंवा पोस्ट ऑफिस खात्याचे KYC विवरण.,,
+1 ऑक्टोबर 2022 पर्यंत आपण आयकर भागीदार नसल्याचे तपासा [1]। जर योग्य असाल, तर आपल्या बँक किंवा पोस्ट ऑफि",hallucination,unsupported_claims,सक्रिय वार्षिक बचत बँक किंवा पोस्ट ऑफिस खात्याचे KYC विवरण.,,answer correct; flagged line is supported by catalog
 gold,main,GQA-015,What type of industry is eligible for the Testing Fee Reimbursement Scheme?,"**Schemes That May Suit You**  
 - **Testing Fee Reimbursement Scheme** [1] **NEEDS_MORE_INFO**: SC/ST MSEs can get 80% or ₹1,00,000 reimbursement for testing fees [2].  
 - **Scheme for Reimbursement of Testing and Certification Charges for Start-ups and Telecom MSEs** [4] **NEEDS_MORE_INFO**: Start-ups and Telecom MSEs can get partial reimbursement for testing and certification charges.  
@@ -55,14 +55,14 @@ gold,main,GQA-015,What type of industry is eligible for the Testing Fee Reimburs
 - Only SC/ST MSEs or Start-ups/Telecom MSEs are eligible.  
 
 **Documents Needed**  
-- Se",reasoning_error,incomplete_or_wrong_answer,The answer accurately states the eligible industry types based on the provided evidence.,,
+- Se",reasoning_error,incomplete_or_wrong_answer,The answer accurately states the eligible industry types based on the provided evidence.,reasoning_error,right scheme found; blended two schemes into one rule and asked for eligibility instead of answering.
 task,loop,ML-02,"Mera PM-KISAN ka pichle 6 mahine se paisa nahi aaya, kya eligibility aur documents check karne chahiye?","मैंने **प्रधान मंत्री किसान सम्मान निधि** के लिए एक औपचारिक CPGRAMS शिकायत की रूपरेखा तैयार कर ली है, जिसे **कृषि एवं किसान सुविधा मंत्रालय (`MOAFW`)** के लिए प्रस्तुत कर दिया गया है।
 
 - **ड्राफ्ट आईडी:** `DRAFT-FD58C3`
 - **करकता गिनती:** `741 / 2000` (CPGRAMS अनुरूप)
 - **स्थिति:** आपकी स्पष्ट पुष्टि के इंतजार में (मानव-इन-द-लूप सुरक्षा द्वार)
 
-कृपया नीचे **शिकायत की समीक्षा एवं पुष्टि** कार्ड में तैयार की गई शिकायत को ध्यान से समीक्षा करें और जब तैयार हो जाएं तो **पुष्टि एवं आवेदन** पर क्लिक करें। अब तक कोई आवेदन नहीं किया गया है।",tool_call_error,required_tool_not_called,needed search_schemes; called ['draft_grievance'],,
+कृपया नीचे **शिकायत की समीक्षा एवं पुष्टि** कार्ड में तैयार की गई शिकायत को ध्यान से समीक्षा करें और जब तैयार हो जाएं तो **पुष्टि एवं आवेदन** पर क्लिक करें। अब तक कोई आवेदन नहीं किया गया है।",tool_call_error,required_tool_not_called,needed search_schemes; called ['draft_grievance'],tool_call_error,"asked what to check, agent drafted grievance instead; Hindi reply wrongly says 'submitted'"
 task,loop,ELIG-03,I am 73 years old. Am I eligible for Employees' Pension Scheme?,"**Schemes That May Suit You**  
 - **NSAP - Indira Gandhi National Old Age Pension Scheme** [**ELIGIBLE**] – Get a monthly pension of up to ₹2,000 if you are 60+ and live below the poverty line [7].  
 - **Atal Pension Yojana** [**NEEDS_MORE_INFO**] – You may qualify if you are a worker and not an income tax payer, but more details are needed [4].  
@@ -72,7 +72,7 @@ task,loop,ELIG-03,I am 73 years old. Am I eligible for Employees' Pension Scheme
 - **APY** offers guaranteed pension post-60, but only for those aged 18–40 at enrollment [3].  
 
 **Documents Needed**  
-- For **NSAP**, no specif",retrieval_miss,gold_scheme_not_retrieved,"evidence schemes ['apy', 'nsap-ignoaps']",,
+- For **NSAP**, no specif",retrieval_miss,gold_scheme_not_retrieved,"evidence schemes ['apy', 'nsap-ignoaps']",retrieval_miss,EPS in catalog but not retrieved; also marked NSAP ELIGIBLE without knowing BPL status.
 task,loop,ML-04,PM Vishwakarma yojana mein karigaron aur carpenter ko toolkit aur loan par kitna labh milta hai?,"**अनुशंसित योजना**  
 पीएम विश्वकर्मा विशेष रूप से कलाकारों और कारीगरों, जिनमें मेहरबानी कर्मचारी शामिल हैं, के लिए डिज़ाइन की गई है, जिसमें वित्तीय और कौशल समर्थन शामिल हैं।  
 
@@ -82,7 +82,7 @@ task,loop,ML-04,PM Vishwakarma yojana mein karigaron aur carpenter ko toolkit au
 - **योग्यता**: अनुसूचित क्षेत्रों में कार्यरत 18 साल से अधिक आयु के कलाकार, जो 18 पारंपरिक व्यवसायों (जैसे कारीगर, लोहार) में लगे हुए हैं [2]।  
 
 **आवश्यक दस्तावेज**  
-- एडार्ड, मोबाइल",hallucination,unsupported_claims,अनुसूचित क्षेत्रों में कार्यरत 18 साल से अधिक आयु के कलाकार,,
+- एडार्ड, मोबाइल",hallucination,unsupported_claims,अनुसूचित क्षेत्रों में कार्यरत 18 साल से अधिक आयु के कलाकार,hallucination,"Right scheme and amounts, but says artisans must be ""in scheduled areas""; the catalog says unorganised sector, so that part is made up."
 gold,main,GQA-020,What documents are required for a migrant applicant under Pradhan Mantri Ujjwala Yojana 2.0?,"**Schemes That May Suit You**  
 - **Pradhan Mantri Mudra Yojana** [1] – **Needs More Info**: For MSME/entrepreneurs, requires ID proof, photo, machinery quotation, and supplier details.  
 - **Pradhan Mantri Vanbandhu Kalyan Yojana** [2] – **Not Checked**: Not evaluated for this profile.  
@@ -94,7 +94,7 @@ gold,main,GQA-020,What documents are required for a migrant applicant under Prad
 - Supplier details and price  
 
 **Next Steps**  
-Clarify if you are an MSME/entrepreneur to proceed. Are you seeking a loan, scholarship, or o",reasoning_error,answered_from_wrong_scheme,"cited ['pmmy', 'pmvky'], gold pmuy2",,
+Clarify if you are an MSME/entrepreneur to proceed. Are you seeking a loan, scholarship, or o",reasoning_error,answered_from_wrong_scheme,"cited ['pmmy', 'pmvky'], gold pmuy2",retrieval_miss,"Ujjwala 2.0 (pmuy2) wasn't in the search results, so it answered with Mudra's documents"
 task,loop,ELIG-01,I am 60 years old. Am I eligible for Pradhan Mantri Kaushal Vikas Yojana - Recognition Of Prior Learning?,"**Schemes That May Suit You**  
 - **Pradhan Mantri Suraksha Bima Yojana** [1] **NEEDS_MORE_INFO**: Offers accidental death and disability cover for bank account holders aged 18–70 [2].  
 - **Pradhan Mantri Kaushal Vikas Yojana - Special Projects** [6] **NEEDS_MORE_INFO**: Designed for marginalized groups, including SC/ST, PwD, and those in remote areas [6].  
@@ -104,19 +104,19 @@ task,loop,ELIG-01,I am 60 years old. Am I eligible for Pradhan Mantri Kaushal Vi
 - PMKVY-Special Projects supports skill development for vulnerable groups [6].  
 
 **Documents Needed**  
-- For PMSBY: Bank ac",retrieval_miss,gold_scheme_not_retrieved,"evidence schemes ['pmsby', 'pmvky', 'pmkvy-sp', 'pm-vikas', 'pmuy']",,
+- For PMSBY: Bank ac",retrieval_miss,gold_scheme_not_retrieved,"evidence schemes ['pmsby', 'pmvky', 'pmkvy-sp', 'pm-vikas', 'pmuy']",retrieval_miss,"PMKVY-RPL not retrieved; offered unrelated schemes (PMSBY, PMKVY Special Projects) instead of the NOT_ELIGIBLE verdict."
 task,loop,FAQ-05,Regarding Production Linked Incentive Scheme (PLI) For Promoting Telecom & Networking Products Manufacturing In India: Can An Existing PLI Beneficiary Company Apply For Revision Of Committed Investment / Net Incremental Sales Forecast In The Existing Approval Under The Scheme?,"**Recommended Scheme**  
 The Production Linked Incentive (PLI) Scheme for Telecom & Networking Products Manufacturing in India [1] offers financial incentives to boost domestic manufacturing and exports.  
 
 **Key Benefits & Eligibility**  
 - Existing PLI beneficiaries can claim incentives for FY2021-22 with achieved figures under normal rates.  
 - They can also apply for new applications under the Design-Led PLI for the remaining 4 years with higher forecasts, provided they meet Design-led criteria.  
-- However, revising committed investment/net sales requires applying as a fresh company, whic",hallucination,unsupported_claims,PAN; Authority Letter for Nodal Officer; Certificate of Incorporation,,
+- However, revising committed investment/net sales requires applying as a fresh company, whic",hallucination,unsupported_claims,PAN; Authority Letter for Nodal Officer; Certificate of Incorporation,,"The answer is correct (apply again as a new applicant and lose the earlier investment), and the flagged documents (PAN, authority letter, certificate) are in the catalog."
 task,loop,ELIG-15,"My annual family income is Rs 750,000. Am I eligible for PM-YASASVI: Pre-Matric Scholarship for OBC, EBC and DNT Students?","**Schemes That May Suit You**  
 - **PM-YASASVI: Top Class College Education for OBC, EBC and DNT Students** [NEEDS_MORE_INFO]: Provides full tuition, living expenses, and a laptop for students beyond Class XII. [1]  
 - **PM-YASASVI: Post-Matric Scholarship for OBC, EBC and DNT Students** [NEEDS_MORE_INFO]: Offers financial support for students after Class XII, with income limit up to ₹2.50 lakhs. [7]  
 
-Your annual family income of ₹750,000 exceeds the ₹2.50 lakh income limit for eligibility under these schemes. Please clarify your social category (OBC / General) and confirm if you are a stude",retrieval_miss,gold_scheme_not_retrieved,"evidence schemes ['pm-yasasvitcceobcebcdnts', 'pm-yasasvipmsobcebcdnts']",,
+Your annual family income of ₹750,000 exceeds the ₹2.50 lakh income limit for eligibility under these schemes. Please clarify your social category (OBC / General) and confirm if you are a stude",retrieval_miss,gold_scheme_not_retrieved,"evidence schemes ['pm-yasasvitcceobcebcdnts', 'pm-yasasvipmsobcebcdnts']",retrieval_miss,Found the Post-Matric scheme instead of Pre-Matric; the two have near-identical slugs.
 task,loop,ML-05,प्रधानमंत्री मुद्रा योजनेअंतर्गत लहान व्यवसायासाठी किती कर्ज मिळते?,"**पीएम मुद्रा योजनेच्या वापरासाठी कर्ज रक्कम**  
 प्रधान मंत्री मुद्रा योजना (PMMY) अंतर्गत, गृहस्थ व्यवसाय आणि गृहस्थ उद्योगांसाठी अतिरिक्त शेती विभागातील उत्पादन व्यवसाय, वाहतूक, सेवा आणि शेतीसंबंधित गतिविधींसाठी **₹20 लाख** पर्यंत कर्ज उपलब्ध आहे [4]।  
 
@@ -129,14 +129,14 @@ task,loop,ML-05,प्रधानमंत्री मुद्रा यो�
 - खरेदी करायच्या यंत्रांची किंमत आणि विवरण.  
 - ₹2 लाख पेक्षा जास्त कर्जासाठी आर्थिक विवरण.  
 
-**पु",hallucination,unsupported_claims,आधार आणि रहिवासी विधान; खरेदी करायच्या यंत्रांची किंमत आणि विवरण; ₹2 लाख पेक्षा जास्त कर्जासाठी आर्थिक विवरण,,
+**पु",hallucination,unsupported_claims,आधार आणि रहिवासी विधान; खरेदी करायच्या यंत्रांची किंमत आणि विवरण; ₹2 लाख पेक्षा जास्त कर्जासाठी आर्थिक विवरण,hallucination,"₹20 lakh limit correct; the ""financial statements for loans over ₹2 lakh"" document isn't in the catalog."
 task,loop,ML-10,ప్రధాన మంత్రి ఫసల్ బీమా యోజన ద్వారా రైతులకు పంట బీమా ప్రయోజనాలు ఏమిటి?,"**మీకు సరిపోయే పథకాలు**  
 - **ప్రధాన మంత్రి ఫసల్ బిమా యోజన (PMFBY)**: **సాధ్యంగా అర్హుడు** – కొన్ని రాష్ట్రాలలో ప్రీమియం చెల్లింపులకు ప్రభుత్వ సబ్సిడీ కలిగి సులభమైన ఫసలు బిమా అందిస్తుంది [1].  
 - **పరమ్పరగత కృషి వికాస యోజన**: **మరింత సమాచారం అవసరం** – ఆస్తి వ్యవస్థ మరియు బంధాల విషయంలో దృష్టి సారించడం కోసం మీ ప్రోఫైల్ గురించి వివరాలు అవసరం [7].  
 - **ప్రధాన మంత్రి కృషి సమ్మాన్ నిధి**: **మరింత సమాచారం అవసరం** – ప్రతి కుటుంబానికి వార్షికంగా రూ. 6,000 ఆర్థిక సాయం అందిస్తుంది, కానీ కృషి వ్యవస్థ అంగీకరణ అవసరం [8].  
 
 **ప్రధాన ప్రయోజనాలు మరియు అర్హత**  
-- **సులభమైన ప్రీమియంలు**: కాల్వు పంటలకు వ్యవసాయ",retrieval_miss,gold_scheme_not_retrieved,"evidence schemes ['pmfby', 'pkvy', 'pm-kisan']",,
+- **సులభమైన ప్రీమియంలు**: కాల్వు పంటలకు వ్యవసాయ",retrieval_miss,gold_scheme_not_retrieved,"evidence schemes ['pmfby', 'pkvy', 'pm-kisan']",,"Gold label wrong (pmecrg is a research grant; the right scheme is PMFBY, and it was found). The real problem: the Telugu reply repeats the same word over and over, which none of the four categories covers."
 task,loop,FAQ-03,"Regarding AICTE - Scheme For Promoting Interests, Creativity And Ethics Among Students: Q.1 What Is AICTE Expecting From The Institution?","**Recommended Scheme**  
 AICTE - Scheme For Promoting Interests, Creativity And Ethics Among Students [1]  
 
@@ -150,13 +150,13 @@ AICTE - Scheme For Promoting Interests, Creativity And Ethics Among Students [1]
 - No specific documents listed in the retrieved evidence.  
 
 **Next Steps**  
-- Review the s",hallucination,unsupported_claims,"Institutions must commit a minimum ₹1,00,000 contribution to the club; having a minimum of 5 years of existence and a full-time faculty coordinator with at least 10 years of experience",,
+- Review the s",hallucination,unsupported_claims,"Institutions must commit a minimum ₹1,00,000 contribution to the club; having a minimum of 5 years of existence and a full-time faculty coordinator with at least 10 years of experience",hallucination,"Never answered what AICTE expects (that institutions fund their other clubs); invented ""faculty coordinator with 10 years' experience"". The 5-year rule is real."
 gold,main,GQA-047,What documents are required to apply for the Pradhan Mantri Ujjwala Yojana?,"**Schemes That May Suit You**  
 - **Ayushman Bharat - Pradhan Mantri Jan Arogya Yojana** [2] – **Needs More Info**: Provides health coverage up to ₹5 lakh per family per year.  
 - **Pradhan Mantri Vanbandhu Kalyan Yojana** [4] – **Needs More Info**: Offers scholarships and development support for ST students and communities.  
 - **Pradhan Mantri Mudra Yojana** [1] – **Needs More Info**: Provides loans up to ₹10 lakh for MSMEs and entrepreneurs.  
 
-To apply for the **Pradhan Mantri Ujjwala Yojana**, you need to submit **proof of identity**, **proof of address**, and **proof of BPL category** al",retrieval_miss,gold_scheme_not_retrieved,"evidence schemes ['pmmy', 'ab-pmjay', 'csss-cus', 'pmvky', 'pmuy2', 'pmksypdmc']",,
+To apply for the **Pradhan Mantri Ujjwala Yojana**, you need to submit **proof of identity**, **proof of address**, and **proof of BPL category** al",retrieval_miss,gold_scheme_not_retrieved,"evidence schemes ['pmmy', 'ab-pmjay', 'csss-cus', 'pmvky', 'pmuy2', 'pmksypdmc']",retrieval_miss,"Original Ujjwala (pmuy) not retrieved; listed unrelated schemes (PMJAY, Mudra) and gave only generic documents."
 task,loop,FAQ-10,"Regarding PM-YASASVI: Post-Matric Scholarship for OBC, EBC and DNT Students: What is the objective of the scheme?","**Recommended Scheme**  
 PM-YASASVI: Post-Matric Scholarship for OBC, EBC and DNT Students [1]  
 
@@ -168,4 +168,4 @@ PM-YASASVI: Post-Matric Scholarship for OBC, EBC and DNT Students [1]
 **Documents Needed**  
 - Proof of OBC/EBC/DNT status.  
 - Income certificate of parents/guardians (not exceeding ₹2.50 lakhs annually).  
-- Academic records a",hallucination,unsupported_claims,Group 2 (other courses),,
+- Academic records a",hallucination,unsupported_claims,Group 2 (other courses),hallucination,"Objective correct. The flagged Group 1/Group 2 line is in the catalog. The real issue is an uncited documents list (""attendance proof"" isn't in the catalog)."

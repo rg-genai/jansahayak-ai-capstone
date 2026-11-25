@@ -47,10 +47,10 @@ from eval.grounding_judge import (
     GroundingVerdict,
     build_evidence_block,
     cached_verdict,
-    grounding_key,
     judge_grounding,
     load_cache,
     load_chunk_texts,
+    record_grounding_key,
 )
 from eval.run_task_eval import TASK_CONFIGS, TASK_RUNS_DIR, load_tasks
 
@@ -218,7 +218,7 @@ def grounding_requests(tasks: list[dict[str, Any]], runs: dict[str, dict[str, An
               for item_id, rec in sorted(run["results"].items())
               if item_id in by_id and rec.get("status") != "error" and wanted(config, by_id[item_id], rec)]
     texts = load_chunk_texts(db_path, [cid for _, _, rec in picked for cid in rec.get("evidence_chunk_ids") or []])
-    return [GroundingRequest(key=grounding_key(suite, config, item_id, rec.get("answer", "")),
+    return [GroundingRequest(key=record_grounding_key(suite, config, item_id, rec),
                              request=request_of(by_id[item_id]), evidence=build_evidence_block(rec, texts),
                              answer=rec.get("answer", "")) for config, item_id, rec in picked]
 
@@ -233,7 +233,7 @@ def grade_runs(tasks: list[dict[str, Any]], runs: dict[str, dict[str, Any]], cac
         for task_id, rec in run["results"].items():
             if task_id not in by_id:
                 continue
-            verdict = cached_verdict(cache, grounding_key(TASK_SUITE, config, task_id, rec.get("answer", "")))
+            verdict = cached_verdict(cache, record_grounding_key(TASK_SUITE, config, task_id, rec))
             outcome = grade_task(by_id[task_id], rec, verdict, max_tool_calls)
             rows[task_id] = {**rec, "outcome": asdict(outcome),
                              "grounding_verdict": verdict.model_dump() if verdict else None}

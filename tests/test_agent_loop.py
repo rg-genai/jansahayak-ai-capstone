@@ -122,14 +122,42 @@ def test_guard_blocks_repeated_query():
 
 
 def test_guard_drops_invented_and_already_checked_slugs():
+    eligibility = {"planner_output": {"intent": "ELIGIBILITY_CHECK"}}
     d, guard = _validate_reflection(
         ReflectionOutput(decision="check_eligibility", scheme_slugs=["made-up-slug", "pm-kisan", "pmfby"]),
-        _state(eligibility_cards=[{"scheme_slug": "pm-kisan"}]), 10,
+        _state(eligibility_cards=[{"scheme_slug": "pm-kisan"}], **eligibility), 10,
     )
     assert guard is None and d.scheme_slugs == ["pmfby"]
 
-    d, guard = _validate_reflection(ReflectionOutput(decision="check_eligibility", scheme_slugs=["made-up-slug"]), _state(), 10)
+    d, guard = _validate_reflection(
+        ReflectionOutput(decision="check_eligibility", scheme_slugs=["made-up-slug"]), _state(**eligibility), 10
+    )
     assert d.decision == "answer" and guard == "no_valid_unchecked_slugs"
+
+
+@pytest.mark.parametrize("query", [
+    "What are the main benefits and application documents required for Biotechnology Ignition Grant Scheme?",  # QA-21
+    "What are the benefits and eligibility criteria of the Prime Minister Awas Yojana?",  # ML-07
+])
+def test_guard_skips_eligibility_check_on_info_questions(query):
+    """Regression task eval QA-21 / ML-07: the Reflector checked eligibility on 38/45 plain info questions."""
+    d, guard = _validate_reflection(
+        ReflectionOutput(decision="check_eligibility", scheme_slugs=["pm-kisan"]),
+        _state(query_en=query, planner_output={"intent": "SCHEME_QA"}), 10,
+    )
+    assert d.decision == "answer" and guard == "info_question_not_about_citizen"
+
+
+@pytest.mark.parametrize("intent, query", [
+    ("SCHEME_QA", "I am a farmer with 2 acres. What does PM-KISAN give me?"),
+    ("ELIGIBILITY_CHECK", "Is a 60 year old eligible for PM-KISAN?"),
+])
+def test_guard_still_checks_eligibility_when_relevant(intent, query):
+    d, guard = _validate_reflection(
+        ReflectionOutput(decision="check_eligibility", scheme_slugs=["pm-kisan"]),
+        _state(query_en=query, planner_output={"intent": intent}), 10,
+    )
+    assert d.decision == "check_eligibility" and guard is None and d.scheme_slugs == ["pm-kisan"]
 
 
 def test_guard_enforces_tool_call_budget():

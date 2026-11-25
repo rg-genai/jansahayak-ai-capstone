@@ -44,6 +44,7 @@ from backend.config import get_settings
 from backend.db.repositories import now_ist_iso
 from backend.gateway.llm_client import LLMGateway, get_gemini_gateway, get_llm_gateway
 from backend.retrieval.hybrid_retriever import HybridRetriever, RetrievalMode
+from eval.grounding_judge import ELIGIBILITY_CARD_DETAILS
 
 logging.basicConfig(level=logging.WARNING, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("run_gold_eval")
@@ -180,7 +181,8 @@ def agent_diagnostics(state: dict[str, Any]) -> dict[str, Any]:
         "reflection_decisions": [{"decision": r.get("decision"), "guard": r.get("guard")}
                                  for r in state.get("reflections") or []],
         "evidence_chunk_ids": [c.get("chunk_id") for c in state.get("retrieved_chunks") or [] if c.get("chunk_id")],
-        "eligibility_verdicts": [{"scheme_slug": c.get("scheme_slug"), "verdict": c.get("verdict")}
+        "eligibility_verdicts": [{"scheme_slug": c.get("scheme_slug"), "verdict": c.get("verdict"),
+                                  **{k: c[k] for k in ELIGIBILITY_CARD_DETAILS if c.get(k)}}
                                  for c in state.get("eligibility_cards") or []],
         "cited_schemes": cited_scheme_slugs(state),
         "critic_passed": (state.get("critic_output") or {}).get("passed"),

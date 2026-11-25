@@ -20,6 +20,7 @@ from eval.grounding_judge import (
     build_evidence_block,
     grounding_key,
     judge_grounding,
+    record_grounding_key,
 )
 from eval.run_gold_eval import NoWebToolbox, agent_diagnostics, cited_scheme_slugs
 from eval.run_task_eval import TASK_CONFIGS, load_tasks, run_task_config, sandbox_repository
@@ -321,6 +322,17 @@ def test_evidence_block_numbers_chunks_like_the_answer_and_adds_verdicts():
               "eligibility_verdicts": [{"scheme_slug": "pm-kisan", "verdict": "ELIGIBLE"}]}
     block = build_evidence_block(record, {"c1": "first", "c2": "second"})
     assert block.startswith("[1] first\n\n[2] second") and "pm-kisan: ELIGIBLE" in block
+
+
+def test_judge_sees_eligibility_details_and_rejudges_when_they_are_added():
+    """Regression task eval FAQ-05: documents copied from the eligibility tool output were judged unsupported."""
+    old = {"answer": "Bring your PAN.", "evidence_chunk_ids": ["c1"],
+           "eligibility_verdicts": [{"scheme_slug": "dot-pli-scheme", "verdict": "NEEDS_MORE_INFO"}]}
+    new = {**old, "eligibility_verdicts": [{**old["eligibility_verdicts"][0], "documents_required": ["PAN"]}]}
+
+    assert '"documents_required"' in build_evidence_block(new, {"c1": "text"})
+    assert record_grounding_key("task", "loop", "FAQ-05", old) == grounding_key("task", "loop", "FAQ-05", old["answer"])
+    assert record_grounding_key("task", "loop", "FAQ-05", new) != record_grounding_key("task", "loop", "FAQ-05", old)
 
 
 def _sql(db_path, statement: str) -> list[tuple]:

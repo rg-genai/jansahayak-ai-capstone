@@ -1,11 +1,13 @@
 """Evidence-grounded LLM judge shared by the task-completion eval and the failure taxonomy.
 
 The judge sees exactly the evidence the agent's answer writer saw (chunk texts looked up by the saved chunk ids, in
-the same [n] order, plus the eligibility tool verdicts) and reports whether the answer gives what was asked, which
-claims the evidence does not support, and whether the answer declines.
+the same [n] order, plus the eligibility tool verdicts and the check_eligibility details the writer was given) and
+reports whether the answer gives what was asked, which claims the evidence does not support, and whether the answer
+declines.
 
 Calls Gemini (free-tier key): every call is capped by `max_calls`, each verdict is cached on disk as soon as it
-arrives, and an answer already judged is never sent again (the cache key includes a hash of the answer text).
+arrives, and an answer already judged is never sent again (the cache key includes a hash of the answer text and
+of those eligibility details).
 """
 
 from __future__ import annotations
@@ -32,6 +34,10 @@ logger = logging.getLogger(__name__)
 JUDGE_MAX_TOKENS = 1024
 RAW_REPLY_LOG_CHARS = 400
 MAX_UNSUPPORTED_CLAIMS = 3
+# check_eligibility output fields the answer writer sees next to the chunks (official scheme data from the DB).
+# Without them the judge flagged documents copied from this output as unsupported (task eval FAQ-05, QA-22).
+ELIGIBILITY_CARD_DETAILS = ("matched_criteria", "unmet_criteria", "exclusion_warnings", "documents_required",
+                            "eligibility_excerpt")
 
 
 class GroundingVerdict(BaseModel):
@@ -57,9 +63,23 @@ class GroundingRequest:
     answer: str
 
 
-def grounding_key(suite: str, config: str, item_id: str, answer: str) -> str:
-    """Cache key; changes whenever the answer text changes, so a re-run answer is judged again."""
-    return f"{suite}:{config}:{item_id}:{hashlib.sha256(answer.encode('utf-8')).hexdigest()[:12]}"
+def grounding_key(suite: str, config: str, item_id: str, answer: str, card_details: str = "") -> str:
+    """Cache key; changes whenever the answer text or the eligibility details shown to the judge change, so a
+    re-run answer, or one now judged with more evidence, is judged again."""
+    digest = hashlib.sha256((answer + card_details).encode("utf-8")).hexdigest()[:12]
+    return f"{suite}:{config}:{item_id}:{digest}"
+
+
+def eligibility_card_details(record: dict[str, Any]) -> str:
+    """The saved check_eligibility details of one record as text; empty for records saved before they were kept."""
+    details = [{"scheme_slug": v.get("scheme_slug"), **{k: v[k] for k in ELIGIBILITY_CARD_DETAILS if v.get(k)}}
+               for v in record.get("eligibility_verdicts") or [] if any(v.get(k) for k in ELIGIBILITY_CARD_DETAILS)]
+    return json.dumps(details, ensure_ascii=False, indent=2) if details else ""
+
+
+def record_grounding_key(suite: str, config: str, item_id: str, record: dict[str, Any]) -> str:
+    """`grounding_key` of one saved record."""
+    return grounding_key(suite, config, item_id, record.get("answer", ""), eligibility_card_details(record))
 
 
 def load_chunk_texts(db_path: Path, chunk_ids: list[str]) -> dict[str, str]:
@@ -84,6 +104,9 @@ def build_evidence_block(record: dict[str, Any], chunk_texts: dict[str, str]) ->
     verdicts = record.get("eligibility_verdicts") or []
     if verdicts:
         lines.append("Eligibility tool verdicts: " + "; ".join(f"{v['scheme_slug']}: {v['verdict']}" for v in verdicts))
+    details = eligibility_card_details(record)
+    if details:
+        lines.append("Eligibility tool output (official scheme data):\n" + details)
     return "\n\n".join(lines) or "(no evidence was retrieved)"
 
 

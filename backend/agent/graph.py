@@ -238,6 +238,10 @@ def _validate_reflection(
         return decision, None
 
     if decision.decision == "check_eligibility":
+        intent = (state.get("planner_output") or {}).get("intent", "SCHEME_QA")
+        if intent == "SCHEME_QA" and not _FIRST_PERSON_RE.search(state.get("query_en") or ""):
+            # Task eval: on 38/45 info questions the Reflector checked eligibility nobody asked for (QA-21, ML-07).
+            return answer("info_question_not_about_citizen")
         found = {c.get("scheme_slug") for c in state.get("retrieved_chunks") or []}
         checked = {c.get("scheme_slug") for c in state.get("eligibility_cards") or []}
         slugs = [s for s in dict.fromkeys(decision.scheme_slugs) if s in found and s not in checked]

@@ -67,6 +67,11 @@ TASK_CONFIGS: dict[str, EvalConfig] = {c.name: c for c in [
                exclude_faq_chunks=False),
     EvalConfig("single_pass_after_elig_fix", "Single pass, after the ELIG-01 named-scheme search fix", reflection=False,
                exclude_faq_chunks=False),
+    # Full 80-task re-runs on the current code: ELIG-01 fix plus the guard that stops eligibility checks on plain
+    # info questions (QA-21 / ML-07), judged with the eligibility tool output the answer writer saw.
+    EvalConfig("loop_v2", "Full agent with the loop, current code (all 80 tasks)", exclude_faq_chunks=False),
+    EvalConfig("single_pass_v2", "Single pass, current code (all 80 tasks)", reflection=False,
+               exclude_faq_chunks=False),
 ]}
 
 

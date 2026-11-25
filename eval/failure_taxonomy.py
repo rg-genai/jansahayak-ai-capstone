@@ -45,7 +45,7 @@ from backend.config import get_settings
 from backend.db.repositories import now_ist_iso
 from backend.gateway.llm_client import get_gemini_gateway
 from eval.eval_stats import cohen_kappa
-from eval.grounding_judge import GroundingVerdict, cached_verdict, grounding_key, judge_grounding, load_cache
+from eval.grounding_judge import GroundingVerdict, cached_verdict, judge_grounding, load_cache, record_grounding_key
 from eval.run_gold_eval import RUNS_DIR as GOLD_RUNS_DIR
 from eval.run_task_eval import load_tasks
 from eval.score_gold_eval import JUDGE_CACHE_FILE, JUDGE_CORRECT_MIN_SCORE, answer_key, load_runs
@@ -70,7 +70,8 @@ AUDIT_PATH = PROJECT_ROOT / "eval" / "failure_audit.csv"
 GOLD_SUITE = "gold"
 TASK_SUITE = "task"
 # Configurations whose failures are classified (production agent and its no-loop ablation, in both suites).
-CLASSIFIED_CONFIGS = {TASK_SUITE: ("loop", "single_pass", "loop_after_elig_fix", "single_pass_after_elig_fix"),
+CLASSIFIED_CONFIGS = {TASK_SUITE: ("loop", "single_pass", "loop_after_elig_fix", "single_pass_after_elig_fix",
+                                   "loop_v2", "single_pass_v2"),
                       GOLD_SUITE: ("main", "single_pass")}
 AUDIT_CONFIGS = {TASK_SUITE: "loop", GOLD_SUITE: "main"}  # the human audit samples the production agent
 AUDIT_SAMPLE_SIZE = 20
@@ -241,7 +242,7 @@ def gold_failures(cache: dict[str, dict[str, Any]], judge_cache: dict[str, dict[
                 unjudged += 1
             if not failed:
                 continue
-            verdict = cached_verdict(cache, grounding_key(GOLD_SUITE, config, item_id, rec.get("answer", "")))
+            verdict = cached_verdict(cache, record_grounding_key(GOLD_SUITE, config, item_id, rec))
             label = classify_failure("info", rec, gold_slug=rec.get("scheme_slug"), verdict=verdict)
             out.append({"suite": GOLD_SUITE, "config": config, "item_id": item_id, "kind": "info",
                         "category_tag": rec.get("aspect"), "request": rec.get("question", ""),
