@@ -42,6 +42,36 @@ EVAL_REPORT_REGISTRY: dict[str, dict[str, str]] = {
         "json_file": "red_team_report.json",
         "md_file": "red_team_report.md",
     },
+    "gold60_comprehensive_eval": {
+        "eval_trace_id": "EVAL-GOLD60-GEMINI",
+        "title": "60-Pair Zero-Leakage Gold QA (Vanilla vs RAG, ROUGE/BLEU/BERTScore & Unbiased Gemini Judge)",
+        "json_file": "gold60_comprehensive_eval.json",
+        "md_file": "gold60_comprehensive_eval.md",
+    },
+    "gold_eval": {
+        "eval_trace_id": "EVAL-GOLD-LOOP",
+        "title": "60-Pair Gold QA Full-Agent Ablation (FAQ Excluded, Top-k 1/3/5 & Gemini 3.5 Flash-Lite Judge)",
+        "json_file": "gold_eval.json",
+        "md_file": "gold_eval.md",
+    },
+    "task_eval": {
+        "eval_trace_id": "EVAL-TASK-80",
+        "title": "80-Task End-to-End Agent Suite (Reflector Loop vs Single Pass)",
+        "json_file": "task_eval.json",
+        "md_file": "task_eval.md",
+    },
+    "chunking_eval": {
+        "eval_trace_id": "EVAL-CHUNK-5WAY",
+        "title": "5-Way Chunking Ablation (440/256/128-tok & Fixed Windows)",
+        "json_file": "chunking_eval.json",
+        "md_file": "chunking_eval.md",
+    },
+    "failure_taxonomy": {
+        "eval_trace_id": "EVAL-FAIL-TAX",
+        "title": "Root-Cause Failure Taxonomy (Human Audited, Cohen's kappa 0.92)",
+        "json_file": "failure_taxonomy.json",
+        "md_file": "failure_taxonomy.md",
+    },
 }
 
 

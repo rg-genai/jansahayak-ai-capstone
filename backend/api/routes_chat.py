@@ -328,6 +328,7 @@ async def _run_chat_turn(
             state.get("status") or "ok",
             eligibility_cards,
             citations,
+            language=state.get("detected_lang") or detected_lang,
         ),
     }
 

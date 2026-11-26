@@ -125,6 +125,7 @@ export interface ChatMessage {
   cache_hit?: string
   latency_ms?: number
   guardrail_flags?: string[]
+  suggested_followups?: string[]
   created_at: string
 }
 

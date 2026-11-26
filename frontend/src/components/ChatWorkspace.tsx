@@ -77,6 +77,41 @@ const QUICK_SERVICES = [
   },
 ]
 
+function buildSuggestedFollowUps(msg: ChatMessage, lang: string): string[] {
+  const schemeName =
+    msg.eligibility_cards?.[0]?.scheme_name ||
+    msg.citations?.find((c) => c.source_type !== 'gov_web' && c.scheme_name)?.scheme_name ||
+    ''
+
+  const isHindi = lang === 'hi' || lang === 'hinglish'
+  if (schemeName) {
+    if (isHindi) {
+      return [
+        `${schemeName} के लिए कौन-कौन से दस्तावेज़ जरूरी हैं?`,
+        `${schemeName} के लिए ऑनलाइन आवेदन कैसे करें?`,
+        `${schemeName} में कौन लोग पात्र नहीं हैं (exclusions)?`,
+      ]
+    }
+    return [
+      `What documents are required to apply for ${schemeName}?`,
+      `What are the step-by-step application instructions for ${schemeName}?`,
+      `Are there any exclusion rules that could disqualify me from ${schemeName}?`,
+    ]
+  }
+  if (isHindi) {
+    return [
+      'मेरी प्रोफ़ाइल के अनुसार मैं किन केंद्रीय योजनाओं के लिए पात्र हूँ?',
+      'PM-KISAN की रुकी हुई किस्त के लिए CPGRAMS शिकायत ड्राफ्ट करें',
+      'मुद्रा लोन (PMMY) के लिए कौन आवेदन कर सकता है?',
+    ]
+  }
+  return [
+    'Which Central Government schemes match my citizen profile?',
+    'What documents should I keep ready for Direct Benefit Transfer (DBT) schemes?',
+    'Help me draft a CPGRAMS grievance for a delayed scheme benefit',
+  ]
+}
+
 function renderInlineSpans(text: string, citations: CitationItem[]): React.ReactNode {
   // Parse markdown links [label](url), **bold**, `code`, and clickable inline citations [1]
   const tokenRegex = /(\[[^\]]+\]\(https?:\/\/[^\s)]+\)|\*\*[^*]+\*\*|`[^`]+`|\[\d+\])/g
@@ -369,6 +404,7 @@ export const ChatWorkspace: React.FC<Props> = ({
     cache_hit?: string
     latency_ms?: number
     guardrail_flags?: string[]
+    suggested_followups?: string[]
   }) => {
     if (p.citizen_profile) setProfile(p.citizen_profile)
     if (p.grievance_draft) {
@@ -390,6 +426,7 @@ export const ChatWorkspace: React.FC<Props> = ({
         cache_hit: p.cache_hit,
         latency_ms: p.latency_ms,
         guardrail_flags: p.guardrail_flags || [],
+        suggested_followups: p.suggested_followups || [],
         created_at: new Date().toLocaleTimeString(),
       },
     ])
@@ -448,6 +485,7 @@ export const ChatWorkspace: React.FC<Props> = ({
           evName === 'language' ||
           evName === 'planner' ||
           evName === 'tool_call' ||
+          evName === 'reflector' ||
           evName === 'synthesizer' ||
           evName === 'critic' ||
           evName === 'localize'
@@ -777,6 +815,30 @@ export const ChatWorkspace: React.FC<Props> = ({
                   </div>
                 )}
 
+                {/* 3 Suggested Follow-Up Questions (shown on latest assistant reply) */}
+                {m.role === 'assistant' && !loading && m.id === messages[messages.length - 1]?.id && (
+                  <div className="mt-3 pt-2.5 border-t border-slate-900/10 dark:border-white/10">
+                    <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500 mb-1.5">
+                      Suggested Follow-Up Questions
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {(m.suggested_followups && m.suggested_followups.length > 0
+                        ? m.suggested_followups
+                        : buildSuggestedFollowUps(m, language)
+                      ).map((q, qIdx) => (
+                        <button
+                          key={qIdx}
+                          type="button"
+                          onClick={() => sendMessage(q)}
+                          className="text-left text-[11px] px-2.5 py-1.5 rounded-xl bg-white/70 hover:bg-white border border-slate-900/10 hover:border-indiaSaffron/60 text-slate-700 hover:text-indiaNavy transition shadow-sm dark:bg-white/5 dark:hover:bg-white/10 dark:border-white/10 dark:text-slate-200 dark:hover:border-indiaSaffron/50"
+                        >
+                          {q}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Clean Footer (Read Aloud for all; Trace ID only for Admin) */}
                 {m.role === 'assistant' && (
                   <div className="mt-3 pt-2 border-t border-slate-900/10 dark:border-white/10 flex items-center justify-between gap-2 text-[11px] text-slate-400 dark:text-slate-500">
@@ -815,9 +877,17 @@ export const ChatWorkspace: React.FC<Props> = ({
 
         {loading && (
           <div className="flex justify-start">
-            <div className="glass-subtle bg-white/80 border-slate-900/10 px-4 py-3 text-xs text-slate-600 flex items-center gap-2.5 shadow-sm dark:bg-slate-900/60 dark:border-white/10 dark:text-slate-300">
-              <Loader2 className="w-4 h-4 animate-spin text-indiaSaffron" />
-              <span>{liveStep || 'Looking up official scheme information...'}</span>
+            <div className="glass-subtle bg-white/85 border-slate-900/10 px-4 py-3 text-xs text-slate-700 flex items-center gap-3 shadow-sm dark:bg-slate-900/70 dark:border-white/15 dark:text-slate-200">
+              <Loader2 className="w-4 h-4 animate-spin text-indiaSaffron shrink-0" />
+              <div className="space-y-0.5">
+                <p className="font-semibold text-[11px] uppercase tracking-wider text-indiaSaffron flex items-center gap-1.5">
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-indiaSaffron animate-ping" />
+                  JanSahayak AI is Thinking
+                </p>
+                <p className="text-slate-600 dark:text-slate-300">
+                  {liveStep || 'Checking guardrails & searching 649 verified Central schemes...'}
+                </p>
+              </div>
             </div>
           </div>
         )}

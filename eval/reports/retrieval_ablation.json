@@ -5,45 +5,49 @@
       "id": "R1",
       "name": "BM25-Only (Sparse Lexical)",
       "mode": "bm25",
+      "recall_at_1": 0.9041,
       "recall_at_3": 0.9315,
       "recall_at_5": 0.9315,
       "recall_at_10": 0.9452,
       "mrr_at_10": 0.9201,
       "ndcg_at_5": 0.9214,
-      "avg_latency_ms": 28.06
+      "avg_latency_ms": 113.96
     },
     {
       "id": "R2",
       "name": "Dense-Only (bge-small-en-v1.5)",
       "mode": "dense",
+      "recall_at_1": 0.8356,
       "recall_at_3": 0.9178,
       "recall_at_5": 0.9452,
       "recall_at_10": 0.9452,
       "mrr_at_10": 0.8767,
       "ndcg_at_5": 0.8939,
-      "avg_latency_ms": 3.23
+      "avg_latency_ms": 12.2
     },
     {
       "id": "R3",
       "name": "Hybrid RRF (BM25 + Dense)",
       "mode": "hybrid_rrf",
+      "recall_at_1": 0.9041,
       "recall_at_3": 0.9452,
       "recall_at_5": 0.9589,
       "recall_at_10": 0.9589,
       "mrr_at_10": 0.9251,
       "ndcg_at_5": 0.9335,
-      "avg_latency_ms": 31.7
+      "avg_latency_ms": 110.24
     },
     {
       "id": "R4",
       "name": "Hybrid RRF + Cross-Encoder Reranker + Metadata Filter",
       "mode": "hybrid_rerank",
+      "recall_at_1": 0.8356,
       "recall_at_3": 0.9452,
       "recall_at_5": 0.9589,
       "recall_at_10": 0.9589,
       "mrr_at_10": 0.8916,
       "ndcg_at_5": 0.9089,
-      "avg_latency_ms": 1664.71
+      "avg_latency_ms": 7125.19
     }
   ],
   "r4_misses_top5": [

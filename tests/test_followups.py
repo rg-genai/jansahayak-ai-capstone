@@ -29,3 +29,12 @@ def test_no_suggestions_without_a_finished_scheme_answer():
     assert suggest_followups("file a complaint", "GRIEVANCE", "ok", [], KISAN) == []
     web_only = [{"source_type": "web", "scheme_name": "Some portal"}]
     assert suggest_followups("x", "SCHEME_QA", "ok", [], web_only) == []
+
+
+def test_localizes_followups_to_devanagari_hindi_and_marathi():
+    hi = suggest_followups("What benefits does PM-KISAN give?", "SCHEME_QA", "ok", [], KISAN, language="hi")
+    assert len(hi) == 3 and all("PM-KISAN" in q for q in hi)
+    assert any("दस्तावेज़" in q for q in hi) and any("आवेदन" in q for q in hi)
+    mr = suggest_followups("Am I eligible for PM-KISAN?", "SCHEME_QA", "ok", [], KISAN, language="mr")
+    assert len(mr) == 3 and any("कागदपत्रे" in q for q in mr)
+

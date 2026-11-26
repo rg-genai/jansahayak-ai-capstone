@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
 Creates a private zip bundle (`JanSahayak_Private_Team_Bundle.zip`, gitignored) containing:
   - .env (IIT KGP API keys + Gmail SMTP config)

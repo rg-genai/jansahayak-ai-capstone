@@ -55,6 +55,7 @@ def run_retrieval_ablation(golden_path: Path = GOLDEN_PATH) -> dict[str, Any]:
     misses_r4: list[dict[str, Any]] = []
 
     for cid, name, mode, use_filters in configs:
+        r1_hits = 0
         r3_hits = 0
         r5_hits = 0
         r10_hits = 0
@@ -77,7 +78,9 @@ def run_retrieval_ablation(golden_path: Path = GOLDEN_PATH) -> dict[str, Any]:
             lat_sum += out.latency_ms
             ranked_slugs = _unique_scheme_ranking(out.results)
 
-            # Hit metrics
+            # Hit metrics (Top-1, Top-3, Top-5, Top-10)
+            if any(s in gold_slugs for s in ranked_slugs[:1]):
+                r1_hits += 1
             if any(s in gold_slugs for s in ranked_slugs[:3]):
                 r3_hits += 1
             if any(s in gold_slugs for s in ranked_slugs[:5]):
@@ -112,6 +115,7 @@ def run_retrieval_ablation(golden_path: Path = GOLDEN_PATH) -> dict[str, Any]:
             "id": cid,
             "name": name,
             "mode": mode,
+            "recall_at_1": round(r1_hits / n, 4),
             "recall_at_3": round(r3_hits / n, 4),
             "recall_at_5": round(r5_hits / n, 4),
             "recall_at_10": round(r10_hits / n, 4),
@@ -132,12 +136,12 @@ def run_retrieval_ablation(golden_path: Path = GOLDEN_PATH) -> dict[str, Any]:
         "# Retrieval Ablation Benchmark (`R1`–`R4`)",
         f"- **Evaluated Queries:** {len(retrieval_items)} (stratified across Scheme QA, Eligibility, FAQs & Multilingual English-Pivot)",
         "",
-        "| Config | Strategy | Recall@3 | Recall@5 | Recall@10 | MRR@10 | NDCG@5 | Avg Latency (ms) |",
-        "| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |",
+        "| Config | Strategy | Recall@1 | Recall@3 | Recall@5 | Recall@10 | MRR@10 | NDCG@5 | Avg Latency (ms) |",
+        "| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |",
     ]
     for c in summary_configs:
         md_lines.append(
-            f"| **{c['id']}** | {c['name']} | {c['recall_at_3']*100:.1f}% | **{c['recall_at_5']*100:.1f}%** | "
+            f"| **{c['id']}** | {c['name']} | {c['recall_at_1']*100:.1f}% | {c['recall_at_3']*100:.1f}% | **{c['recall_at_5']*100:.1f}%** | "
             f"{c['recall_at_10']*100:.1f}% | **{c['mrr_at_10']:.3f}** | {c['ndcg_at_5']:.3f} | {c['avg_latency_ms']:.1f} |"
         )
     if misses_r4:
